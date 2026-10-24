@@ -9,7 +9,7 @@ import { Field, PageHeader } from "@/components/admin/fields";
 import { rupiah } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/admin/invoice/new")({
-  validateSearch: (s: Record<string, unknown>) => ({ order: typeof s.order === "string" ? s.order : undefined }),
+  validateSearch: (s: Record<string, unknown>): { order?: string } => ({ order: typeof s["order"] === "string" ? (s["order"] as string) : undefined }),
   component: Page,
 });
 
