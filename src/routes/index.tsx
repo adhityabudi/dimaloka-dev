@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, CreditCard, Eye, LayoutGrid, MessageCircle, Quote, ShieldCheck, Star, Zap } from "lucide-react";
 import hero from "@/assets/hero.png";
 import { getHome } from "@/lib/public.functions";
@@ -39,8 +39,8 @@ const steps = [
 
 function Index() {
   const data = Route.useLoaderData();
-  const { layout } = Route.useRouteContext() as any as { layout?: any };
-  const wa = (layout?.settings?.contact_whatsapp as string) ?? "6281234567890";
+  const { layout } = useLoaderData({ from: "__root__" });
+  const wa = (layout.settings.contact_whatsapp as string) ?? "6281234567890";
   const brands = [...data.sellers.map((s) => s.name), "Kopi Senja", "Tokoku.id", "Batik Nusa", "Rumah Kreatif", "UMKM Maju", "Laris Store"];
 
   return (
