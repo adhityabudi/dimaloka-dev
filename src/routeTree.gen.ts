@@ -23,6 +23,10 @@ import { Route as InvoiceTokenRouteImport } from './routes/invoice.$token'
 import { Route as KategoriSlugRouteImport } from './routes/kategori.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminKategoriRouteImport } from './routes/_authenticated/admin/kategori'
+import { Route as AuthenticatedAdminSellerRouteImport } from './routes/_authenticated/admin/seller'
+import { Route as AuthenticatedAdminTestimoniRouteImport } from './routes/_authenticated/admin/testimoni'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -93,12 +97,35 @@ const StoreSlugRoute = StoreSlugRouteImport.update({
   path: '/store/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminKategoriRoute =
+  AuthenticatedAdminKategoriRouteImport.update({
+    id: '/kategori',
+    path: '/kategori',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminSellerRoute =
+  AuthenticatedAdminSellerRouteImport.update({
+    id: '/seller',
+    path: '/seller',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminTestimoniRoute =
+  AuthenticatedAdminTestimoniRouteImport.update({
+    id: '/testimoni',
+    path: '/testimoni',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin': typeof AuthenticatedAdminRouteRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/akun': typeof AuthenticatedAkunRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -108,12 +135,15 @@ export interface FileRoutesByFullPath {
   '/p/$slug': typeof PSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/admin': typeof AuthenticatedAdminRouteRoute
   '/akun': typeof AuthenticatedAkunRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -123,6 +153,10 @@ export interface FileRoutesByTo {
   '/p/$slug': typeof PSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -130,7 +164,7 @@ export interface FileRoutesById {
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
-  '/_authenticated/admin': typeof AuthenticatedAdminRouteRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/akun': typeof AuthenticatedAkunRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
@@ -140,6 +174,10 @@ export interface FileRoutesById {
   '/p/$slug': typeof PSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/_authenticated/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/_authenticated/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/_authenticated/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -157,12 +195,15 @@ export interface FileRouteTypes {
     | '/p/$slug'
     | '/store/$slug'
     | '/blog/'
+    | '/admin/kategori'
+    | '/admin/seller'
+    | '/admin/testimoni'
+    | '/admin/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
     | '/robots.txt'
     | '/sitemap.xml'
-    | '/admin'
     | '/akun'
     | '/auth/sign-in'
     | '/auth/sign-up'
@@ -172,6 +213,10 @@ export interface FileRouteTypes {
     | '/p/$slug'
     | '/store/$slug'
     | '/blog'
+    | '/admin/kategori'
+    | '/admin/seller'
+    | '/admin/testimoni'
+    | '/admin'
   id:
     | '__root__'
     | '/'
@@ -188,6 +233,10 @@ export interface FileRouteTypes {
     | '/p/$slug'
     | '/store/$slug'
     | '/blog/'
+    | '/_authenticated/admin/kategori'
+    | '/_authenticated/admin/seller'
+    | '/_authenticated/admin/testimoni'
+    | '/_authenticated/admin/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -305,16 +354,64 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/kategori': {
+      id: '/_authenticated/admin/kategori'
+      path: '/kategori'
+      fullPath: '/admin/kategori'
+      preLoaderRoute: typeof AuthenticatedAdminKategoriRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/seller': {
+      id: '/_authenticated/admin/seller'
+      path: '/seller'
+      fullPath: '/admin/seller'
+      preLoaderRoute: typeof AuthenticatedAdminSellerRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/testimoni': {
+      id: '/_authenticated/admin/testimoni'
+      path: '/testimoni'
+      fullPath: '/admin/testimoni'
+      preLoaderRoute: typeof AuthenticatedAdminTestimoniRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminKategoriRoute: typeof AuthenticatedAdminKategoriRoute
+  AuthenticatedAdminSellerRoute: typeof AuthenticatedAdminSellerRoute
+  AuthenticatedAdminTestimoniRoute: typeof AuthenticatedAdminTestimoniRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+}
+
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminKategoriRoute: AuthenticatedAdminKategoriRoute,
+    AuthenticatedAdminSellerRoute: AuthenticatedAdminSellerRoute,
+    AuthenticatedAdminTestimoniRoute: AuthenticatedAdminTestimoniRoute,
+    AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
 interface AuthenticatedRouteRouteChildren {
-  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRoute
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedAkunRoute: typeof AuthenticatedAkunRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
-  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRoute,
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedAkunRoute: AuthenticatedAkunRoute,
 }
 
