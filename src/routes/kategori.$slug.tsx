@@ -44,7 +44,7 @@ function CategoryPage() {
             <Link to="/" className="hover:text-primary">Beranda</Link><ChevronRight className="h-4 w-4" /><span>{c.name}</span>
           </nav>
           <div className="mt-5 flex items-center gap-4">
-            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground"><CategoryIcon name={c.icon} className="h-7 w-7" /></div>
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary text-primary-foreground"><CategoryIcon icon={c.icon} className="h-7 w-7" /></div>
             <h1 className="text-3xl font-extrabold md:text-5xl">{c.name}</h1>
           </div>
           <p className="mt-4 max-w-2xl text-navy-foreground/75">{c.seo_description || c.description}</p>

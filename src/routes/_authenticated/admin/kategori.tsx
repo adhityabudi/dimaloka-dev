@@ -66,7 +66,7 @@ function Page() {
             {data.map((c, i) => (
               <TableRow key={c.id}>
                 <TableCell><div className="flex gap-1"><Button size="icon" variant="ghost" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Naik"><ArrowUp /></Button><Button size="icon" variant="ghost" onClick={() => move(i, 1)} disabled={i === data.length - 1} aria-label="Turun"><ArrowDown /></Button></div></TableCell>
-                <TableCell><div className="flex items-center gap-2 font-semibold"><CategoryIcon name={c.icon} className="h-4 w-4 text-primary" /> {c.name}</div><p className="text-xs text-muted-foreground">/{c.slug}</p></TableCell>
+                <TableCell><div className="flex items-center gap-2 font-semibold"><CategoryIcon icon={c.icon} className="h-4 w-4 text-primary" /> {c.name}</div><p className="text-xs text-muted-foreground">/{c.slug}</p></TableCell>
                 <TableCell>{c.count}</TableCell>
                 <TableCell>{c.is_active ? <span className="font-semibold text-success">Aktif</span> : <span className="text-muted-foreground">Nonaktif</span>}</TableCell>
                 <TableCell className="text-right"><Button size="icon" variant="ghost" onClick={() => setEdit(c)} aria-label="Edit"><Pencil /></Button><Button size="icon" variant="ghost" onClick={() => del(c.id)} aria-label="Hapus"><Trash2 /></Button></TableCell>
