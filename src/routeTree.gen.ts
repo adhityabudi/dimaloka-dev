@@ -27,6 +27,12 @@ import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authentic
 import { Route as AuthenticatedAdminKategoriRouteImport } from './routes/_authenticated/admin/kategori'
 import { Route as AuthenticatedAdminSellerRouteImport } from './routes/_authenticated/admin/seller'
 import { Route as AuthenticatedAdminTestimoniRouteImport } from './routes/_authenticated/admin/testimoni'
+import { Route as AuthenticatedAdminArtikelIndexRouteImport } from './routes/_authenticated/admin/artikel/index'
+import { Route as AuthenticatedAdminArtikelNewRouteImport } from './routes/_authenticated/admin/artikel/new'
+import { Route as AuthenticatedAdminProdukIndexRouteImport } from './routes/_authenticated/admin/produk/index'
+import { Route as AuthenticatedAdminProdukNewRouteImport } from './routes/_authenticated/admin/produk/new'
+import { Route as AuthenticatedAdminArtikelIdEditRouteImport } from './routes/_authenticated/admin/artikel/$id.edit'
+import { Route as AuthenticatedAdminProdukIdEditRouteImport } from './routes/_authenticated/admin/produk/$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -120,6 +126,42 @@ const AuthenticatedAdminTestimoniRoute =
     path: '/testimoni',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminArtikelIndexRoute =
+  AuthenticatedAdminArtikelIndexRouteImport.update({
+    id: '/artikel/',
+    path: '/artikel/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminArtikelNewRoute =
+  AuthenticatedAdminArtikelNewRouteImport.update({
+    id: '/artikel/new',
+    path: '/artikel/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminProdukIndexRoute =
+  AuthenticatedAdminProdukIndexRouteImport.update({
+    id: '/produk/',
+    path: '/produk/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminProdukNewRoute =
+  AuthenticatedAdminProdukNewRouteImport.update({
+    id: '/produk/new',
+    path: '/produk/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminArtikelIdEditRoute =
+  AuthenticatedAdminArtikelIdEditRouteImport.update({
+    id: '/artikel/$id/edit',
+    path: '/artikel/$id/edit',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminProdukIdEditRoute =
+  AuthenticatedAdminProdukIdEditRouteImport.update({
+    id: '/produk/$id/edit',
+    path: '/produk/$id/edit',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -139,6 +181,12 @@ export interface FileRoutesByFullPath {
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
+  '/admin/produk/': typeof AuthenticatedAdminProdukIndexRoute
+  '/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
+  '/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -157,6 +205,12 @@ export interface FileRoutesByTo {
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/admin/artikel': typeof AuthenticatedAdminArtikelIndexRoute
+  '/admin/produk': typeof AuthenticatedAdminProdukIndexRoute
+  '/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
+  '/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -178,6 +232,12 @@ export interface FileRoutesById {
   '/_authenticated/admin/seller': typeof AuthenticatedAdminSellerRoute
   '/_authenticated/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/_authenticated/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/_authenticated/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
+  '/_authenticated/admin/produk/': typeof AuthenticatedAdminProdukIndexRoute
+  '/_authenticated/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
+  '/_authenticated/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -199,6 +259,12 @@ export interface FileRouteTypes {
     | '/admin/seller'
     | '/admin/testimoni'
     | '/admin/'
+    | '/admin/artikel/new'
+    | '/admin/produk/new'
+    | '/admin/artikel/'
+    | '/admin/produk/'
+    | '/admin/artikel/$id/edit'
+    | '/admin/produk/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -217,6 +283,12 @@ export interface FileRouteTypes {
     | '/admin/seller'
     | '/admin/testimoni'
     | '/admin'
+    | '/admin/artikel/new'
+    | '/admin/produk/new'
+    | '/admin/artikel'
+    | '/admin/produk'
+    | '/admin/artikel/$id/edit'
+    | '/admin/produk/$id/edit'
   id:
     | '__root__'
     | '/'
@@ -237,6 +309,12 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/seller'
     | '/_authenticated/admin/testimoni'
     | '/_authenticated/admin/'
+    | '/_authenticated/admin/artikel/new'
+    | '/_authenticated/admin/produk/new'
+    | '/_authenticated/admin/artikel/'
+    | '/_authenticated/admin/produk/'
+    | '/_authenticated/admin/artikel/$id/edit'
+    | '/_authenticated/admin/produk/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -382,6 +460,48 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminTestimoniRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/artikel/': {
+      id: '/_authenticated/admin/artikel/'
+      path: '/artikel'
+      fullPath: '/admin/artikel/'
+      preLoaderRoute: typeof AuthenticatedAdminArtikelIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/artikel/new': {
+      id: '/_authenticated/admin/artikel/new'
+      path: '/artikel/new'
+      fullPath: '/admin/artikel/new'
+      preLoaderRoute: typeof AuthenticatedAdminArtikelNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/produk/': {
+      id: '/_authenticated/admin/produk/'
+      path: '/produk'
+      fullPath: '/admin/produk/'
+      preLoaderRoute: typeof AuthenticatedAdminProdukIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/produk/new': {
+      id: '/_authenticated/admin/produk/new'
+      path: '/produk/new'
+      fullPath: '/admin/produk/new'
+      preLoaderRoute: typeof AuthenticatedAdminProdukNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/artikel/$id/edit': {
+      id: '/_authenticated/admin/artikel/$id/edit'
+      path: '/artikel/$id/edit'
+      fullPath: '/admin/artikel/$id/edit'
+      preLoaderRoute: typeof AuthenticatedAdminArtikelIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/produk/$id/edit': {
+      id: '/_authenticated/admin/produk/$id/edit'
+      path: '/produk/$id/edit'
+      fullPath: '/admin/produk/$id/edit'
+      preLoaderRoute: typeof AuthenticatedAdminProdukIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
   }
 }
 
@@ -390,6 +510,12 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminSellerRoute: typeof AuthenticatedAdminSellerRoute
   AuthenticatedAdminTestimoniRoute: typeof AuthenticatedAdminTestimoniRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminArtikelNewRoute: typeof AuthenticatedAdminArtikelNewRoute
+  AuthenticatedAdminProdukNewRoute: typeof AuthenticatedAdminProdukNewRoute
+  AuthenticatedAdminArtikelIndexRoute: typeof AuthenticatedAdminArtikelIndexRoute
+  AuthenticatedAdminProdukIndexRoute: typeof AuthenticatedAdminProdukIndexRoute
+  AuthenticatedAdminArtikelIdEditRoute: typeof AuthenticatedAdminArtikelIdEditRoute
+  AuthenticatedAdminProdukIdEditRoute: typeof AuthenticatedAdminProdukIdEditRoute
 }
 
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
@@ -398,6 +524,12 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminSellerRoute: AuthenticatedAdminSellerRoute,
     AuthenticatedAdminTestimoniRoute: AuthenticatedAdminTestimoniRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+    AuthenticatedAdminArtikelNewRoute: AuthenticatedAdminArtikelNewRoute,
+    AuthenticatedAdminProdukNewRoute: AuthenticatedAdminProdukNewRoute,
+    AuthenticatedAdminArtikelIndexRoute: AuthenticatedAdminArtikelIndexRoute,
+    AuthenticatedAdminProdukIndexRoute: AuthenticatedAdminProdukIndexRoute,
+    AuthenticatedAdminArtikelIdEditRoute: AuthenticatedAdminArtikelIdEditRoute,
+    AuthenticatedAdminProdukIdEditRoute: AuthenticatedAdminProdukIdEditRoute,
   }
 
 const AuthenticatedAdminRouteRouteWithChildren =
