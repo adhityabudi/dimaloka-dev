@@ -43,7 +43,7 @@ function Page() {
         </section>
         <section className="space-y-4 rounded-2xl border bg-card p-6 shadow-card">
           <h2 className="font-extrabold text-navy">Pembayaran</h2>
-          <Field label="Info rekening (tampil di invoice)"><Textarea rows={3} value={v.payment_info ?? ""} onChange={s("payment_info")} /></Field>
+          <Field label="Info rekening (tampil di invoice)" hint="Satu bank per blok, pisahkan dengan baris kosong. Baris 1: nama bank, baris 2: nomor rekening, baris 3: a.n. pemilik"><Textarea rows={8} value={v.payment_info ?? ""} onChange={s("payment_info")} /></Field>
         </section>
       </div>
     </div>

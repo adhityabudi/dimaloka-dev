@@ -135,7 +135,7 @@ function InvoicePage() {
 
           <footer className="mt-10 border-t pt-6 text-center text-sm text-muted-foreground">
             <p>Terima kasih atas kepercayaan Anda.</p>
-            <p className="mt-2 text-destructive">{typeof window === "undefined" ? "" : window.location.host}</p>
+            <p className="mt-2 text-destructive">{site}</p>
           </footer>
         </div>
       </div>
