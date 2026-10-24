@@ -10,16 +10,72 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
+import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
+import { Route as AuthenticatedAkunRouteImport } from './routes/_authenticated/akun'
+import { Route as AuthSignInRouteImport } from './routes/auth.sign-in'
+import { Route as AuthSignUpRouteImport } from './routes/auth.sign-up'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as InvoiceTokenRouteImport } from './routes/invoice.$token'
 import { Route as KategoriSlugRouteImport } from './routes/kategori.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
+import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
+import { Route as AuthenticatedAdminKategoriRouteImport } from './routes/_authenticated/admin/kategori'
+import { Route as AuthenticatedAdminOrderRouteImport } from './routes/_authenticated/admin/order'
+import { Route as AuthenticatedAdminSellerRouteImport } from './routes/_authenticated/admin/seller'
+import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin/seo'
+import { Route as AuthenticatedAdminSettingRouteImport } from './routes/_authenticated/admin/setting'
+import { Route as AuthenticatedAdminTestimoniRouteImport } from './routes/_authenticated/admin/testimoni'
+import { Route as AuthenticatedAdminArtikelIndexRouteImport } from './routes/_authenticated/admin/artikel/index'
+import { Route as AuthenticatedAdminArtikelNewRouteImport } from './routes/_authenticated/admin/artikel/new'
+import { Route as AuthenticatedAdminInvoiceIndexRouteImport } from './routes/_authenticated/admin/invoice/index'
+import { Route as AuthenticatedAdminInvoiceNewRouteImport } from './routes/_authenticated/admin/invoice/new'
+import { Route as AuthenticatedAdminProdukIndexRouteImport } from './routes/_authenticated/admin/produk/index'
+import { Route as AuthenticatedAdminProdukNewRouteImport } from './routes/_authenticated/admin/produk/new'
+import { Route as AuthenticatedAdminArtikelIdEditRouteImport } from './routes/_authenticated/admin/artikel/$id.edit'
+import { Route as AuthenticatedAdminProdukIdEditRouteImport } from './routes/_authenticated/admin/produk/$id.edit'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
+  id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthenticatedAdminRouteRoute = AuthenticatedAdminRouteRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthenticatedAkunRoute = AuthenticatedAkunRouteImport.update({
+  id: '/akun',
+  path: '/akun',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const AuthSignInRoute = AuthSignInRouteImport.update({
+  id: '/auth/sign-in',
+  path: '/auth/sign-in',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const AuthSignUpRoute = AuthSignUpRouteImport.update({
+  id: '/auth/sign-up',
+  path: '/auth/sign-up',
   getParentRoute: () => rootRouteImport,
 } as any)
 const BlogIndexRoute = BlogIndexRouteImport.update({
@@ -52,67 +108,285 @@ const StoreSlugRoute = StoreSlugRouteImport.update({
   path: '/store/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedAdminIndexRoute = AuthenticatedAdminIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminKategoriRoute =
+  AuthenticatedAdminKategoriRouteImport.update({
+    id: '/kategori',
+    path: '/kategori',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminOrderRoute = AuthenticatedAdminOrderRouteImport.update({
+  id: '/order',
+  path: '/order',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminSellerRoute =
+  AuthenticatedAdminSellerRouteImport.update({
+    id: '/seller',
+    path: '/seller',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminSettingRoute =
+  AuthenticatedAdminSettingRouteImport.update({
+    id: '/setting',
+    path: '/setting',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminTestimoniRoute =
+  AuthenticatedAdminTestimoniRouteImport.update({
+    id: '/testimoni',
+    path: '/testimoni',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminArtikelIndexRoute =
+  AuthenticatedAdminArtikelIndexRouteImport.update({
+    id: '/artikel/',
+    path: '/artikel/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminArtikelNewRoute =
+  AuthenticatedAdminArtikelNewRouteImport.update({
+    id: '/artikel/new',
+    path: '/artikel/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminInvoiceIndexRoute =
+  AuthenticatedAdminInvoiceIndexRouteImport.update({
+    id: '/invoice/',
+    path: '/invoice/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminInvoiceNewRoute =
+  AuthenticatedAdminInvoiceNewRouteImport.update({
+    id: '/invoice/new',
+    path: '/invoice/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminProdukIndexRoute =
+  AuthenticatedAdminProdukIndexRouteImport.update({
+    id: '/produk/',
+    path: '/produk/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminProdukNewRoute =
+  AuthenticatedAdminProdukNewRouteImport.update({
+    id: '/produk/new',
+    path: '/produk/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminArtikelIdEditRoute =
+  AuthenticatedAdminArtikelIdEditRouteImport.update({
+    id: '/artikel/$id/edit',
+    path: '/artikel/$id/edit',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminProdukIdEditRoute =
+  AuthenticatedAdminProdukIdEditRouteImport.update({
+    id: '/produk/$id/edit',
+    path: '/produk/$id/edit',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/akun': typeof AuthenticatedAkunRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/order': typeof AuthenticatedAdminOrderRoute
+  '/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/admin/setting': typeof AuthenticatedAdminSettingRoute
+  '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/admin/': typeof AuthenticatedAdminIndexRoute
+  '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
+  '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
+  '/admin/invoice/': typeof AuthenticatedAdminInvoiceIndexRoute
+  '/admin/produk/': typeof AuthenticatedAdminProdukIndexRoute
+  '/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
+  '/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/akun': typeof AuthenticatedAkunRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/order': typeof AuthenticatedAdminOrderRoute
+  '/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/admin/setting': typeof AuthenticatedAdminSettingRoute
+  '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/admin': typeof AuthenticatedAdminIndexRoute
+  '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
+  '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/admin/artikel': typeof AuthenticatedAdminArtikelIndexRoute
+  '/admin/invoice': typeof AuthenticatedAdminInvoiceIndexRoute
+  '/admin/produk': typeof AuthenticatedAdminProdukIndexRoute
+  '/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
+  '/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/robots.txt': typeof RobotsDottxtRoute
+  '/sitemap.xml': typeof SitemapDotxmlRoute
+  '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
+  '/_authenticated/akun': typeof AuthenticatedAkunRoute
+  '/auth/sign-in': typeof AuthSignInRoute
+  '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/_authenticated/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/_authenticated/admin/order': typeof AuthenticatedAdminOrderRoute
+  '/_authenticated/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/_authenticated/admin/setting': typeof AuthenticatedAdminSettingRoute
+  '/_authenticated/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
+  '/_authenticated/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/_authenticated/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
+  '/_authenticated/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/_authenticated/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
+  '/_authenticated/admin/invoice/': typeof AuthenticatedAdminInvoiceIndexRoute
+  '/_authenticated/admin/produk/': typeof AuthenticatedAdminProdukIndexRoute
+  '/_authenticated/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
+  '/_authenticated/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/admin'
+    | '/akun'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/blog/$slug'
     | '/invoice/$token'
     | '/kategori/$slug'
     | '/p/$slug'
     | '/store/$slug'
     | '/blog/'
+    | '/admin/kategori'
+    | '/admin/order'
+    | '/admin/seller'
+    | '/admin/seo'
+    | '/admin/setting'
+    | '/admin/testimoni'
+    | '/admin/'
+    | '/admin/artikel/new'
+    | '/admin/invoice/new'
+    | '/admin/produk/new'
+    | '/admin/artikel/'
+    | '/admin/invoice/'
+    | '/admin/produk/'
+    | '/admin/artikel/$id/edit'
+    | '/admin/produk/$id/edit'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/akun'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/blog/$slug'
     | '/invoice/$token'
     | '/kategori/$slug'
     | '/p/$slug'
     | '/store/$slug'
     | '/blog'
+    | '/admin/kategori'
+    | '/admin/order'
+    | '/admin/seller'
+    | '/admin/seo'
+    | '/admin/setting'
+    | '/admin/testimoni'
+    | '/admin'
+    | '/admin/artikel/new'
+    | '/admin/invoice/new'
+    | '/admin/produk/new'
+    | '/admin/artikel'
+    | '/admin/invoice'
+    | '/admin/produk'
+    | '/admin/artikel/$id/edit'
+    | '/admin/produk/$id/edit'
   id:
     | '__root__'
     | '/'
+    | '/_authenticated'
+    | '/robots.txt'
+    | '/sitemap.xml'
+    | '/_authenticated/admin'
+    | '/_authenticated/akun'
+    | '/auth/sign-in'
+    | '/auth/sign-up'
     | '/blog/$slug'
     | '/invoice/$token'
     | '/kategori/$slug'
     | '/p/$slug'
     | '/store/$slug'
     | '/blog/'
+    | '/_authenticated/admin/kategori'
+    | '/_authenticated/admin/order'
+    | '/_authenticated/admin/seller'
+    | '/_authenticated/admin/seo'
+    | '/_authenticated/admin/setting'
+    | '/_authenticated/admin/testimoni'
+    | '/_authenticated/admin/'
+    | '/_authenticated/admin/artikel/new'
+    | '/_authenticated/admin/invoice/new'
+    | '/_authenticated/admin/produk/new'
+    | '/_authenticated/admin/artikel/'
+    | '/_authenticated/admin/invoice/'
+    | '/_authenticated/admin/produk/'
+    | '/_authenticated/admin/artikel/$id/edit'
+    | '/_authenticated/admin/produk/$id/edit'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  AuthSignInRoute: typeof AuthSignInRoute
+  AuthSignUpRoute: typeof AuthSignUpRoute
   BlogSlugRoute: typeof BlogSlugRoute
   InvoiceTokenRoute: typeof InvoiceTokenRoute
   KategoriSlugRoute: typeof KategoriSlugRoute
@@ -128,6 +402,55 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated': {
+      id: '/_authenticated'
+      path: ''
+      fullPath: '/'
+      preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/_authenticated/admin': {
+      id: '/_authenticated/admin'
+      path: '/admin'
+      fullPath: '/admin'
+      preLoaderRoute: typeof AuthenticatedAdminRouteRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/akun': {
+      id: '/_authenticated/akun'
+      path: '/akun'
+      fullPath: '/akun'
+      preLoaderRoute: typeof AuthenticatedAkunRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/auth/sign-in': {
+      id: '/auth/sign-in'
+      path: '/auth/sign-in'
+      fullPath: '/auth/sign-in'
+      preLoaderRoute: typeof AuthSignInRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/auth/sign-up': {
+      id: '/auth/sign-up'
+      path: '/auth/sign-up'
+      fullPath: '/auth/sign-up'
+      preLoaderRoute: typeof AuthSignUpRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/blog/': {
@@ -172,11 +495,176 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof StoreSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/admin/': {
+      id: '/_authenticated/admin/'
+      path: '/'
+      fullPath: '/admin/'
+      preLoaderRoute: typeof AuthenticatedAdminIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/kategori': {
+      id: '/_authenticated/admin/kategori'
+      path: '/kategori'
+      fullPath: '/admin/kategori'
+      preLoaderRoute: typeof AuthenticatedAdminKategoriRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/order': {
+      id: '/_authenticated/admin/order'
+      path: '/order'
+      fullPath: '/admin/order'
+      preLoaderRoute: typeof AuthenticatedAdminOrderRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/seller': {
+      id: '/_authenticated/admin/seller'
+      path: '/seller'
+      fullPath: '/admin/seller'
+      preLoaderRoute: typeof AuthenticatedAdminSellerRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/seo': {
+      id: '/_authenticated/admin/seo'
+      path: '/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AuthenticatedAdminSeoRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/setting': {
+      id: '/_authenticated/admin/setting'
+      path: '/setting'
+      fullPath: '/admin/setting'
+      preLoaderRoute: typeof AuthenticatedAdminSettingRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/testimoni': {
+      id: '/_authenticated/admin/testimoni'
+      path: '/testimoni'
+      fullPath: '/admin/testimoni'
+      preLoaderRoute: typeof AuthenticatedAdminTestimoniRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/artikel/': {
+      id: '/_authenticated/admin/artikel/'
+      path: '/artikel'
+      fullPath: '/admin/artikel/'
+      preLoaderRoute: typeof AuthenticatedAdminArtikelIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/artikel/new': {
+      id: '/_authenticated/admin/artikel/new'
+      path: '/artikel/new'
+      fullPath: '/admin/artikel/new'
+      preLoaderRoute: typeof AuthenticatedAdminArtikelNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/invoice/': {
+      id: '/_authenticated/admin/invoice/'
+      path: '/invoice'
+      fullPath: '/admin/invoice/'
+      preLoaderRoute: typeof AuthenticatedAdminInvoiceIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/invoice/new': {
+      id: '/_authenticated/admin/invoice/new'
+      path: '/invoice/new'
+      fullPath: '/admin/invoice/new'
+      preLoaderRoute: typeof AuthenticatedAdminInvoiceNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/produk/': {
+      id: '/_authenticated/admin/produk/'
+      path: '/produk'
+      fullPath: '/admin/produk/'
+      preLoaderRoute: typeof AuthenticatedAdminProdukIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/produk/new': {
+      id: '/_authenticated/admin/produk/new'
+      path: '/produk/new'
+      fullPath: '/admin/produk/new'
+      preLoaderRoute: typeof AuthenticatedAdminProdukNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/artikel/$id/edit': {
+      id: '/_authenticated/admin/artikel/$id/edit'
+      path: '/artikel/$id/edit'
+      fullPath: '/admin/artikel/$id/edit'
+      preLoaderRoute: typeof AuthenticatedAdminArtikelIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/produk/$id/edit': {
+      id: '/_authenticated/admin/produk/$id/edit'
+      path: '/produk/$id/edit'
+      fullPath: '/admin/produk/$id/edit'
+      preLoaderRoute: typeof AuthenticatedAdminProdukIdEditRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
   }
 }
 
+interface AuthenticatedAdminRouteRouteChildren {
+  AuthenticatedAdminKategoriRoute: typeof AuthenticatedAdminKategoriRoute
+  AuthenticatedAdminOrderRoute: typeof AuthenticatedAdminOrderRoute
+  AuthenticatedAdminSellerRoute: typeof AuthenticatedAdminSellerRoute
+  AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
+  AuthenticatedAdminSettingRoute: typeof AuthenticatedAdminSettingRoute
+  AuthenticatedAdminTestimoniRoute: typeof AuthenticatedAdminTestimoniRoute
+  AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
+  AuthenticatedAdminArtikelNewRoute: typeof AuthenticatedAdminArtikelNewRoute
+  AuthenticatedAdminInvoiceNewRoute: typeof AuthenticatedAdminInvoiceNewRoute
+  AuthenticatedAdminProdukNewRoute: typeof AuthenticatedAdminProdukNewRoute
+  AuthenticatedAdminArtikelIndexRoute: typeof AuthenticatedAdminArtikelIndexRoute
+  AuthenticatedAdminInvoiceIndexRoute: typeof AuthenticatedAdminInvoiceIndexRoute
+  AuthenticatedAdminProdukIndexRoute: typeof AuthenticatedAdminProdukIndexRoute
+  AuthenticatedAdminArtikelIdEditRoute: typeof AuthenticatedAdminArtikelIdEditRoute
+  AuthenticatedAdminProdukIdEditRoute: typeof AuthenticatedAdminProdukIdEditRoute
+}
+
+const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
+  {
+    AuthenticatedAdminKategoriRoute: AuthenticatedAdminKategoriRoute,
+    AuthenticatedAdminOrderRoute: AuthenticatedAdminOrderRoute,
+    AuthenticatedAdminSellerRoute: AuthenticatedAdminSellerRoute,
+    AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
+    AuthenticatedAdminSettingRoute: AuthenticatedAdminSettingRoute,
+    AuthenticatedAdminTestimoniRoute: AuthenticatedAdminTestimoniRoute,
+    AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
+    AuthenticatedAdminArtikelNewRoute: AuthenticatedAdminArtikelNewRoute,
+    AuthenticatedAdminInvoiceNewRoute: AuthenticatedAdminInvoiceNewRoute,
+    AuthenticatedAdminProdukNewRoute: AuthenticatedAdminProdukNewRoute,
+    AuthenticatedAdminArtikelIndexRoute: AuthenticatedAdminArtikelIndexRoute,
+    AuthenticatedAdminInvoiceIndexRoute: AuthenticatedAdminInvoiceIndexRoute,
+    AuthenticatedAdminProdukIndexRoute: AuthenticatedAdminProdukIndexRoute,
+    AuthenticatedAdminArtikelIdEditRoute: AuthenticatedAdminArtikelIdEditRoute,
+    AuthenticatedAdminProdukIdEditRoute: AuthenticatedAdminProdukIdEditRoute,
+  }
+
+const AuthenticatedAdminRouteRouteWithChildren =
+  AuthenticatedAdminRouteRoute._addFileChildren(
+    AuthenticatedAdminRouteRouteChildren,
+  )
+
+interface AuthenticatedRouteRouteChildren {
+  AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
+  AuthenticatedAkunRoute: typeof AuthenticatedAkunRoute
+}
+
+const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
+  AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
+  AuthenticatedAkunRoute: AuthenticatedAkunRoute,
+}
+
+const AuthenticatedRouteRouteWithChildren =
+  AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  RobotsDottxtRoute: RobotsDottxtRoute,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
+  AuthSignInRoute: AuthSignInRoute,
+  AuthSignUpRoute: AuthSignUpRoute,
   BlogSlugRoute: BlogSlugRoute,
   InvoiceTokenRoute: InvoiceTokenRoute,
   KategoriSlugRoute: KategoriSlugRoute,

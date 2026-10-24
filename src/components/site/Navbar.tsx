@@ -33,7 +33,7 @@ export function Navbar() {
               {cats.map((c) => (
                 <DropdownMenuItem key={c.id} asChild>
                   <Link to="/kategori/$slug" params={{ slug: c.slug }} className="flex items-center gap-2">
-                    <CategoryIcon name={c.icon} className="h-4 w-4 text-primary" /> {c.name}
+                    <CategoryIcon icon={c.icon} className="h-4 w-4 text-primary" /> {c.name}
                   </Link>
                 </DropdownMenuItem>
               ))}
@@ -72,7 +72,7 @@ export function Navbar() {
           <div className="grid grid-cols-2 gap-2">
             {cats.map((c) => (
               <Link key={c.id} to="/kategori/$slug" params={{ slug: c.slug }} onClick={() => setOpen(false)} className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm font-medium">
-                <CategoryIcon name={c.icon} className="h-4 w-4 text-primary" /> {c.name}
+                <CategoryIcon icon={c.icon} className="h-4 w-4 text-primary" /> {c.name}
               </Link>
             ))}
           </div>

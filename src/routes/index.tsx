@@ -107,7 +107,7 @@ function Index() {
           {data.categories.map((c, i) => (
             <Link key={c.id} to="/kategori/$slug" params={{ slug: c.slug }} className="group relative flex gap-4 rounded-2xl border bg-card p-5 shadow-card transition hover:-translate-y-1 hover:border-primary/50">
               <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl ${i % 3 === 0 ? "bg-accent text-primary-strong" : i % 3 === 1 ? "bg-secondary text-navy-2" : "bg-muted text-sky"}`}>
-                <CategoryIcon name={c.icon} className="h-7 w-7" />
+                <CategoryIcon icon={c.icon} className="h-7 w-7" />
               </div>
               <div className="min-w-0">
                 <h3 className="font-bold text-navy group-hover:text-primary-strong">{c.name}</h3>
