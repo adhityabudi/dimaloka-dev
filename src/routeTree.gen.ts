@@ -25,10 +25,15 @@ import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminKategoriRouteImport } from './routes/_authenticated/admin/kategori'
+import { Route as AuthenticatedAdminOrderRouteImport } from './routes/_authenticated/admin/order'
 import { Route as AuthenticatedAdminSellerRouteImport } from './routes/_authenticated/admin/seller'
+import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin/seo'
+import { Route as AuthenticatedAdminSettingRouteImport } from './routes/_authenticated/admin/setting'
 import { Route as AuthenticatedAdminTestimoniRouteImport } from './routes/_authenticated/admin/testimoni'
 import { Route as AuthenticatedAdminArtikelIndexRouteImport } from './routes/_authenticated/admin/artikel/index'
 import { Route as AuthenticatedAdminArtikelNewRouteImport } from './routes/_authenticated/admin/artikel/new'
+import { Route as AuthenticatedAdminInvoiceIndexRouteImport } from './routes/_authenticated/admin/invoice/index'
+import { Route as AuthenticatedAdminInvoiceNewRouteImport } from './routes/_authenticated/admin/invoice/new'
 import { Route as AuthenticatedAdminProdukIndexRouteImport } from './routes/_authenticated/admin/produk/index'
 import { Route as AuthenticatedAdminProdukNewRouteImport } from './routes/_authenticated/admin/produk/new'
 import { Route as AuthenticatedAdminArtikelIdEditRouteImport } from './routes/_authenticated/admin/artikel/$id.edit'
@@ -114,10 +119,26 @@ const AuthenticatedAdminKategoriRoute =
     path: '/kategori',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminOrderRoute = AuthenticatedAdminOrderRouteImport.update({
+  id: '/order',
+  path: '/order',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
 const AuthenticatedAdminSellerRoute =
   AuthenticatedAdminSellerRouteImport.update({
     id: '/seller',
     path: '/seller',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminSeoRoute = AuthenticatedAdminSeoRouteImport.update({
+  id: '/seo',
+  path: '/seo',
+  getParentRoute: () => AuthenticatedAdminRouteRoute,
+} as any)
+const AuthenticatedAdminSettingRoute =
+  AuthenticatedAdminSettingRouteImport.update({
+    id: '/setting',
+    path: '/setting',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminTestimoniRoute =
@@ -136,6 +157,18 @@ const AuthenticatedAdminArtikelNewRoute =
   AuthenticatedAdminArtikelNewRouteImport.update({
     id: '/artikel/new',
     path: '/artikel/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminInvoiceIndexRoute =
+  AuthenticatedAdminInvoiceIndexRouteImport.update({
+    id: '/invoice/',
+    path: '/invoice/',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminInvoiceNewRoute =
+  AuthenticatedAdminInvoiceNewRouteImport.update({
+    id: '/invoice/new',
+    path: '/invoice/new',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminProdukIndexRoute =
@@ -178,12 +211,17 @@ export interface FileRoutesByFullPath {
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/admin/setting': typeof AuthenticatedAdminSettingRoute
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
+  '/admin/invoice/': typeof AuthenticatedAdminInvoiceIndexRoute
   '/admin/produk/': typeof AuthenticatedAdminProdukIndexRoute
   '/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
   '/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
@@ -202,12 +240,17 @@ export interface FileRoutesByTo {
   '/store/$slug': typeof StoreSlugRoute
   '/blog': typeof BlogIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/admin/setting': typeof AuthenticatedAdminSettingRoute
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/admin/artikel': typeof AuthenticatedAdminArtikelIndexRoute
+  '/admin/invoice': typeof AuthenticatedAdminInvoiceIndexRoute
   '/admin/produk': typeof AuthenticatedAdminProdukIndexRoute
   '/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
   '/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
@@ -229,12 +272,17 @@ export interface FileRoutesById {
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
   '/_authenticated/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/_authenticated/admin/order': typeof AuthenticatedAdminOrderRoute
   '/_authenticated/admin/seller': typeof AuthenticatedAdminSellerRoute
+  '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
+  '/_authenticated/admin/setting': typeof AuthenticatedAdminSettingRoute
   '/_authenticated/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/_authenticated/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/_authenticated/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/_authenticated/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
+  '/_authenticated/admin/invoice/': typeof AuthenticatedAdminInvoiceIndexRoute
   '/_authenticated/admin/produk/': typeof AuthenticatedAdminProdukIndexRoute
   '/_authenticated/admin/artikel/$id/edit': typeof AuthenticatedAdminArtikelIdEditRoute
   '/_authenticated/admin/produk/$id/edit': typeof AuthenticatedAdminProdukIdEditRoute
@@ -256,12 +304,17 @@ export interface FileRouteTypes {
     | '/store/$slug'
     | '/blog/'
     | '/admin/kategori'
+    | '/admin/order'
     | '/admin/seller'
+    | '/admin/seo'
+    | '/admin/setting'
     | '/admin/testimoni'
     | '/admin/'
     | '/admin/artikel/new'
+    | '/admin/invoice/new'
     | '/admin/produk/new'
     | '/admin/artikel/'
+    | '/admin/invoice/'
     | '/admin/produk/'
     | '/admin/artikel/$id/edit'
     | '/admin/produk/$id/edit'
@@ -280,12 +333,17 @@ export interface FileRouteTypes {
     | '/store/$slug'
     | '/blog'
     | '/admin/kategori'
+    | '/admin/order'
     | '/admin/seller'
+    | '/admin/seo'
+    | '/admin/setting'
     | '/admin/testimoni'
     | '/admin'
     | '/admin/artikel/new'
+    | '/admin/invoice/new'
     | '/admin/produk/new'
     | '/admin/artikel'
+    | '/admin/invoice'
     | '/admin/produk'
     | '/admin/artikel/$id/edit'
     | '/admin/produk/$id/edit'
@@ -306,12 +364,17 @@ export interface FileRouteTypes {
     | '/store/$slug'
     | '/blog/'
     | '/_authenticated/admin/kategori'
+    | '/_authenticated/admin/order'
     | '/_authenticated/admin/seller'
+    | '/_authenticated/admin/seo'
+    | '/_authenticated/admin/setting'
     | '/_authenticated/admin/testimoni'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/artikel/new'
+    | '/_authenticated/admin/invoice/new'
     | '/_authenticated/admin/produk/new'
     | '/_authenticated/admin/artikel/'
+    | '/_authenticated/admin/invoice/'
     | '/_authenticated/admin/produk/'
     | '/_authenticated/admin/artikel/$id/edit'
     | '/_authenticated/admin/produk/$id/edit'
@@ -446,11 +509,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminKategoriRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/order': {
+      id: '/_authenticated/admin/order'
+      path: '/order'
+      fullPath: '/admin/order'
+      preLoaderRoute: typeof AuthenticatedAdminOrderRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/seller': {
       id: '/_authenticated/admin/seller'
       path: '/seller'
       fullPath: '/admin/seller'
       preLoaderRoute: typeof AuthenticatedAdminSellerRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/seo': {
+      id: '/_authenticated/admin/seo'
+      path: '/seo'
+      fullPath: '/admin/seo'
+      preLoaderRoute: typeof AuthenticatedAdminSeoRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/setting': {
+      id: '/_authenticated/admin/setting'
+      path: '/setting'
+      fullPath: '/admin/setting'
+      preLoaderRoute: typeof AuthenticatedAdminSettingRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/testimoni': {
@@ -472,6 +556,20 @@ declare module '@tanstack/react-router' {
       path: '/artikel/new'
       fullPath: '/admin/artikel/new'
       preLoaderRoute: typeof AuthenticatedAdminArtikelNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/invoice/': {
+      id: '/_authenticated/admin/invoice/'
+      path: '/invoice'
+      fullPath: '/admin/invoice/'
+      preLoaderRoute: typeof AuthenticatedAdminInvoiceIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/invoice/new': {
+      id: '/_authenticated/admin/invoice/new'
+      path: '/invoice/new'
+      fullPath: '/admin/invoice/new'
+      preLoaderRoute: typeof AuthenticatedAdminInvoiceNewRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/produk/': {
@@ -507,12 +605,17 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminKategoriRoute: typeof AuthenticatedAdminKategoriRoute
+  AuthenticatedAdminOrderRoute: typeof AuthenticatedAdminOrderRoute
   AuthenticatedAdminSellerRoute: typeof AuthenticatedAdminSellerRoute
+  AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
+  AuthenticatedAdminSettingRoute: typeof AuthenticatedAdminSettingRoute
   AuthenticatedAdminTestimoniRoute: typeof AuthenticatedAdminTestimoniRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminArtikelNewRoute: typeof AuthenticatedAdminArtikelNewRoute
+  AuthenticatedAdminInvoiceNewRoute: typeof AuthenticatedAdminInvoiceNewRoute
   AuthenticatedAdminProdukNewRoute: typeof AuthenticatedAdminProdukNewRoute
   AuthenticatedAdminArtikelIndexRoute: typeof AuthenticatedAdminArtikelIndexRoute
+  AuthenticatedAdminInvoiceIndexRoute: typeof AuthenticatedAdminInvoiceIndexRoute
   AuthenticatedAdminProdukIndexRoute: typeof AuthenticatedAdminProdukIndexRoute
   AuthenticatedAdminArtikelIdEditRoute: typeof AuthenticatedAdminArtikelIdEditRoute
   AuthenticatedAdminProdukIdEditRoute: typeof AuthenticatedAdminProdukIdEditRoute
@@ -521,12 +624,17 @@ interface AuthenticatedAdminRouteRouteChildren {
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
     AuthenticatedAdminKategoriRoute: AuthenticatedAdminKategoriRoute,
+    AuthenticatedAdminOrderRoute: AuthenticatedAdminOrderRoute,
     AuthenticatedAdminSellerRoute: AuthenticatedAdminSellerRoute,
+    AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
+    AuthenticatedAdminSettingRoute: AuthenticatedAdminSettingRoute,
     AuthenticatedAdminTestimoniRoute: AuthenticatedAdminTestimoniRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
     AuthenticatedAdminArtikelNewRoute: AuthenticatedAdminArtikelNewRoute,
+    AuthenticatedAdminInvoiceNewRoute: AuthenticatedAdminInvoiceNewRoute,
     AuthenticatedAdminProdukNewRoute: AuthenticatedAdminProdukNewRoute,
     AuthenticatedAdminArtikelIndexRoute: AuthenticatedAdminArtikelIndexRoute,
+    AuthenticatedAdminInvoiceIndexRoute: AuthenticatedAdminInvoiceIndexRoute,
     AuthenticatedAdminProdukIndexRoute: AuthenticatedAdminProdukIndexRoute,
     AuthenticatedAdminArtikelIdEditRoute: AuthenticatedAdminArtikelIdEditRoute,
     AuthenticatedAdminProdukIdEditRoute: AuthenticatedAdminProdukIdEditRoute,
