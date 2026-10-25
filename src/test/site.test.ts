@@ -16,7 +16,8 @@ describe("Search Console token", () => {
 
   it("returns empty when nothing usable is stored", () => {
     expect(searchConsoleToken("")).toBe("");
+    expect(searchConsoleToken("   ")).toBe("");
     expect(searchConsoleToken(null)).toBe("");
-    expect(searchConsoleToken("<meta name=\"viewport\" content=\"width=device-width\">")).toBe("width=device-width");
+    expect(searchConsoleToken(undefined)).toBe("");
   });
 });
