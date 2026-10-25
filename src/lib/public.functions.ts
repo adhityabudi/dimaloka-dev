@@ -1,6 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { createClient } from "@supabase/supabase-js";
-import type { Database } from "@/integrations/supabase/types";
+import type { Database, Json } from "@/integrations/supabase/types";
 
 function pub() {
   const key = process.env["SUPABASE_PUBLISHABLE_KEY"]!;
@@ -151,8 +151,8 @@ export const getPortfolioOverview = createServerFn({ method: "GET" }).handler(as
   const keys = ["portfolio_master", ...SERVICE_KEYS.map(pfKey)];
   const { data, error } = await pub().from("site_settings").select("key,value").in("key", keys);
   if (error) throw new Error("Portfolio belum dapat dimuat. Silakan coba kembali.");
-  const map = Object.fromEntries((data ?? []).map(r => [r.key, r.value])) as Record<string, unknown>;
-  return { master: map.portfolio_master ?? null, services: Object.fromEntries(SERVICE_KEYS.map(s => [s, map[pfKey(s)] ?? null])) as Record<string, unknown> };
+  const map = Object.fromEntries((data ?? []).map(r => [r.key, r.value])) as Record<string, Json>;
+  return { master: map.portfolio_master ?? null, services: Object.fromEntries(SERVICE_KEYS.map(s => [s, map[pfKey(s)] ?? null])) as Record<string, Json> };
 });
 
 export const getServiceContent = createServerFn({ method: "GET" })
@@ -163,6 +163,6 @@ export const getServiceContent = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     const { data: rows, error } = await pub().from("site_settings").select("key,value").in("key", [`service_${data.slug}`, pfKey(data.slug)]);
     if (error) throw new Error("Halaman layanan belum dapat dimuat.");
-    const map = Object.fromEntries((rows ?? []).map(r => [r.key, r.value])) as Record<string, unknown>;
+    const map = Object.fromEntries((rows ?? []).map(r => [r.key, r.value])) as Record<string, Json>;
     return { content: map[`service_${data.slug}`] ?? null, portfolio: map[pfKey(data.slug)] ?? null };
   });
