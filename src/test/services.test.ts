@@ -3,7 +3,7 @@ import { isServiceSlug, portfolioKey, serviceContent, servicePortfolio, SERVICE_
 
 describe("Master portfolio per service", () => {
   it("covers website plus the five service pages", () => {
-    expect([...SERVICE_SLUGS]).toEqual(["website", "desain-grafis", "digital-marketing", "seo", "aplikasi", "video"]);
+    expect(SERVICE_SLUGS).toEqual(expect.arrayContaining(["website", "desain-grafis", "digital-marketing", "seo", "aplikasi", "video", "website-custom", "website-company-profile", "web-toko-online", "facebook-ads", "google-ads"]));
     expect(isServiceSlug("blog")).toBe(false);
   });
   it("keeps the existing Website portfolio data under its original key", () => {

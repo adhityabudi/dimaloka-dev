@@ -97,8 +97,8 @@ function ProductPage() {
 
         <aside className="lg:sticky lg:top-24 lg:self-start">
           <div className="rounded-2xl border bg-card p-6 shadow-card">
-            <p className="text-sm text-muted-foreground">Harga mulai</p>
-            <p className="text-3xl font-extrabold text-primary-strong">{rupiah(p.price)}</p>
+            <p className="text-sm text-muted-foreground">{p.price > 0 ? "Harga mulai" : "Penawaran"}</p>
+            <p className="text-3xl font-extrabold text-primary-strong">{p.price > 0 ? rupiah(p.price) : "Sesuai kebutuhan"}</p>
             {packages.length > 0 && (
               <div className="mt-5 space-y-3">
                 {packages.map((k, i) => (
@@ -109,11 +109,12 @@ function ProductPage() {
                 ))}
               </div>
             )}
-            <Button asChild size="lg" className="mt-5 h-12 w-full rounded-xl font-bold shadow-cta">
+            {p.price > 0 && <Button asChild size="lg" className="mt-5 h-12 w-full rounded-xl font-bold shadow-cta">
               {user ? <Link to="/checkout/$slug" params={{ slug: p.slug }} search={{ paket: chosen?.name }}><ShoppingCart /> Pesan Sekarang</Link>
                 : <Link to="/auth/sign-in" search={{ redirect: checkoutPath }}><ShoppingCart /> Pesan Sekarang</Link>}
-            </Button>
-            {!user && <p className="mt-2 text-center text-xs text-muted-foreground">Masuk atau daftar gratis untuk melanjutkan pesanan.</p>}
+            </Button>}
+            {p.price <= 0 && <p className="mt-5 text-sm text-muted-foreground">Biaya ditentukan setelah kebutuhan dan ruang lingkup disepakati.</p>}
+            {p.price > 0 && !user && <p className="mt-2 text-center text-xs text-muted-foreground">Masuk atau daftar gratis untuk melanjutkan pesanan.</p>}
             <Button asChild size="lg" variant="outline" className="mt-2 h-12 w-full rounded-xl font-bold">
               <a href={waLink(phone, msg)} target="_blank" rel="noreferrer"><MessageCircle /> Tanya via Chat</a>
             </Button>

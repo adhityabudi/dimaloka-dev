@@ -1,3 +1,4 @@
+import { priorityServiceDefaults } from "./priority-services";
 import dgHero from "@/assets/svc-desain-grafis-hero.jpg";
 import dgA from "@/assets/svc-desain-grafis-a.jpg";
 import dgB from "@/assets/svc-desain-grafis-b.jpg";
@@ -31,11 +32,11 @@ import vd3 from "@/assets/pf-video-3.jpg";
 import { defaultPortfolio, normalizePortfolio, type PortfolioPage, type PortfolioProject } from "./portfolio";
 
 /** Service slugs match category slugs. "website" keeps its own dedicated page. */
-export const SERVICE_SLUGS = ["website", "desain-grafis", "digital-marketing", "seo", "aplikasi", "video"] as const;
+export const SERVICE_SLUGS = ["website", "desain-grafis", "digital-marketing", "seo", "aplikasi", "video", "website-custom", "website-company-profile", "web-toko-online", "facebook-ads", "google-ads"] as const;
 export type ServiceSlug = (typeof SERVICE_SLUGS)[number];
 export const LANDING_SLUGS = SERVICE_SLUGS.filter(s => s !== "website") as Exclude<ServiceSlug, "website">[];
 export const SERVICE_NAMES: Record<ServiceSlug, string> = {
-  website: "Pembuatan Website", "desain-grafis": "Desain Grafis", "digital-marketing": "Digital Marketing", seo: "SEO", aplikasi: "Aplikasi Mobile", video: "Video & Animasi",
+  "website-custom": "Website Custom", "website-company-profile": "Website Company Profile", "web-toko-online": "Web Toko Online", "facebook-ads": "Facebook Ads", "google-ads": "Google Ads", website: "Pembuatan Website", "desain-grafis": "Desain Grafis", "digital-marketing": "Digital Marketing", seo: "SEO", aplikasi: "Aplikasi Mobile", video: "Video & Animasi",
 };
 export const isServiceSlug = (s: string): s is ServiceSlug => (SERVICE_SLUGS as readonly string[]).includes(s);
 export const portfolioKey = (slug: ServiceSlug) => slug === "website" ? "portfolio_page" : `portfolio_${slug}`;
@@ -49,7 +50,7 @@ function pf(p: Partial<PortfolioPage> & Pick<PortfolioPage, "eyebrow" | "descrip
   return { ...defaultPortfolio, title: `Portfolio ${p.card_title}`, cover_image: "", section_button: "Lihat semua portfolio", ...p };
 }
 
-export const portfolioDefaults: Record<ServiceSlug, PortfolioPage> = {
+const legacyPortfolioDefaults = {
   website: defaultPortfolio,
   "desain-grafis": pf({
     eyebrow: "Dimaloka · Portfolio Desain Grafis", card_title: "Desain Grafis", card_image: dg1,
@@ -133,6 +134,15 @@ export const portfolioDefaults: Record<ServiceSlug, PortfolioPage> = {
   }),
 };
 
+export const portfolioDefaults: Record<ServiceSlug, PortfolioPage> = {
+  ...legacyPortfolioDefaults,
+  ...Object.fromEntries(["website-custom", "website-company-profile", "web-toko-online", "facebook-ads", "google-ads"].map(slug => {
+    const base = slug.includes("ads") ? legacyPortfolioDefaults["digital-marketing"] : legacyPortfolioDefaults.website;
+    const name = SERVICE_NAMES[slug as ServiceSlug];
+    return [slug, { ...base, title: `Portfolio ${name}`, card_title: name, eyebrow: `Dimaloka · Portfolio ${name}`, seo_title: `Portfolio ${name} | Dimaloka`, projects: base.projects.filter(p => slug === "facebook-ads" ? p.category === "Meta Ads" : slug === "google-ads" ? p.category === "Google Ads" : true) }];
+  })) as Record<keyof typeof priorityServiceDefaults, PortfolioPage>,
+};
+
 export const servicePortfolio = (slug: ServiceSlug, value: unknown) => normalizePortfolio(portfolioDefaults[slug], value);
 
 export type PortfolioMaster = { eyebrow: string; title: string; description: string; seo_title: string; seo_description: string; keywords: string[]; cta_title: string; cta_description: string; cta_button: string };
@@ -173,6 +183,7 @@ export type ServiceContent = {
 
 const content = (c: ServiceContent) => c;
 export const serviceDefaults: Record<Exclude<ServiceSlug, "website">, ServiceContent> = {
+  ...priorityServiceDefaults,
   "desain-grafis": content({
     eyebrow: "Dimaloka · Desain untuk Brand", title: "Jasa Desain Grafis & Identitas Brand",
     description: "Logo, materi promosi, dan konten media sosial yang tampil konsisten. Pelanggan lebih mudah mengenali usaha Anda di mana pun mereka melihatnya.",

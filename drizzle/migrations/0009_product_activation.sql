@@ -1,0 +1,3 @@
+ALTER TABLE public.products ADD COLUMN IF NOT EXISTS is_active boolean NOT NULL DEFAULT true;
+COMMENT ON COLUMN public.products.is_active IS 'Independent public visibility switch; preserves publication status and historical orders.';
+ALTER POLICY "public products" ON public.products USING (public.has_role(auth.uid(), 'admin'::public.app_role) OR (status = 'published'::public.content_status AND is_active AND (category_id IS NULL OR EXISTS (SELECT 1 FROM public.categories c WHERE c.id = products.category_id AND c.is_active))));

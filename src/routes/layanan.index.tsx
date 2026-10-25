@@ -24,7 +24,7 @@ function ServiceDirectory() {
   const services = filterServices(data, query);
   return <div className="mx-auto max-w-7xl px-4 py-12 sm:py-16">
     <h1 className="text-3xl font-bold text-navy sm:text-4xl">Layanan Digital</h1>
-    <div className="relative mt-7 max-w-2xl"><Search className="absolute left-4 top-3 size-5 text-muted-foreground" /><Input type="search" aria-label="Pencarian layanan" placeholder="Cari website, desain, SEO…" value={query} onChange={event => setQuery(event.target.value)} className="h-12 pl-12" /></div>
+    <div className="relative mt-7 max-w-2xl"><Search className="absolute left-4 top-3 size-5 text-muted-foreground" /><Input type="search" aria-label="Pencarian layanan" placeholder="Cari website, SEO, Facebook Ads…" value={query} onChange={event => setQuery(event.target.value)} className="h-12 pl-12" /></div>
     <p role="status" className="mt-5 text-sm text-muted-foreground">{services.length} layanan{query.trim() ? ` untuk “${query.trim()}”` : " tersedia"}</p>
     {services.length ? <div className="mt-7 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">{services.map(service => <ProductCard key={service.id} p={service} />)}</div> : <div className="py-16"><h2 className="text-xl font-semibold">Layanan tidak ditemukan</h2><p className="mt-3 text-muted-foreground">Coba kata kunci lain.</p><Button variant="outline" className="mt-5" onClick={() => setQuery("")}>Lihat semua layanan</Button></div>}
     <Button asChild variant="link" className="mt-8 px-0"><Link to="/">Kembali ke Home</Link></Button>

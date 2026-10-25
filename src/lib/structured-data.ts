@@ -66,7 +66,7 @@ export function publicPageHead(kind: Kind, data: any, root: RootData = {}) {
     pageType = "WebPage";
   } else if (kind === "directory") {
     path = "/layanan"; name = "Layanan Digital"; title = "Cari Layanan Digital | Dimaloka";
-    description = "Temukan layanan website, desain grafis, digital marketing, SEO, aplikasi mobile, dan video sesuai kebutuhan bisnis Anda di Dimaloka.";
+    description = "Temukan jasa website custom, company profile, toko online, SEO website, Facebook Ads, dan Google Ads untuk bisnis Anda di Dimaloka.";
     pageType = "CollectionPage"; items = cards(data);
   } else if (kind === "service") {
     const c = data.category;
@@ -103,7 +103,7 @@ export function publicPageHead(kind: Kind, data: any, root: RootData = {}) {
   } else if (kind === "portfolio") {
     const m = masterPage(data?.master);
     path = "/portfolio"; name = m.title; title = m.seo_title; description = m.seo_description; keywords = keywordList(m.keywords); pageType = "CollectionPage";
-    items = SERVICE_SLUGS.map(slug => { const p = servicePortfolio(slug, data?.services?.[slug]); return { "@type": "CollectionPage", name: p.card_title, description: p.card_description, image: absoluteUrl(p.card_image, origin), url: link(`/portfolio/${slug}`) }; });
+    items = SERVICE_SLUGS.filter(slug => (data?.activeSlugs ?? SERVICE_SLUGS).includes(slug)).map(slug => { const p = servicePortfolio(slug, data?.services?.[slug]); return { "@type": "CollectionPage", name: p.card_title, description: p.card_description, image: absoluteUrl(p.card_image, origin), url: link(`/portfolio/${slug}`) }; });
   } else {
     const p = servicePortfolio(data.slug, data.value);
     path = `/portfolio/${data.slug}`; name = p.title; title = p.seo_title; description = p.seo_description; keywords = keywordList(p.keywords); image = p.cover_image; pageType = "CollectionPage";

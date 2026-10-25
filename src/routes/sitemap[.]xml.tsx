@@ -14,7 +14,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { loc: "/blog" },
           { loc: "/assisstant-ai" },
           { loc: "/portfolio" },
-          ...["website", "desain-grafis", "digital-marketing", "seo", "aplikasi", "video"].map((s) => ({ loc: `/portfolio/${s}` })),
+          ...d.categories.filter(c => ["website", "desain-grafis", "digital-marketing", "seo", "aplikasi", "video", "website-custom", "website-company-profile", "web-toko-online", "facebook-ads", "google-ads"].includes(c.slug)).map(c => ({ loc: `/portfolio/${c.slug}` })),
           ...d.categories.map((c) => ({ loc: `/layanan/${c.slug}` })),
           ...d.products.map((p) => ({ loc: `/p/${p.slug}`, lastmod: p.updated_at })),
           ...d.sellers.map((s) => ({ loc: `/store/${s.slug}` })),
