@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Dimaloka architecture
+- AI token limits share client-safe constants with server validation; all AI settings editors preserve the existing token budget when changing other settings to avoid resetting generation limits.
 - Admin settings must finish loading successfully before editing/saving; admin article mutations invalidate list/detail caches so navigation never shows stale saved data.
 - AI SEO uses admin-checked server functions and a fixed DollarDesa endpoint with an environment-only credential; only nonsecret model/enabled settings are stored. A shared editable recommendation editor applies metadata only on explicit action, with content replacement opt-in; article forms still require Save, and status/slug/keyword remain unchanged.
 - Opted-in service HTML revisions from the category description replace the public editorial intro and feed its Service schema; metadata-only changes preserve visible copy. Saved SEO is read back and linked to its exact published page.

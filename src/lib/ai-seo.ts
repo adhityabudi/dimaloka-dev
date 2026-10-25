@@ -1,7 +1,9 @@
 import { z } from "zod";
 
 export const AI_SEO_BASE = "https://dollardesa.id/v1";
-export const aiSeoSettingsSchema = z.object({ enabled: z.boolean(), model: z.string().trim().min(1).max(120), max_tokens: z.number().int().min(256).max(16000).optional() });
+export const AI_MIN_TOKENS = 256;
+export const AI_MAX_TOKENS = 65536;
+export const aiSeoSettingsSchema = z.object({ enabled: z.boolean(), model: z.string().trim().min(1).max(120), max_tokens: z.number().int().min(AI_MIN_TOKENS).max(AI_MAX_TOKENS).optional() });
 export const aiSeoInputSchema = z.object({
   title: z.string().trim().max(200),
   content: z.string().trim().min(30, "Konten minimal 30 karakter").max(24000, "Konten maksimal 24.000 karakter"),

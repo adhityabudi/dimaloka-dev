@@ -1,9 +1,14 @@
 import { describe, expect, it } from "vitest";
-import { aiSeoInputSchema, parseAiSeoResult } from "../lib/ai-seo";
+import { aiSeoInputSchema, aiSeoSettingsSchema, parseAiSeoResult } from "../lib/ai-seo";
 import { assertSeoAdmin, readSeoStream } from "../lib/ai-seo.server";
 import { seoApplication, contentToHtml, serviceRevision } from "../lib/ai-seo-application";
 
 describe("AI SEO recommendations", () => {
+  it("allows larger token budgets and rejects invalid token settings", () => {
+    const settings = { enabled: true, model: "deepseek-v4-pro" };
+    for (const max_tokens of [256, 16384, 32768, 65536]) expect(aiSeoSettingsSchema.safeParse({ ...settings, max_tokens }).success).toBe(true);
+    for (const max_tokens of [255, 65537, 8192.5, NaN]) expect(aiSeoSettingsSchema.safeParse({ ...settings, max_tokens }).success).toBe(false);
+  });
   const draft = { seo_title: "Jasa Website Dimaloka", seo_description: "a".repeat(150), content: "## Layanan website\n\nKonten revisi" };
   it("applies edited metadata without replacing content by default", () => {
     expect(seoApplication(draft, "article", false)).toEqual({ seo_title: draft.seo_title, seo_description: draft.seo_description });
