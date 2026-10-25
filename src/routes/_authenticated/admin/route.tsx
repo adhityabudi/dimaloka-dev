@@ -23,6 +23,7 @@ const nav = [
   { to: "/admin/testimoni", label: "Testimoni", icon: MessageSquareQuote },
   { to: "/admin/artikel", label: "Artikel", icon: FileText },
   { to: "/admin/portfolio", label: "Portfolio", icon: Images },
+  { to: "/admin/layanan", label: "Halaman Layanan", icon: LayoutTemplate },
   { to: "/admin/seo", label: "Optimasi SEO", icon: Search },
   { to: "/admin/setting", label: "Setting", icon: Settings },
 ] as const;
