@@ -37,7 +37,7 @@ export function WebsiteServicePage({ products, phone, portfolio }: { products: S
             <div className="mt-7 flex flex-wrap items-center gap-3"><Button asChild className="h-12 rounded-md px-5 font-semibold"><a href={contact} target="_blank" rel="noreferrer">Konsultasi Website <ArrowUpRight className="size-4" /></a></Button><Button asChild variant="link" className="h-12 text-navy-foreground"><a href="#layanan-website">Lihat layanan <ArrowDown className="size-4" /></a></Button></div>
             <div className="mt-5 flex flex-wrap gap-x-5 gap-y-3 text-xs text-navy-foreground/70 md:mt-9"><span className="flex items-center gap-2"><LayoutTemplate className="size-4" />Company Profile</span><span className="flex items-center gap-2"><MonitorSmartphone className="size-4" />Desktop & Mobile</span></div>
           </div>
-          <img src={mockups} alt="Contoh website company profile untuk perusahaan konsultasi dan logistik" width={1024} height={1024} fetchPriority="high" className="mx-auto mt-5 block h-auto w-full max-w-[180px] object-contain sm:max-w-[320px] md:absolute md:inset-y-0 md:right-0 md:my-auto md:h-full md:max-h-[540px] md:w-[48%] md:max-w-[520px]" />
+          <img src={mockups} alt="Contoh website company profile untuk perusahaan konsultasi dan logistik" width={1024} height={1024} fetchPriority="high" className="hero-float mx-auto mt-5 block h-auto w-full max-w-[180px] object-contain sm:max-w-[320px] md:absolute md:inset-y-0 md:right-0 md:my-auto md:h-full md:max-h-[540px] md:w-[48%] md:max-w-[520px]" />
         </div>
       </div>
     </section>
