@@ -68,6 +68,6 @@
 - Paused at the user's request; do not resume without a new request.
 
 # SEO reports
-- [ ] Add admin report with real published-content inventory and honest unavailable Google metrics.
-- [ ] Verify admin access, search, and report export.
+- [x] Add admin report with real published-content inventory and honest unavailable Google metrics.
+- [x] Verify admin access, search, and report export.
 - [ ] Activate live index/click/traffic/bounce reports — waiting for Google connections declined by the user.
