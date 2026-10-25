@@ -57,6 +57,13 @@
       "when": 1792907251428,
       "tag": "0007_retain_admin_settings_read",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "7",
+      "when": 1792910935166,
+      "tag": "0008_annisa_daily_question_quota",
+      "breakpoints": true
     }
   ]
 }
