@@ -3,6 +3,7 @@ import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import { rupiah, tanggal } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
+import { paymentKind } from "@/lib/invoice-payments";
 
 export const Route = createFileRoute("/_authenticated/akun")({
   head: () => ({ meta: [{ title: "Akun Saya | Dimaloka" }, { name: "robots", content: "noindex" }] }),
@@ -37,8 +38,8 @@ function Akun() {
       <div className="mt-4 space-y-3">
         {(invoices.data ?? []).map((i) => (
           <Link key={i.id} to="/invoice/$token" params={{ token: i.public_token }} className="flex items-center justify-between rounded-xl border p-4 hover:border-primary">
-            <div><p className="font-mono font-bold">{i.invoice_number}</p><p className="text-sm text-muted-foreground">{tanggal(i.created_at)}</p></div>
-            <div className="flex items-center gap-3"><span className="font-bold">{rupiah(i.amount)}</span><Badge>{i.status}</Badge></div>
+            <div><p className="font-mono font-bold">{i.invoice_number}</p><p className="text-sm text-muted-foreground">{tanggal(i.created_at)} · {paymentKind(i.payment_stage)}</p></div>
+            <div className="flex items-center gap-3"><span className="font-bold">{rupiah(i.amount)}</span><Badge>{i.status === "paid" ? i.payment_stage === "dp" ? "DP Dibayar" : "Lunas" : i.status === "cancelled" ? "Batal" : "Belum Dibayar"}</Badge></div>
           </Link>
         ))}
         {invoices.data?.length === 0 && <p className="text-sm text-muted-foreground">Belum ada invoice.</p>}
