@@ -12,7 +12,11 @@ export const annisaTextSchema = z
   .max(ANNISA_INPUT_LIMIT)
   .refine((s) => !!s.trim(), "Pesan tidak boleh kosong")
   .refine(
-    (s) => !Array.from(s).some(c => { const n = c.charCodeAt(0); return (n < 32 && ![9, 10, 13].includes(n)) || n === 127; }),
+    (s) =>
+      !Array.from(s).some((c) => {
+        const n = c.charCodeAt(0);
+        return (n < 32 && ![9, 10, 13].includes(n)) || n === 127;
+      }),
     "Pesan mengandung karakter yang tidak diizinkan",
   );
 export const annisaRequestSchema = z.object({
