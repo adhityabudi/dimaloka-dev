@@ -2,7 +2,7 @@ import { jsonLd, pageMeta } from "./site";
 import { stripHtml } from "./format";
 import { homepageContent, HOMEPAGE_KEY } from "./homepage";
 import { LANDING_SLUGS, SERVICE_SLUGS, serviceContent, servicePortfolio, masterPage } from "./services";
-import websiteHero from "@/assets/website-profile-mockups.png";
+import websiteHero from "@/assets/website-profile-mockups.webp";
 import siteLogo from "@/assets/dimaloka-logo.png.asset.json";
 import { serviceRevision } from "./ai-seo-application";
 
