@@ -1,6 +1,21 @@
 export const SITE_NAME = "Dimaloka";
 export const DEFAULT_WA = "6281234567890";
 
+/**
+ * Returns the bare Search Console token. Admins often paste the whole <meta>
+ * tag into the settings field, so pull its content value out instead of
+ * emitting a verification tag Google cannot read.
+ */
+export function searchConsoleToken(raw: unknown): string {
+  const s = typeof raw === "string" ? raw.trim() : "";
+  if (!s) return "";
+  if (s.includes("<")) {
+    const m = s.match(/content\s*=\s*(["'])(.*?)\1/i);
+    return m?.[2]?.trim() ?? "";
+  }
+  return s;
+}
+
 /** Builds head meta for a public page. */
 export function pageMeta(o: { title: string; description: string; image?: string | null; type?: string; path?: string }) {
   const meta: any[] = [

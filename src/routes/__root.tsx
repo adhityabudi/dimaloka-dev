@@ -15,6 +15,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { getLayoutData } from "@/lib/public.functions";
 import { getRequestOrigin } from "@/lib/origin.functions";
+import { searchConsoleToken } from "@/lib/site";
 import { AuthProvider } from "@/hooks/use-auth";
 import { Navbar } from "@/components/site/Navbar";
 import { Footer } from "@/components/site/Footer";
@@ -94,7 +95,8 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
     ];
-    if (s.search_console_meta) meta.push({ name: "google-site-verification", content: s.search_console_meta });
+    const verification = searchConsoleToken(s.search_console_meta);
+    if (verification) meta.push({ name: "google-site-verification", content: verification });
     const scripts: any[] = [];
     if (s.google_analytics_id) {
       scripts.push({ src: `https://www.googletagmanager.com/gtag/js?id=${s.google_analytics_id}`, async: true });
