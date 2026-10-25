@@ -55,6 +55,6 @@
 - [x] Test application and confirm saved metadata/content through the public page.
 
 # AIO direct implementation
-- [ ] Add explicit article/product publishing and article SEO application from AIO results.
-- [ ] Apply website content to a selected existing page while preserving images.
-- [ ] Verify saved results on public pages and SEO validation.
+- [x] Add explicit article/product publishing and article SEO application from AIO results.
+- [x] Apply website content to a selected existing service page while preserving images.
+- [x] Verify saved article/service results on public pages and test SEO validation.
