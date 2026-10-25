@@ -11,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { listAioPrompts, resetAioPrompt, saveAioPrompt } from "@/lib/aio.functions";
 import { AIO_MODELS, type AioFeature } from "@/lib/aio";
-import { formatDate } from "@/lib/format";
+import { tanggal as formatDate } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/admin/aio/prompts")({ component: Page });
 
