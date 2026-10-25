@@ -33,6 +33,7 @@ import { Route as AuthenticatedAdminTestimoniRouteImport } from './routes/_authe
 import { Route as AuthenticatedAdminArtikelIndexRouteImport } from './routes/_authenticated/admin/artikel/index'
 import { Route as AuthenticatedAdminArtikelNewRouteImport } from './routes/_authenticated/admin/artikel/new'
 import { Route as AuthenticatedAdminInvoiceIndexRouteImport } from './routes/_authenticated/admin/invoice/index'
+import { Route as AuthenticatedAdminInvoiceIdRouteImport } from './routes/_authenticated/admin/invoice/$id'
 import { Route as AuthenticatedAdminInvoiceNewRouteImport } from './routes/_authenticated/admin/invoice/new'
 import { Route as AuthenticatedAdminProdukIndexRouteImport } from './routes/_authenticated/admin/produk/index'
 import { Route as AuthenticatedAdminProdukNewRouteImport } from './routes/_authenticated/admin/produk/new'
@@ -165,6 +166,12 @@ const AuthenticatedAdminInvoiceIndexRoute =
     path: '/invoice/',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminInvoiceIdRoute =
+  AuthenticatedAdminInvoiceIdRouteImport.update({
+    id: '/invoice/$id',
+    path: '/invoice/$id',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminInvoiceNewRoute =
   AuthenticatedAdminInvoiceNewRouteImport.update({
     id: '/invoice/new',
@@ -218,6 +225,7 @@ export interface FileRoutesByFullPath {
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/admin/invoice/$id': typeof AuthenticatedAdminInvoiceIdRoute
   '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
@@ -247,6 +255,7 @@ export interface FileRoutesByTo {
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/admin/invoice/$id': typeof AuthenticatedAdminInvoiceIdRoute
   '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/admin/artikel': typeof AuthenticatedAdminArtikelIndexRoute
@@ -279,6 +288,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
+  '/_authenticated/admin/invoice/$id': typeof AuthenticatedAdminInvoiceIdRoute
   '/_authenticated/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/_authenticated/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/_authenticated/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
@@ -311,6 +321,7 @@ export interface FileRouteTypes {
     | '/admin/testimoni'
     | '/admin/'
     | '/admin/artikel/new'
+    | '/admin/invoice/$id'
     | '/admin/invoice/new'
     | '/admin/produk/new'
     | '/admin/artikel/'
@@ -340,6 +351,7 @@ export interface FileRouteTypes {
     | '/admin/testimoni'
     | '/admin'
     | '/admin/artikel/new'
+    | '/admin/invoice/$id'
     | '/admin/invoice/new'
     | '/admin/produk/new'
     | '/admin/artikel'
@@ -371,6 +383,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/testimoni'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/artikel/new'
+    | '/_authenticated/admin/invoice/$id'
     | '/_authenticated/admin/invoice/new'
     | '/_authenticated/admin/produk/new'
     | '/_authenticated/admin/artikel/'
@@ -565,6 +578,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminInvoiceIndexRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/invoice/$id': {
+      id: '/_authenticated/admin/invoice/$id'
+      path: '/invoice/$id'
+      fullPath: '/admin/invoice/$id'
+      preLoaderRoute: typeof AuthenticatedAdminInvoiceIdRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/invoice/new': {
       id: '/_authenticated/admin/invoice/new'
       path: '/invoice/new'
@@ -612,6 +632,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminTestimoniRoute: typeof AuthenticatedAdminTestimoniRoute
   AuthenticatedAdminIndexRoute: typeof AuthenticatedAdminIndexRoute
   AuthenticatedAdminArtikelNewRoute: typeof AuthenticatedAdminArtikelNewRoute
+  AuthenticatedAdminInvoiceIdRoute: typeof AuthenticatedAdminInvoiceIdRoute
   AuthenticatedAdminInvoiceNewRoute: typeof AuthenticatedAdminInvoiceNewRoute
   AuthenticatedAdminProdukNewRoute: typeof AuthenticatedAdminProdukNewRoute
   AuthenticatedAdminArtikelIndexRoute: typeof AuthenticatedAdminArtikelIndexRoute
@@ -631,6 +652,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminTestimoniRoute: AuthenticatedAdminTestimoniRoute,
     AuthenticatedAdminIndexRoute: AuthenticatedAdminIndexRoute,
     AuthenticatedAdminArtikelNewRoute: AuthenticatedAdminArtikelNewRoute,
+    AuthenticatedAdminInvoiceIdRoute: AuthenticatedAdminInvoiceIdRoute,
     AuthenticatedAdminInvoiceNewRoute: AuthenticatedAdminInvoiceNewRoute,
     AuthenticatedAdminProdukNewRoute: AuthenticatedAdminProdukNewRoute,
     AuthenticatedAdminArtikelIndexRoute: AuthenticatedAdminArtikelIndexRoute,
