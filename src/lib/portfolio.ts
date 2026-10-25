@@ -4,7 +4,7 @@ import nusa from "@/assets/portfolio-nusa.jpg";
 
 export type PortfolioProject = {
   id: string; title: string; category: string; description: string;
-  image: string; image_alt: string; gallery: string[]; url: string;
+  image: string; image_alt: string; gallery: string[]; url: string; live_enabled?: boolean;
   is_demo: boolean; published: boolean; featured: boolean;
 };
 export type PortfolioPage = {
@@ -58,6 +58,9 @@ export function normalizePortfolio(defaults: PortfolioPage, value: unknown): Por
   return result;
 }
 export function portfolioPage(value: unknown): PortfolioPage { return normalizePortfolio(defaultPortfolio, value); }
+export function liveUrl(p: PortfolioProject) {
+  return p.live_enabled !== false && validProjectUrl(p.url) ? p.url : null;
+}
 export function filterPortfolio(projects: PortfolioProject[], category: string, search: string) {
   const query = search.trim().toLocaleLowerCase("id");
   return projects.filter(p => p.published && (category === "Semua" || p.category === category) && `${p.title} ${p.category} ${p.description}`.toLocaleLowerCase("id").includes(query));

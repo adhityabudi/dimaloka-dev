@@ -12,5 +12,6 @@ export const Route = createFileRoute("/auth/sign-up")({
       { name: "twitter:card", content: "summary" },
     ],
   }),
-  component: () => <AuthForm mode="up" />,
+  validateSearch: (s: Record<string, unknown>) => ({ redirect: typeof s.redirect === "string" && s.redirect.startsWith("/") && !s.redirect.startsWith("//") ? s.redirect : undefined }),
+  component: function AuthPage() { const { redirect } = Route.useSearch(); return <AuthForm mode="up" redirect={redirect} />; },
 });

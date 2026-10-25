@@ -1,5 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
-import { Check, ChevronRight, MessageCircle, Star, Store } from "lucide-react";
+import { Check, ChevronRight, MessageCircle, ShoppingCart, Star, Store } from "lucide-react";
+import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
 import { getProduct } from "@/lib/public.functions";
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,8 @@ function ProductPage() {
   const [pkg, setPkg] = useState(0);
   const phone = p.whatsapp_cta || seller?.whatsapp;
   const chosen = packages[pkg];
+  const { user } = useAuth();
+  const checkoutPath = `/checkout/${p.slug}${chosen ? `?paket=${encodeURIComponent(chosen.name)}` : ""}`;
   const msg = `Halo, saya tertarik dengan layanan "${p.title}"${chosen ? ` paket ${chosen.name} (${rupiah(chosen.price)})` : ""} di Dimaloka.`;
 
   return (
@@ -132,9 +135,14 @@ function ProductPage() {
               </div>
             )}
             <Button asChild size="lg" className="mt-5 h-12 w-full rounded-xl font-bold shadow-cta">
-              <a href={waLink(phone, msg)} target="_blank" rel="noreferrer"><MessageCircle /> Order via Chat</a>
+              {user ? <Link to="/checkout/$slug" params={{ slug: p.slug }} search={{ paket: chosen?.name }}><ShoppingCart /> Pesan Sekarang</Link>
+                : <Link to="/auth/sign-in" search={{ redirect: checkoutPath }}><ShoppingCart /> Pesan Sekarang</Link>}
             </Button>
+            {!user && <p className="mt-2 text-center text-xs text-muted-foreground">Masuk atau daftar gratis untuk melanjutkan pesanan.</p>}
             <Button asChild size="lg" variant="outline" className="mt-2 h-12 w-full rounded-xl font-bold">
+              <a href={waLink(phone, msg)} target="_blank" rel="noreferrer"><MessageCircle /> Tanya via Chat</a>
+            </Button>
+            <Button asChild size="lg" variant="ghost" className="mt-1 h-10 w-full rounded-xl font-semibold">
               <a href={waLink(phone, `Halo ${seller?.name ?? ""}, saya ingin bertanya tentang "${p.title}".`)} target="_blank" rel="noreferrer">Hubungi Seller</a>
             </Button>
           </div>
