@@ -22,7 +22,7 @@
 - [x] Admin editing for service pages, master page, and each service portfolio.
 
 # Navigation and mobile
-- [ ] Add Home and service search to desktop and mobile navigation.
-- [ ] Use canonical /layanan URLs and preserve old links with redirects.
-- [ ] Float all opening images and respect reduced-motion settings.
-- [ ] Verify navigation, search, redirects, and mobile layouts.
+- [x] Add Home and service search to desktop and mobile navigation.
+- [x] Use canonical /layanan URLs and preserve old links with redirects.
+- [x] Float all opening images and respect reduced-motion settings.
+- [x] Verify navigation, search, redirects, and mobile layouts.
