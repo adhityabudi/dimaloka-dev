@@ -43,7 +43,7 @@ export function Navbar() {
           </DropdownMenu>
           <Link to="/portfolio" className="rounded-lg px-3 py-2 hover:bg-muted" activeProps={{ className: "text-primary-strong" }}>Portfolio</Link>
           <Link to="/blog" className="rounded-lg px-3 py-2 hover:bg-muted" activeProps={{ className: "text-primary-strong" }}>Blog</Link>
-          <Button asChild variant="ghost" className="px-2 text-navy"><Link to="/assisstant-ai" activeProps={{ className: "text-primary-strong" }}>Assisstant AI</Link></Button>
+          <Button asChild variant="ghost" className="px-2 text-navy"><Link to="/assisstant-ai" activeProps={{ className: "text-primary-strong" }}>AI Assistant</Link></Button>
         </nav>
         <div className="ml-auto hidden w-48 min-w-0 xl:w-64 lg:block"><ServiceSearch /></div>
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
@@ -85,7 +85,7 @@ export function Navbar() {
           </div>
           <Link to="/portfolio" onClick={() => setOpen(false)} className="mt-3 block py-2 font-semibold">Portfolio</Link>
           <Link to="/blog" onClick={() => setOpen(false)} className="block py-2 font-semibold">Blog</Link>
-          <Button asChild variant="ghost" className="px-0 font-semibold"><Link to="/assisstant-ai" onClick={() => setOpen(false)}>Assisstant AI</Link></Button>
+          <Button asChild variant="ghost" className="px-0 font-semibold"><Link to="/assisstant-ai" onClick={() => setOpen(false)}>AI Assistant</Link></Button>
           <div className="mt-3 flex gap-2">
             {user ? (
               <>
