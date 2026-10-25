@@ -45,7 +45,13 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
     // A dropped connection (e.g. server restarting) is transient: retry once quietly.
     if (error instanceof TypeError && /failed to fetch|network/i.test(error.message) && !sessionStorage.getItem("net-retry")) {
       sessionStorage.setItem("net-retry", "1");
-      const t = setTimeout(() => { reset(); void router.invalidate().finally(() => sessionStorage.removeItem("net-retry")); }, 1500);
+      const t = setTimeout(() => {
+        // Clearing the boundary before reloading leaves errored loader matches cached.
+        void router.invalidate().then(() => {
+          sessionStorage.removeItem("net-retry");
+          reset();
+        });
+      }, 1500);
       return () => clearTimeout(t);
     }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
@@ -59,8 +65,10 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
-              router.invalidate();
-              reset();
+              void router.invalidate().then(() => {
+                sessionStorage.removeItem("net-retry");
+                reset();
+              });
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
           >
