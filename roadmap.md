@@ -50,6 +50,6 @@
 - [x] Verify admin navigation, article edits, and settings persistence.
 
 # SEO application recovery
-- [ ] Connect opted-in service revisions to public content and schema.
-- [ ] Refresh saved article/public data and show a verifiable SEO application result.
-- [ ] Test application and confirm saved metadata/content through the public page.
+- [x] Connect opted-in service revisions to public content and schema.
+- [x] Refresh saved article/public data and show a verifiable SEO application result.
+- [x] Test application and confirm saved metadata/content through the public page.
