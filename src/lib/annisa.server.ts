@@ -3,7 +3,10 @@ import { createOpenAICompatible } from "@ai-sdk/openai-compatible";
 import { streamText, convertToModelMessages, type UIMessage } from "ai";
 import type { Database } from "@/integrations/supabase/types";
 import {
+  ANNISA_QUOTA_MESSAGE,
+  ANNISA_RATE_LIMIT,
   ANNISA_REFUSAL,
+  ANNISA_WINDOW_SECONDS,
   annisaGuard,
   annisaRequestSchema,
   annisaTextSchema,
@@ -29,6 +32,39 @@ function publicClient() {
   });
 }
 
+async function resolveSubject(request: Request, headers: Headers) {
+  const url = new URL(request.url);
+  // No visitor-selected ID or X-Forwarded-For: hosting supplies the trusted peer IP.
+  let peer = request.headers.get("cf-connecting-ip");
+  if (!peer && ["localhost", "127.0.0.1"].includes(url.hostname)) {
+    let id = request.headers
+      .get("cookie")
+      ?.match(/(?:^|;\s*)annisa_session=([a-f0-9-]{36})(?:;|$)/)?.[1];
+    if (!id) {
+      id = crypto.randomUUID();
+      headers.append(
+        "Set-Cookie",
+        `annisa_session=${id}; HttpOnly; SameSite=Strict; Path=/; Max-Age=${ANNISA_WINDOW_SECONDS}`,
+      );
+    }
+    peer = `local:${id}`;
+  }
+  if (!peer) return null;
+  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`annisa:${peer}`));
+  return Array.from(new Uint8Array(digest), (x) => x.toString(16).padStart(2, "0")).join("");
+}
+
+export async function handleAnnisaQuota(request: Request) {
+  const headers = new Headers({ "Cache-Control": "no-store" });
+  const subject = await resolveSubject(request, headers);
+  if (!subject) return Response.json({ remaining: 0, limit: ANNISA_RATE_LIMIT }, { headers });
+  const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
+  const { data, error } = await supabaseAdmin.rpc("assistant_quota_status", { _subject: subject });
+  if (error) return Response.json({ error: "Kuota belum dapat diperiksa." }, { status: 503, headers });
+  const state = data as { remaining: number; blocked: boolean; retry_after?: number | null };
+  return Response.json({ ...state, limit: ANNISA_RATE_LIMIT }, { headers });
+}
+
 export async function handleAnnisa(request: Request) {
   const headers = new Headers({ "Cache-Control": "no-store" });
   const fail = (message: string, status: number) =>
@@ -51,26 +87,11 @@ export async function handleAnnisa(request: Request) {
   } catch {
     return fail("Pesan harus berupa teks, tidak kosong, dan maksimal 2000 karakter.", 400);
   }
-  // No visitor-selected ID or X-Forwarded-For: hosting supplies the trusted peer IP.
-  let peer = request.headers.get("cf-connecting-ip");
-  if (!peer && ["localhost", "127.0.0.1"].includes(url.hostname)) {
-    let id = request.headers
-      .get("cookie")
-      ?.match(/(?:^|;\s*)annisa_session=([a-f0-9-]{36})(?:;|$)/)?.[1];
-    if (!id) {
-      id = crypto.randomUUID();
-      headers.append(
-        "Set-Cookie",
-        `annisa_session=${id}; HttpOnly; SameSite=Strict; Path=/; Max-Age=900`,
-      );
-    }
-    peer = `local:${id}`;
-  }
-  if (!peer) return fail("Identitas koneksi belum dapat diverifikasi. Silakan coba kembali.", 503);
-  const digest = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(`annisa:${peer}`));
-  const subject = Array.from(new Uint8Array(digest), (x) => x.toString(16).padStart(2, "0")).join(
-    "",
-  );
+  if (body.messages.filter((m) => m.role === "user").length > ANNISA_RATE_LIMIT)
+    return fail(ANNISA_QUOTA_MESSAGE, 429);
+  const subject = await resolveSubject(request, headers);
+  if (!subject)
+    return fail("Identitas koneksi belum dapat diverifikasi. Silakan coba kembali.", 503);
   const messages = body.messages as UIMessage[];
   const latest = body.messages.at(-1)?.parts[0]?.text ?? "";
   const guard = annisaGuard(latest);
@@ -83,13 +104,19 @@ export async function handleAnnisa(request: Request) {
     );
     if (limitError)
       return fail("Batas penggunaan belum dapat diperiksa. Silakan coba kembali.", 503);
-    const state = limit as { allowed: boolean; blocked: boolean; retry_after?: number } | null;
+    const state = limit as {
+      allowed: boolean;
+      blocked: boolean;
+      remaining?: number;
+      retry_after?: number;
+    } | null;
+    headers.set("X-Annisa-Remaining", String(state?.remaining ?? 0));
     if (!state?.allowed) {
-      headers.set("Retry-After", String(state?.retry_after ?? 900));
+      headers.set("Retry-After", String(state?.retry_after ?? ANNISA_WINDOW_SECONDS));
       return fail(
         state?.blocked
           ? "Akses Annisa dinonaktifkan sementara untuk koneksi ini karena permintaan tidak aman."
-          : "Kamu terlalu sering mengirim pesan. Coba beberapa saat lagi.",
+          : ANNISA_QUOTA_MESSAGE,
         state?.blocked ? 403 : 429,
       );
     }
