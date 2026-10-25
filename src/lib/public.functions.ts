@@ -132,3 +132,37 @@ export const getSitemapData = createServerFn({ method: "GET" }).handler(async ()
   ]);
   return { categories: c.data ?? [], products: p.data ?? [], sellers: s.data ?? [], articles: a.data ?? [], settings: st };
 });
+
+const SERVICE_KEYS = ["website", "desain-grafis", "digital-marketing", "seo", "aplikasi", "video"];
+const pfKey = (slug: string) => slug === "website" ? "portfolio_page" : `portfolio_${slug}`;
+
+export const getServicePortfolio = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string }) => {
+    if (!SERVICE_KEYS.includes(d.slug)) throw new Error("Layanan tidak ditemukan");
+    return d;
+  })
+  .handler(async ({ data }) => {
+    const { data: row, error } = await pub().from("site_settings").select("value").eq("key", pfKey(data.slug)).maybeSingle();
+    if (error) throw new Error("Portfolio belum dapat dimuat. Silakan coba kembali.");
+    return row?.value ?? null;
+  });
+
+export const getPortfolioOverview = createServerFn({ method: "GET" }).handler(async () => {
+  const keys = ["portfolio_master", ...SERVICE_KEYS.map(pfKey)];
+  const { data, error } = await pub().from("site_settings").select("key,value").in("key", keys);
+  if (error) throw new Error("Portfolio belum dapat dimuat. Silakan coba kembali.");
+  const map = Object.fromEntries((data ?? []).map(r => [r.key, r.value])) as Record<string, unknown>;
+  return { master: map.portfolio_master ?? null, services: Object.fromEntries(SERVICE_KEYS.map(s => [s, map[pfKey(s)] ?? null])) as Record<string, unknown> };
+});
+
+export const getServiceContent = createServerFn({ method: "GET" })
+  .inputValidator((d: { slug: string }) => {
+    if (!SERVICE_KEYS.includes(d.slug)) throw new Error("Layanan tidak ditemukan");
+    return d;
+  })
+  .handler(async ({ data }) => {
+    const { data: rows, error } = await pub().from("site_settings").select("key,value").in("key", [`service_${data.slug}`, pfKey(data.slug)]);
+    if (error) throw new Error("Halaman layanan belum dapat dimuat.");
+    const map = Object.fromEntries((rows ?? []).map(r => [r.key, r.value])) as Record<string, unknown>;
+    return { content: map[`service_${data.slug}`] ?? null, portfolio: map[pfKey(data.slug)] ?? null };
+  });
