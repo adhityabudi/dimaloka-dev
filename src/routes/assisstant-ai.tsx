@@ -181,7 +181,7 @@ function AnnisaPage() {
             <div className="min-w-0">
               <p className="truncate text-sm font-bold text-navy">Annisa AI</p>
               <p className="text-xs text-muted-foreground">
-                AI Assistant Dimaloka · Sisa {remaining} dari {QUESTION_QUOTA} pertanyaan
+                AI Assistant Dimaloka · Sisa {remaining} dari {QUESTION_QUOTA} pertanyaan hari ini
               </p>
             </div>
           </div>
@@ -281,7 +281,7 @@ function AnnisaPage() {
           )}
           {quotaHabis && !notice && (
             <p className="mb-2 px-1 text-sm text-muted-foreground">
-              Batas 5 pertanyaan per sesi tercapai. Tekan tombol mulai ulang di atas untuk sesi baru.
+              {ANNISA_QUOTA_MESSAGE}
             </p>
           )}
           <PromptInput
@@ -296,7 +296,7 @@ function AnnisaPage() {
                 blocked
                   ? "Akses chat dinonaktifkan sementara"
                   : quotaHabis
-                    ? "Batas pertanyaan sesi ini sudah habis"
+                    ? "Batas pertanyaan hari ini sudah habis"
                     : "Tanya Annisa apa saja…"
               }
               value={input}
