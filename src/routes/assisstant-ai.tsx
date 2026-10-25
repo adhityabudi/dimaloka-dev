@@ -20,6 +20,8 @@ import { Shimmer } from "@/components/ai-elements/shimmer";
 import annisa from "@/assets/annisa-ai.png";
 import {
   ANNISA_INPUT_LIMIT,
+  ANNISA_QUOTA_MESSAGE,
+  ANNISA_RATE_LIMIT,
   annisaTextSchema,
   safeAnnisaOutput,
 } from "@/lib/annisa";
@@ -55,20 +57,13 @@ const SUGGESTIONS = [
   "Tips SEO untuk website baru",
 ];
 
-const QUESTION_QUOTA = 5;
-const QUOTA_KEY = "annisa-quota-used";
-
-function readUsedQuota() {
-  if (typeof window === "undefined") return 0;
-  const n = Number(window.sessionStorage.getItem(QUOTA_KEY));
-  return Number.isFinite(n) && n > 0 ? Math.min(n, QUESTION_QUOTA) : 0;
-}
+const QUESTION_QUOTA = ANNISA_RATE_LIMIT;
 
 function AnnisaPage() {
   const [input, setInput] = useState("");
   const [notice, setNotice] = useState("");
   const [blocked, setBlocked] = useState(false);
-  const [used, setUsed] = useState(0);
+  const [remaining, setRemaining] = useState(QUESTION_QUOTA);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const transport = useMemo(
     () =>
@@ -76,8 +71,11 @@ function AnnisaPage() {
         api: "/api/annisa",
         fetch: async (url, init) => {
           const response = await fetch(url, init);
+          const left = response.headers.get("X-Annisa-Remaining");
+          if (left !== null && Number.isFinite(Number(left))) setRemaining(Number(left));
           if (!response.ok) {
             const data = await response.json().catch(() => ({}));
+            if (response.status === 429) setRemaining(0);
             if (response.status === 403 && String(data.error).includes("tidak aman"))
               setBlocked(true);
             throw new Error(data.error || "Annisa belum dapat dihubungi. Silakan coba kembali.");
@@ -110,10 +108,16 @@ function AnnisaPage() {
     onError: (e) => setNotice(e.message),
   });
   const busy = status === "submitted" || status === "streaming";
-  const remaining = Math.max(0, QUESTION_QUOTA - used);
   const quotaHabis = remaining <= 0;
   useEffect(() => {
-    setUsed(readUsedQuota());
+    // Quota is enforced and counted on the server; this only displays it.
+    fetch("/api/annisa", { cache: "no-store" })
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d: { remaining?: number; blocked?: boolean } | null) => {
+        if (d && typeof d.remaining === "number") setRemaining(d.remaining);
+        if (d?.blocked) setBlocked(true);
+      })
+      .catch(() => {});
   }, []);
   useEffect(() => {
     if (!busy && !blocked && !quotaHabis) textarea.current?.focus();
@@ -121,7 +125,7 @@ function AnnisaPage() {
   const send = async (text: string) => {
     if (busy || blocked) return;
     if (quotaHabis) {
-      setNotice("Batas 5 pertanyaan per sesi sudah tercapai. Mulai ulang percakapan untuk bertanya lagi.");
+      setNotice(ANNISA_QUOTA_MESSAGE);
       return;
     }
     const parsed = annisaTextSchema.safeParse(text);
@@ -133,13 +137,7 @@ function AnnisaPage() {
     setNotice("");
     clearError();
     setInput("");
-    const next = used + 1;
-    setUsed(next);
-    try {
-      window.sessionStorage.setItem(QUOTA_KEY, String(next));
-    } catch {
-      /* sesi tanpa storage tetap dibatasi oleh state */
-    }
+    setRemaining((n) => Math.max(0, n - 1));
     void sendMessage({ text: parsed.data.trim() });
     textarea.current?.focus();
   };
@@ -148,12 +146,6 @@ function AnnisaPage() {
     clearError();
     setNotice("");
     setInput("");
-    setUsed(0);
-    try {
-      window.sessionStorage.removeItem(QUOTA_KEY);
-    } catch {
-      /* abaikan */
-    }
     textarea.current?.focus();
   };
 
