@@ -68,7 +68,7 @@ function AnnisaPage() {
   const [input, setInput] = useState("");
   const [notice, setNotice] = useState("");
   const [blocked, setBlocked] = useState(false);
-  const [used, setUsed] = useState(readUsedQuota);
+  const [used, setUsed] = useState(0);
   const textarea = useRef<HTMLTextAreaElement>(null);
   const transport = useMemo(
     () =>
