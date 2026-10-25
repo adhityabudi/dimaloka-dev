@@ -21,8 +21,8 @@ import { Route as AuthSignUpRouteImport } from './routes/auth.sign-up'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as InvoiceTokenRouteImport } from './routes/invoice.$token'
-import { Route as KategoriSlugRouteImport } from './routes/kategori.$slug'
 import { Route as LayananIndexRouteImport } from './routes/layanan.index'
+import { Route as LayananSlugRouteImport } from './routes/layanan.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as PortfolioIndexRouteImport } from './routes/portfolio.index'
 import { Route as PortfolioServiceRouteImport } from './routes/portfolio.$service'
@@ -105,14 +105,14 @@ const InvoiceTokenRoute = InvoiceTokenRouteImport.update({
   path: '/invoice/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const KategoriSlugRoute = KategoriSlugRouteImport.update({
-  id: '/kategori/$slug',
-  path: '/kategori/$slug',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LayananIndexRoute = LayananIndexRouteImport.update({
   id: '/layanan/',
   path: '/layanan/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayananSlugRoute = LayananSlugRouteImport.update({
+  id: '/layanan/$slug',
+  path: '/layanan/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PSlugRoute = PSlugRouteImport.update({
@@ -252,7 +252,7 @@ export interface FileRoutesByFullPath {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
-  '/kategori/$slug': typeof KategoriSlugRoute
+  '/layanan/$slug': typeof LayananSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
@@ -287,7 +287,7 @@ export interface FileRoutesByTo {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
-  '/kategori/$slug': typeof KategoriSlugRoute
+  '/layanan/$slug': typeof LayananSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
@@ -326,7 +326,7 @@ export interface FileRoutesById {
   '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
-  '/kategori/$slug': typeof KategoriSlugRoute
+  '/layanan/$slug': typeof LayananSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
@@ -365,7 +365,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/blog/$slug'
     | '/invoice/$token'
-    | '/kategori/$slug'
+    | '/layanan/$slug'
     | '/p/$slug'
     | '/portfolio/$service'
     | '/store/$slug'
@@ -400,7 +400,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/blog/$slug'
     | '/invoice/$token'
-    | '/kategori/$slug'
+    | '/layanan/$slug'
     | '/p/$slug'
     | '/portfolio/$service'
     | '/store/$slug'
@@ -438,7 +438,7 @@ export interface FileRouteTypes {
     | '/auth/sign-up'
     | '/blog/$slug'
     | '/invoice/$token'
-    | '/kategori/$slug'
+    | '/layanan/$slug'
     | '/p/$slug'
     | '/portfolio/$service'
     | '/store/$slug'
@@ -475,7 +475,7 @@ export interface RootRouteChildren {
   AuthSignUpRoute: typeof AuthSignUpRoute
   BlogSlugRoute: typeof BlogSlugRoute
   InvoiceTokenRoute: typeof InvoiceTokenRoute
-  KategoriSlugRoute: typeof KategoriSlugRoute
+  LayananSlugRoute: typeof LayananSlugRoute
   PSlugRoute: typeof PSlugRoute
   StoreSlugRoute: typeof StoreSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
@@ -568,18 +568,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof InvoiceTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/kategori/$slug': {
-      id: '/kategori/$slug'
-      path: '/kategori/$slug'
-      fullPath: '/kategori/$slug'
-      preLoaderRoute: typeof KategoriSlugRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/layanan/': {
       id: '/layanan/'
       path: '/layanan'
       fullPath: '/layanan/'
       preLoaderRoute: typeof LayananIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/layanan/$slug': {
+      id: '/layanan/$slug'
+      path: '/layanan/$slug'
+      fullPath: '/layanan/$slug'
+      preLoaderRoute: typeof LayananSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/p/$slug': {
@@ -825,7 +825,7 @@ const rootRouteChildren: RootRouteChildren = {
   AuthSignUpRoute: AuthSignUpRoute,
   BlogSlugRoute: BlogSlugRoute,
   InvoiceTokenRoute: InvoiceTokenRoute,
-  KategoriSlugRoute: KategoriSlugRoute,
+  LayananSlugRoute: LayananSlugRoute,
   PSlugRoute: PSlugRoute,
   StoreSlugRoute: StoreSlugRoute,
   BlogIndexRoute: BlogIndexRoute,

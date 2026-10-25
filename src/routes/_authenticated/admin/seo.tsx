@@ -11,8 +11,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Field, PageHeader, TagInput } from "@/components/admin/fields";
 import { useSettings } from "@/components/admin/useSettings";
 import { descOk, scoreArticle, titleOk } from "@/lib/seo";
+import { pageMeta } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/admin/seo")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/seo")({ head: () => ({ meta: [...pageMeta({ title: "Optimasi SEO | Dimaloka", description: "Kelola SEO layanan, artikel, dan produk Dimaloka." }), { name: "robots", content: "noindex" }] }), component: Page });
 
 const KEYS = ["global_seo_title", "global_seo_description", "global_keywords", "canonical_domain", "google_analytics_id", "search_console_meta", "robots_txt"];
 

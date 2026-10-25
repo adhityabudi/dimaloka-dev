@@ -14,8 +14,9 @@ import { Field, PageHeader, SeoFields } from "@/components/admin/fields";
 import { CategoryIcon } from "@/components/site/CategoryIcon";
 import { slugify } from "@/lib/format";
 import { canPublish } from "@/lib/seo";
+import { pageMeta } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/admin/layanan")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/layanan")({ head: () => ({ meta: [...pageMeta({ title: "Kelola Layanan | Dimaloka", description: "Kelola daftar layanan digital dan SEO Dimaloka." }), { name: "robots", content: "noindex" }] }), component: Page });
 
 const empty = { name: "", slug: "", icon: "Sparkles", description: "", is_active: true, seo_title: "", seo_description: "", keywords: [] as string[], sort_order: 0 };
 
