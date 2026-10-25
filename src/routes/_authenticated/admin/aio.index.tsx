@@ -110,7 +110,7 @@ function Page() {
 
 function Meta({ title, desc }: { title?: string; desc?: string }) {
   if (!title && !desc) return null;
-  return <div className="rounded-xl border p-4"><p className="text-xs font-semibold text-muted-foreground">Pratinjau Google</p><p className="mt-1 text-lg text-blue">{title} <span className="text-xs text-muted-foreground">({title?.length ?? 0}/60)</span></p><p className="text-sm text-muted-foreground">{desc} <span className="text-xs">({desc?.length ?? 0}/160)</span></p></div>;
+  return <div className="rounded-xl border p-4"><p className="text-xs font-semibold text-muted-foreground">Pratinjau Google</p><p className="mt-1 text-lg text-primary-strong">{title} <span className="text-xs text-muted-foreground">({title?.length ?? 0}/60)</span></p><p className="text-sm text-muted-foreground">{desc} <span className="text-xs">({desc?.length ?? 0}/160)</span></p></div>;
 }
 const Tags = ({ items }: { items: string[] }) => <div className="flex flex-wrap gap-1.5">{items.map((k) => <span key={k} className="rounded-full bg-muted px-2.5 py-1 text-xs">{k}</span>)}</div>;
 const List = ({ title, items }: { title: string; items: string[] }) => items.length ? <div><h3 className="font-bold">{title}</h3><ul className="ml-5 list-disc text-sm">{items.map((x) => <li key={x}>{x}</li>)}</ul></div> : null;

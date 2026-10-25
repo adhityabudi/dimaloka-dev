@@ -40,6 +40,7 @@ import { Route as AuthenticatedAdminSettingRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminTestimoniRouteImport } from './routes/_authenticated/admin/testimoni'
 import { Route as AuthenticatedCheckoutSlugRouteImport } from './routes/_authenticated/checkout.$slug'
 import { Route as AuthenticatedPesananIdRouteImport } from './routes/_authenticated/pesanan.$id'
+import { Route as AuthenticatedAdminAioIndexRouteImport } from './routes/_authenticated/admin/aio.index'
 import { Route as AuthenticatedAdminAioPromptsRouteImport } from './routes/_authenticated/admin/aio.prompts'
 import { Route as AuthenticatedAdminAioSettingsRouteImport } from './routes/_authenticated/admin/aio.settings'
 import { Route as AuthenticatedAdminArtikelIndexRouteImport } from './routes/_authenticated/admin/artikel/index'
@@ -214,6 +215,12 @@ const AuthenticatedPesananIdRoute = AuthenticatedPesananIdRouteImport.update({
   path: '/pesanan/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const AuthenticatedAdminAioIndexRoute =
+  AuthenticatedAdminAioIndexRouteImport.update({
+    id: '/',
+    path: '/',
+    getParentRoute: () => AuthenticatedAdminAioRoute,
+  } as any)
 const AuthenticatedAdminAioPromptsRoute =
   AuthenticatedAdminAioPromptsRouteImport.update({
     id: '/prompts',
@@ -325,6 +332,7 @@ export interface FileRoutesByFullPath {
   '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/admin/aio/': typeof AuthenticatedAdminAioIndexRoute
   '/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
   '/admin/invoice/': typeof AuthenticatedAdminInvoiceIndexRoute
   '/admin/produk/': typeof AuthenticatedAdminProdukIndexRoute
@@ -348,7 +356,6 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/layanan': typeof LayananIndexRoute
   '/portfolio': typeof PortfolioIndexRoute
-  '/admin/aio': typeof AuthenticatedAdminAioRouteWithChildren
   '/admin/halaman-layanan': typeof AuthenticatedAdminHalamanLayananRoute
   '/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
@@ -367,6 +374,7 @@ export interface FileRoutesByTo {
   '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/admin/aio': typeof AuthenticatedAdminAioIndexRoute
   '/admin/artikel': typeof AuthenticatedAdminArtikelIndexRoute
   '/admin/invoice': typeof AuthenticatedAdminInvoiceIndexRoute
   '/admin/produk': typeof AuthenticatedAdminProdukIndexRoute
@@ -413,6 +421,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
   '/_authenticated/admin/order_/$id': typeof AuthenticatedAdminOrderIdRoute
   '/_authenticated/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
+  '/_authenticated/admin/aio/': typeof AuthenticatedAdminAioIndexRoute
   '/_authenticated/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
   '/_authenticated/admin/invoice/': typeof AuthenticatedAdminInvoiceIndexRoute
   '/_authenticated/admin/produk/': typeof AuthenticatedAdminProdukIndexRoute
@@ -459,6 +468,7 @@ export interface FileRouteTypes {
     | '/admin/invoice/new'
     | '/admin/order/$id'
     | '/admin/produk/new'
+    | '/admin/aio/'
     | '/admin/artikel/'
     | '/admin/invoice/'
     | '/admin/produk/'
@@ -482,7 +492,6 @@ export interface FileRouteTypes {
     | '/blog'
     | '/layanan'
     | '/portfolio'
-    | '/admin/aio'
     | '/admin/halaman-layanan'
     | '/admin/layanan'
     | '/admin/order'
@@ -501,6 +510,7 @@ export interface FileRouteTypes {
     | '/admin/invoice/new'
     | '/admin/order/$id'
     | '/admin/produk/new'
+    | '/admin/aio'
     | '/admin/artikel'
     | '/admin/invoice'
     | '/admin/produk'
@@ -546,6 +556,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/invoice/new'
     | '/_authenticated/admin/order_/$id'
     | '/_authenticated/admin/produk/new'
+    | '/_authenticated/admin/aio/'
     | '/_authenticated/admin/artikel/'
     | '/_authenticated/admin/invoice/'
     | '/_authenticated/admin/produk/'
@@ -790,6 +801,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPesananIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/_authenticated/admin/aio/': {
+      id: '/_authenticated/admin/aio/'
+      path: '/'
+      fullPath: '/admin/aio/'
+      preLoaderRoute: typeof AuthenticatedAdminAioIndexRouteImport
+      parentRoute: typeof AuthenticatedAdminAioRoute
+    }
     '/_authenticated/admin/aio/prompts': {
       id: '/_authenticated/admin/aio/prompts'
       path: '/prompts'
@@ -880,11 +898,13 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminAioRouteChildren {
   AuthenticatedAdminAioPromptsRoute: typeof AuthenticatedAdminAioPromptsRoute
   AuthenticatedAdminAioSettingsRoute: typeof AuthenticatedAdminAioSettingsRoute
+  AuthenticatedAdminAioIndexRoute: typeof AuthenticatedAdminAioIndexRoute
 }
 
 const AuthenticatedAdminAioRouteChildren: AuthenticatedAdminAioRouteChildren = {
   AuthenticatedAdminAioPromptsRoute: AuthenticatedAdminAioPromptsRoute,
   AuthenticatedAdminAioSettingsRoute: AuthenticatedAdminAioSettingsRoute,
+  AuthenticatedAdminAioIndexRoute: AuthenticatedAdminAioIndexRoute,
 }
 
 const AuthenticatedAdminAioRouteWithChildren =
