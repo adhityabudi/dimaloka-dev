@@ -93,9 +93,9 @@ export function ProductForm({ initial }: { initial?: any }) {
               </Select>
             </Field>
             <label className="flex items-center gap-2 text-sm font-semibold"><Switch checked={v.is_featured} onCheckedChange={(f) => set({ is_featured: f })} /> Featured (HOT)</label>
-            <Field label="Kategori">
+            <Field label="Layanan">
               <Select value={v.category_id ?? ""} onValueChange={(c) => set({ category_id: c })}>
-                <SelectTrigger><SelectValue placeholder="Pilih kategori" /></SelectTrigger>
+                <SelectTrigger><SelectValue placeholder="Pilih layanan" /></SelectTrigger>
                 <SelectContent>{opts?.cats.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent>
               </Select>
             </Field>

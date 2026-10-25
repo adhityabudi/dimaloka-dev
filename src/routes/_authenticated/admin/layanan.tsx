@@ -1,86 +1,98 @@
-import { createFileRoute, Link, useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ExternalLink, Save } from "lucide-react";
+import { createFileRoute } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
+import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from "lucide-react";
+import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { Field, ImageInput, ListInput, PageHeader, TagInput, uploadMedia } from "@/components/admin/fields";
-import { useSettings } from "@/components/admin/useSettings";
-import { LANDING_SLUGS, SERVICE_NAMES, serviceContent, serviceKey, type ServiceContent } from "@/lib/services";
-import { pageMeta } from "@/lib/site";
+import { Switch } from "@/components/ui/switch";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Field, PageHeader, SeoFields } from "@/components/admin/fields";
+import { CategoryIcon } from "@/components/site/CategoryIcon";
+import { slugify } from "@/lib/format";
+import { canPublish } from "@/lib/seo";
 
-export const Route = createFileRoute("/_authenticated/admin/layanan")({
-  head: () => ({ meta: [...pageMeta({ title: "Kelola Halaman Layanan | Dimaloka", description: "Ubah teks dan gambar halaman Desain Grafis, Digital Marketing, SEO, Aplikasi Mobile, serta Video & Animasi." }), { name: "robots", content: "noindex" }] }),
-  component: AdminServices,
-});
+export const Route = createFileRoute("/_authenticated/admin/layanan")({ component: Page });
 
-type Slug = (typeof LANDING_SLUGS)[number];
+const empty = { name: "", slug: "", icon: "Sparkles", description: "", is_active: true, seo_title: "", seo_description: "", keywords: [] as string[], sort_order: 0 };
 
-// Bundled dummy images are relative URLs; copy them into media storage before saving.
-async function persist(url: string) {
-  if (!url || /^https?:\/\//.test(url)) return url;
-  const res = await fetch(url);
-  if (!res.ok) throw new Error("Gambar contoh tidak dapat disimpan.");
-  const blob = await res.blob();
-  return uploadMedia(new File([blob], `layanan-${crypto.randomUUID()}.jpg`, { type: blob.type }));
-}
-
-function AdminServices() {
-  const [slug, setSlug] = useState<Slug>(LANDING_SLUGS[0]);
-  return <div className="max-w-5xl">
-    <div className="mb-6 flex flex-wrap gap-2">{LANDING_SLUGS.map(s => <Button key={s} size="sm" variant={slug === s ? "default" : "outline"} aria-pressed={slug === s} onClick={() => setSlug(s)}>{SERVICE_NAMES[s]}</Button>)}</div>
-    <Editor key={slug} slug={slug} />
-  </div>;
-}
-
-function Editor({ slug }: { slug: Slug }) {
-  const { data, isPending, refetch } = useSettings();
-  const router = useRouter();
-  const [c, setC] = useState<ServiceContent>(() => serviceContent(slug, null));
-  const [busy, setBusy] = useState(false);
-  useEffect(() => { if (data) setC(serviceContent(slug, data[serviceKey(slug)])); }, [data, slug]);
-  const patch = (v: Partial<ServiceContent>) => setC(p => ({ ...p, ...v }));
-  const text = (k: keyof ServiceContent, label: string, long = false) => <Field key={k} label={label}>{long
-    ? <Textarea aria-label={label} value={c[k] as string} onChange={e => patch({ [k]: e.target.value })} />
-    : <Input aria-label={label} value={c[k] as string} onChange={e => patch({ [k]: e.target.value })} />}</Field>;
-  const setAt = <K extends "features" | "basics" | "faq">(k: K, i: number, v: Partial<ServiceContent[K][number]>) => patch({ [k]: c[k].map((x, j) => j === i ? { ...x, ...v } : x) } as Partial<ServiceContent>);
+function Page() {
+  const qc = useQueryClient();
+  const { data = [] } = useQuery({
+    queryKey: ["adm-cats"],
+    queryFn: async () => {
+      const [{ data: c }, { data: p }] = await Promise.all([supabase.from("categories").select("*").order("sort_order"), supabase.from("products").select("category_id")]);
+      return (c ?? []).map((x) => ({ ...x, count: (p ?? []).filter((y) => y.category_id === x.id).length }));
+    },
+  });
+  const [edit, setEdit] = useState<any>(null);
+  const set = (patch: any) => setEdit((e: any) => ({ ...e, ...patch }));
 
   const save = async () => {
-    if (!c.title.trim() || !c.description.trim()) return toast.error("Judul dan deskripsi pembuka wajib diisi.");
-    if (c.hero_image && !c.hero_alt.trim()) return toast.error("Isi teks alternatif gambar pembuka.");
-    setBusy(true);
-    try {
-      const value: ServiceContent = { ...c, hero_image: await persist(c.hero_image), features: await Promise.all(c.features.map(async f => ({ ...f, image: await persist(f.image) }))) };
-      const { error } = await supabase.from("site_settings").upsert({ key: serviceKey(slug), value: JSON.parse(JSON.stringify(value)), updated_at: new Date().toISOString() });
-      if (error) throw error;
-      setC(value); await refetch(); await router.invalidate();
-      toast.success("Halaman layanan disimpan");
-    } catch (e) { toast.error(e instanceof Error ? e.message : "Gagal menyimpan."); } finally { setBusy(false); }
+    const { count, id, created_at, ...row } = edit;
+    if (row.is_active) {
+      const c = canPublish(row, "category");
+      if (!c.ok) return toast.error(`Lengkapi SEO dulu: ${c.missing.join(", ")}`);
+    }
+    row.slug = slugify(row.slug || row.name);
+    const res = id ? await supabase.from("categories").update(row).eq("id", id) : await supabase.from("categories").insert({ ...row, sort_order: data.length + 1 });
+    if (res.error) return toast.error(res.error.message);
+    toast.success("Layanan disimpan");
+    setEdit(null);
+    qc.invalidateQueries({ queryKey: ["adm-cats"] });
+  };
+  const move = async (i: number, dir: -1 | 1) => {
+    const a = data[i], b = data[i + dir];
+    if (!b) return;
+    await Promise.all([supabase.from("categories").update({ sort_order: b.sort_order }).eq("id", a.id), supabase.from("categories").update({ sort_order: a.sort_order }).eq("id", b.id)]);
+    qc.invalidateQueries({ queryKey: ["adm-cats"] });
+  };
+  const del = async (id: string) => {
+    if (!confirm("Hapus layanan ini?")) return;
+    const { error } = await supabase.from("categories").delete().eq("id", id);
+    if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["adm-cats"] });
   };
 
-  if (isPending) return <p className="text-muted-foreground">Memuat…</p>;
-  const box = "space-y-4 rounded-lg border bg-card p-5 sm:p-6";
-  return <>
-    <PageHeader title={`Halaman ${SERVICE_NAMES[slug]}`} desc="SEO halaman ini mengikuti pengaturan kategori. Paket layanan diambil dari menu Produk, dan portfolio dari menu Portfolio." action={<div className="flex gap-2"><Button asChild variant="outline"><Link to="/kategori/$slug" params={{ slug }} target="_blank">Lihat halaman<ExternalLink className="size-4" /></Link></Button><Button onClick={save} disabled={busy}><Save className="size-4" />{busy ? "Menyimpan…" : "Simpan"}</Button></div>} />
-    <div className="space-y-6">
-      <section className={box}><h2 className="text-lg font-bold text-navy">Pembuka</h2>{text("eyebrow", "Teks pengantar")}{text("title", "Judul utama (H1)")}{text("description", "Deskripsi", true)}<Field label="Gambar pembuka"><ImageInput value={c.hero_image} onChange={hero_image => patch({ hero_image })} /></Field>{text("hero_alt", "Teks alternatif gambar")}<Field label="Label kecil"><TagInput value={c.tags} onChange={tags => patch({ tags })} /></Field></section>
-      <section className={box}><h2 className="text-lg font-bold text-navy">Pengantar</h2>{text("intro_eyebrow", "Label")}{text("intro_title", "Judul")}{text("intro_text", "Isi", true)}</section>
-      {c.features.map((f, i) => <section key={i} className={box}><h2 className="text-lg font-bold text-navy">Keunggulan {i + 1}</h2>
-        <Field label="Label"><Input value={f.eyebrow} onChange={e => setAt("features", i, { eyebrow: e.target.value })} /></Field>
-        <Field label="Judul"><Input value={f.title} onChange={e => setAt("features", i, { title: e.target.value })} /></Field>
-        <Field label="Isi"><Textarea value={f.text} onChange={e => setAt("features", i, { text: e.target.value })} /></Field>
-        <Field label="Gambar"><ImageInput value={f.image} onChange={image => setAt("features", i, { image })} /></Field>
-        <Field label="Teks alternatif gambar"><Input value={f.image_alt} onChange={e => setAt("features", i, { image_alt: e.target.value })} /></Field>
-        <Field label="Poin (satu per baris)"><ListInput value={f.points} onChange={points => setAt("features", i, { points })} /></Field>
-      </section>)}
-      <section className={box}><h2 className="text-lg font-bold text-navy">Langkah / dasar kerja</h2>{text("basics_eyebrow", "Label")}{text("basics_title", "Judul")}{text("basics_text", "Deskripsi", true)}
-        {c.basics.map((b, i) => <div key={i} className="grid gap-3 border-t pt-4 md:grid-cols-[1fr_2fr]"><Input aria-label={`Judul langkah ${i + 1}`} value={b.title} onChange={e => setAt("basics", i, { title: e.target.value })} /><Textarea aria-label={`Isi langkah ${i + 1}`} value={b.text} onChange={e => setAt("basics", i, { text: e.target.value })} /></div>)}</section>
-      <section className={box}><h2 className="text-lg font-bold text-navy">Daftar layanan</h2>{text("services_eyebrow", "Label")}{text("services_title", "Judul")}</section>
-      <section className={box}><h2 className="text-lg font-bold text-navy">Pertanyaan (FAQ)</h2>{text("faq_title", "Judul")}
-        {c.faq.map((f, i) => <div key={i} className="space-y-2 border-t pt-4"><Input aria-label={`Pertanyaan ${i + 1}`} value={f.q} onChange={e => setAt("faq", i, { q: e.target.value })} /><Textarea aria-label={`Jawaban ${i + 1}`} value={f.a} onChange={e => setAt("faq", i, { a: e.target.value })} /></div>)}</section>
-      <section className={box}><h2 className="text-lg font-bold text-navy">Ajakan konsultasi</h2>{text("cta_eyebrow", "Label")}{text("cta_title", "Judul")}{text("cta_text", "Isi", true)}{text("cta_button", "Teks tombol")}{text("wa_message", "Pesan WhatsApp otomatis", true)}</section>
+  return (
+    <div>
+      <PageHeader title="Layanan" desc="Kelola layanan dan urutannya." action={<Button onClick={() => setEdit({ ...empty })}><Plus /> Tambah</Button>} />
+      <div className="rounded-2xl border bg-card shadow-card">
+        <Table>
+          <TableHeader><TableRow><TableHead>Urutan</TableHead><TableHead>Layanan</TableHead><TableHead>Produk</TableHead><TableHead>Status</TableHead><TableHead /></TableRow></TableHeader>
+          <TableBody>
+            {data.map((c, i) => (
+              <TableRow key={c.id}>
+                <TableCell><div className="flex gap-1"><Button size="icon" variant="ghost" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Naik"><ArrowUp /></Button><Button size="icon" variant="ghost" onClick={() => move(i, 1)} disabled={i === data.length - 1} aria-label="Turun"><ArrowDown /></Button></div></TableCell>
+                <TableCell><div className="flex items-center gap-2 font-semibold"><CategoryIcon icon={c.icon} className="h-4 w-4 text-primary" /> {c.name}</div><p className="text-xs text-muted-foreground">/{c.slug}</p></TableCell>
+                <TableCell>{c.count}</TableCell>
+                <TableCell>{c.is_active ? <span className="font-semibold text-success">Aktif</span> : <span className="text-muted-foreground">Nonaktif</span>}</TableCell>
+                <TableCell className="text-right"><Button size="icon" variant="ghost" onClick={() => setEdit(c)} aria-label="Edit"><Pencil /></Button><Button size="icon" variant="ghost" onClick={() => del(c.id)} aria-label="Hapus"><Trash2 /></Button></TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </div>
+      <Dialog open={!!edit} onOpenChange={(o) => !o && setEdit(null)}>
+        <DialogContent className="max-h-[90vh] max-w-2xl overflow-y-auto">
+          <DialogHeader><DialogTitle>{edit?.id ? "Edit" : "Tambah"} Layanan</DialogTitle></DialogHeader>
+          {edit && (
+            <div className="space-y-4">
+              <div className="grid gap-4 sm:grid-cols-2">
+                <Field label="Nama"><Input value={edit.name} onChange={(e) => set({ name: e.target.value, slug: edit.id ? edit.slug : slugify(e.target.value) })} /></Field>
+                <Field label="Slug"><Input value={edit.slug} onChange={(e) => set({ slug: e.target.value })} /></Field>
+              </div>
+              <Field label="Ikon" hint="Nama ikon lucide (mis. Globe, Palette) atau emoji"><Input value={edit.icon ?? ""} onChange={(e) => set({ icon: e.target.value })} /></Field>
+              <Field label="Deskripsi"><Textarea value={edit.description ?? ""} onChange={(e) => set({ description: e.target.value })} /></Field>
+              <label className="flex items-center gap-2 text-sm font-semibold"><Switch checked={edit.is_active} onCheckedChange={(v) => set({ is_active: v })} /> Aktif (tampil publik)</label>
+              <SeoFields v={edit} set={set} slugPath={`/kategori/${edit.slug}`} />
+              <Button onClick={save} className="w-full">Simpan</Button>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
-  </>;
+  );
 }

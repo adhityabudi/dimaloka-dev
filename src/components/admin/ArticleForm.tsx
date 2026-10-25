@@ -54,7 +54,7 @@ export function ArticleForm({ initial }: { initial?: any }) {
           <div className="space-y-4 rounded-2xl border bg-card p-5 shadow-card">
             <Field label="Status"><Select value={v.status} onValueChange={(s) => set({ status: s })}><SelectTrigger><SelectValue /></SelectTrigger><SelectContent><SelectItem value="draft">Draft</SelectItem><SelectItem value="published">Published</SelectItem></SelectContent></Select></Field>
             <Field label="Jadwal publish" hint="Kosongkan untuk terbit sekarang"><Input type="datetime-local" value={v.published_at ? String(v.published_at).slice(0, 16) : ""} onChange={(e) => set({ published_at: e.target.value ? new Date(e.target.value).toISOString() : null })} /></Field>
-            <Field label="Kategori"><Select value={v.category_id ?? ""} onValueChange={(c) => set({ category_id: c })}><SelectTrigger><SelectValue placeholder="Pilih" /></SelectTrigger><SelectContent>{cats.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent></Select></Field>
+            <Field label="Layanan"><Select value={v.category_id ?? ""} onValueChange={(c) => set({ category_id: c })}><SelectTrigger><SelectValue placeholder="Pilih" /></SelectTrigger><SelectContent>{cats.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent></Select></Field>
             <Field label="Penulis"><Input value={v.author ?? ""} onChange={(e) => set({ author: e.target.value })} /></Field>
           </div>
           <div className="rounded-2xl border bg-card p-5 shadow-card">

@@ -41,7 +41,7 @@ function Page() {
       };
       return [
         ...(p.data ?? []).map((x) => ({ type: "Produk", id: x.id, title: x.title, url: `/p/${x.slug}`, edit: "produk", ...base(x) })),
-        ...(c.data ?? []).map((x) => ({ type: "Kategori", id: x.id, title: x.name, url: `/kategori/${x.slug}`, edit: "kategori", ...base(x) })),
+        ...(c.data ?? []).map((x) => ({ type: "Layanan", id: x.id, title: x.name, url: `/kategori/${x.slug}`, edit: "layanan", ...base(x) })),
         ...(a.data ?? []).map((x) => ({ type: "Artikel", id: x.id, title: x.title, url: `/blog/${x.slug}`, edit: "artikel", ...base(x), score: scoreArticle(x as any).score })),
       ];
     },
@@ -65,7 +65,7 @@ function Page() {
       <div className="grid gap-6 lg:grid-cols-2">
         <section className="space-y-3 rounded-2xl border bg-card p-6 shadow-card">
           <h2 className="font-extrabold text-navy">Sitemap</h2>
-          <p className="text-sm text-muted-foreground">Sitemap dibuat otomatis dari halaman, kategori, produk, toko, dan artikel yang sudah dipublikasi. Kirim URL ini ke Google Search Console.</p>
+          <p className="text-sm text-muted-foreground">Sitemap dibuat otomatis dari halaman, layanan, produk, toko, dan artikel yang sudah dipublikasi. Kirim URL ini ke Google Search Console.</p>
           <div className="flex gap-2">
             <Button variant="outline" asChild><a href={`/sitemap.xml?t=${stamp}`} target="_blank" rel="noreferrer"><ExternalLink /> Buka sitemap.xml</a></Button>
             <Button variant="outline" onClick={() => setStamp(Date.now())}><RefreshCw /> Regenerate</Button>
@@ -91,7 +91,7 @@ function Page() {
                 <TableCell>
                   {r.edit === "produk" ? <Link to="/admin/produk/$id/edit" params={{ id: r.id }} className="text-sm text-primary-strong">Perbaiki</Link>
                     : r.edit === "artikel" ? <Link to="/admin/artikel/$id/edit" params={{ id: r.id }} className="text-sm text-primary-strong">Perbaiki</Link>
-                    : <Link to="/admin/kategori" className="text-sm text-primary-strong">Perbaiki</Link>}
+                    : <Link to="/admin/layanan" className="text-sm text-primary-strong">Perbaiki</Link>}
                 </TableCell>
               </TableRow>
             ))}
