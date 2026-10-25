@@ -38,6 +38,11 @@
   --color-sky: var(--sky);
   --color-coral: var(--coral);
   --color-success: var(--success);
+  --color-invoice-paper: var(--invoice-paper);
+  --color-invoice-ink: var(--invoice-ink);
+  --color-invoice-heading: var(--invoice-heading);
+  --color-invoice-warning: var(--invoice-warning);
+  --color-invoice-warning-foreground: var(--invoice-warning-foreground);
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
@@ -87,6 +92,11 @@
   --sky: oklch(0.623 0.188 259.8);
   --coral: oklch(0.637 0.208 25.3);
   --success: oklch(0.65 0.15 155);
+  --invoice-paper: oklch(0.979 0.005 255);
+  --invoice-ink: oklch(0.36 0.035 250);
+  --invoice-heading: oklch(0.49 0.16 25);
+  --invoice-warning: oklch(0.965 0.063 90);
+  --invoice-warning-foreground: oklch(0.49 0.105 78);
   --gradient-navy: linear-gradient(135deg, var(--navy) 0%, var(--navy-2) 100%);
   --shadow-card: 0 1px 2px oklch(0.208 0.042 265.755 / 6%), 0 8px 24px -12px oklch(0.208 0.042 265.755 / 18%);
   --shadow-cta: 0 10px 30px -10px oklch(0.705 0.191 47.6 / 55%);
@@ -138,4 +148,7 @@
 
 @media print {
   .no-print { display: none !important; }
+  .invoice-sheet { box-shadow: none !important; border: 0 !important; max-width: none !important; }
+  .invoice-sheet header, .invoice-sheet section, .invoice-sheet tr, .invoice-sheet footer { break-inside: avoid; }
+  .invoice-sheet { print-color-adjust: exact; -webkit-print-color-adjust: exact; }
 }
