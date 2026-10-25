@@ -53,3 +53,8 @@
 - [x] Connect opted-in service revisions to public content and schema.
 - [x] Refresh saved article/public data and show a verifiable SEO application result.
 - [x] Test application and confirm saved metadata/content through the public page.
+
+# AIO direct implementation
+- [x] Add explicit article/product publishing and article SEO application from AIO results.
+- [x] Apply website content to a selected existing service page while preserving images.
+- [x] Verify saved article/service results on public pages and test SEO validation.
