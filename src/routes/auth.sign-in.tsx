@@ -4,6 +4,7 @@ import { AuthForm } from "@/components/site/AuthForm";
 export const Route = createFileRoute("/auth/sign-in")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Masuk | Dimaloka" },
       { name: "description", content: "Masuk ke akun Dimaloka untuk melihat riwayat order dan invoice." },
       { property: "og:title", content: "Masuk | Dimaloka" },

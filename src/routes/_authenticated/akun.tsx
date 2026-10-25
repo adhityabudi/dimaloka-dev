@@ -6,9 +6,10 @@ import { rupiah, tanggal } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { paymentKind } from "@/lib/invoice-payments";
 import { orderStatusLabel } from "@/lib/checkout";
+import { pageMeta } from "@/lib/site";
 
 export const Route = createFileRoute("/_authenticated/akun")({
-  head: () => ({ meta: [{ title: "Akun Saya | Dimaloka" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [...pageMeta({ title: "Akun Saya | Dimaloka", description: "Riwayat pesanan dan invoice layanan digital Anda di Dimaloka." }), { name: "robots", content: "noindex, nofollow" }] }),
   component: Akun,
 });
 

@@ -3,6 +3,7 @@ import { stripHtml } from "./format";
 import { homepageContent, HOMEPAGE_KEY } from "./homepage";
 import { LANDING_SLUGS, SERVICE_SLUGS, serviceContent, servicePortfolio, masterPage } from "./services";
 import websiteHero from "@/assets/website-profile-mockups.png";
+import siteLogo from "@/assets/dimaloka-logo.png.asset.json";
 
 type Entity = Record<string, unknown>;
 type Kind = "home" | "directory" | "service" | "product" | "blog" | "article" | "store" | "portfolio" | "servicePortfolio";
@@ -43,6 +44,7 @@ export function publicPageHead(kind: Kind, data: any, root: RootData = {}) {
   const orgId = link("/#organization");
   const websiteId = link("/#website");
   const organization: Entity = { "@type": "Organization", "@id": orgId, name: settings.site_name || "Dimaloka", url: link("/") };
+  organization.logo = absoluteUrl(siteLogo.url, origin);
   const social = Object.values(settings.social_links ?? {}).map(value => absoluteUrl(value, origin)).filter(Boolean);
   if (social.length) organization.sameAs = [...new Set(social)];
   // Use only identity already visible on the site; no invented reviews or business claims.
@@ -60,6 +62,7 @@ export function publicPageHead(kind: Kind, data: any, root: RootData = {}) {
     description = settings.global_seo_description || c.description; keywords = keywordList(settings.global_keywords); image = c.hero_image;
     if (c.visible.services) items.push(...(data?.categories ?? []).map((c: any) => ({ "@type": "Service", name: c.name, description: c.description, url: link(`/layanan/${c.slug}`) })));
     if (c.visible.products) items.push(...cards(data?.products));
+    pageType = "WebPage";
   } else if (kind === "directory") {
     path = "/layanan"; name = "Layanan Digital"; title = "Cari Layanan Digital | Dimaloka";
     description = "Temukan layanan website, desain grafis, digital marketing, SEO, aplikasi mobile, dan video sesuai kebutuhan bisnis Anda di Dimaloka.";

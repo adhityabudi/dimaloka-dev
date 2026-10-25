@@ -10,10 +10,11 @@ import { OrderTimeline } from "@/components/site/OrderTimeline";
 import { orderStatusLabel } from "@/lib/checkout";
 import { paymentKind } from "@/lib/invoice-payments";
 import { rupiah, tanggal, waLink } from "@/lib/format";
+import { pageMeta } from "@/lib/site";
 
 export const Route = createFileRoute("/_authenticated/pesanan/$id")({
   validateSearch: (s: Record<string, unknown>): { baru?: number } => ({ baru: s.baru ? 1 : undefined }),
-  head: () => ({ meta: [{ title: "Detail Pesanan | Dimaloka" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [...pageMeta({ title: "Detail Pesanan | Dimaloka", description: "Status pembayaran dan progres pesanan layanan Anda di Dimaloka." }), { name: "robots", content: "noindex, nofollow" }] }),
   component: OrderPage,
 });
 
