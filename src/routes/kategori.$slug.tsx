@@ -1,18 +1,21 @@
 import { createFileRoute, Link, notFound, useLoaderData } from "@tanstack/react-router";
 import { BadgeCheck, ChevronRight, Clock, ShieldCheck, Wallet } from "lucide-react";
-import { getCategory, getPortfolio } from "@/lib/public.functions";
+import { getCategory, getPortfolio, getServiceContent } from "@/lib/public.functions";
 import { portfolioPage } from "@/lib/portfolio";
 import { ProductCard } from "@/components/site/ProductCard";
 import { WaCta } from "@/components/site/WaCta";
 import { CategoryIcon } from "@/components/site/CategoryIcon";
 import { jsonLd, pageMeta } from "@/lib/site";
 import { WebsiteServicePage } from "@/components/site/WebsiteServicePage";
+import { ServiceLandingPage } from "@/components/site/ServiceLandingPage";
+import { LANDING_SLUGS, serviceContent, servicePortfolio } from "@/lib/services";
 
 export const Route = createFileRoute("/kategori/$slug")({
   loader: async ({ params }) => {
     const d = await getCategory({ data: { slug: params.slug } });
     if (!d) throw notFound();
-    return { ...d, portfolio: params.slug === "website" ? await getPortfolio() : null };
+    const landing = (LANDING_SLUGS as string[]).includes(params.slug) ? await getServiceContent({ data: { slug: params.slug } }) : null;
+    return { ...d, landing, portfolio: params.slug === "website" ? await getPortfolio() : landing?.portfolio ?? null };
   },
   head: ({ loaderData, matches }) => {
     if (!loaderData) return { meta: [{ title: "Kategori tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
@@ -36,9 +39,11 @@ const features = [
 ];
 
 function CategoryPage() {
-  const { category: c, products, portfolio } = Route.useLoaderData();
+  const { category: c, products, portfolio, landing } = Route.useLoaderData();
   const { layout } = useLoaderData({ from: "__root__" });
   if (c.slug === "website") return <WebsiteServicePage products={products} phone={layout.settings.contact_whatsapp} portfolio={portfolioPage(portfolio)} />;
+  const slug = LANDING_SLUGS.find(s => s === c.slug);
+  if (slug && landing) return <ServiceLandingPage slug={slug} name={c.name} content={serviceContent(slug, landing.content)} portfolio={servicePortfolio(slug, portfolio)} products={products} phone={layout.settings.contact_whatsapp} />;
   return (
     <>
       <section className="bg-gradient-navy text-navy-foreground">

@@ -23,9 +23,12 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as InvoiceTokenRouteImport } from './routes/invoice.$token'
 import { Route as KategoriSlugRouteImport } from './routes/kategori.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
+import { Route as PortfolioIndexRouteImport } from './routes/portfolio.index'
+import { Route as PortfolioServiceRouteImport } from './routes/portfolio.$service'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminKategoriRouteImport } from './routes/_authenticated/admin/kategori'
+import { Route as AuthenticatedAdminLayananRouteImport } from './routes/_authenticated/admin/layanan'
 import { Route as AuthenticatedAdminOrderRouteImport } from './routes/_authenticated/admin/order'
 import { Route as AuthenticatedAdminPortfolioRouteImport } from './routes/_authenticated/admin/portfolio'
 import { Route as AuthenticatedAdminSellerRouteImport } from './routes/_authenticated/admin/seller'
@@ -111,6 +114,16 @@ const PSlugRoute = PSlugRouteImport.update({
   path: '/p/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PortfolioIndexRoute = PortfolioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortfolioRoute,
+} as any)
+const PortfolioServiceRoute = PortfolioServiceRouteImport.update({
+  id: '/$service',
+  path: '/$service',
+  getParentRoute: () => PortfolioRoute,
+} as any)
 const StoreSlugRoute = StoreSlugRouteImport.update({
   id: '/store/$slug',
   path: '/store/$slug',
@@ -125,6 +138,12 @@ const AuthenticatedAdminKategoriRoute =
   AuthenticatedAdminKategoriRouteImport.update({
     id: '/kategori',
     path: '/kategori',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminLayananRoute =
+  AuthenticatedAdminLayananRouteImport.update({
+    id: '/layanan',
+    path: '/layanan',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminOrderRoute = AuthenticatedAdminOrderRouteImport.update({
@@ -218,7 +237,7 @@ const AuthenticatedAdminProdukIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/portfolio': typeof PortfolioRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -229,9 +248,12 @@ export interface FileRoutesByFullPath {
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/portfolio/': typeof PortfolioIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
@@ -251,7 +273,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/portfolio': typeof PortfolioRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/akun': typeof AuthenticatedAkunRoute
@@ -261,9 +282,12 @@ export interface FileRoutesByTo {
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/portfolio': typeof PortfolioIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
@@ -285,7 +309,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
-  '/portfolio': typeof PortfolioRoute
+  '/portfolio': typeof PortfolioRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -296,9 +320,12 @@ export interface FileRoutesById {
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
   '/p/$slug': typeof PSlugRoute
+  '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/portfolio/': typeof PortfolioIndexRoute
   '/_authenticated/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/_authenticated/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/_authenticated/admin/order': typeof AuthenticatedAdminOrderRoute
   '/_authenticated/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/_authenticated/admin/seller': typeof AuthenticatedAdminSellerRoute
@@ -331,9 +358,12 @@ export interface FileRouteTypes {
     | '/invoice/$token'
     | '/kategori/$slug'
     | '/p/$slug'
+    | '/portfolio/$service'
     | '/store/$slug'
     | '/blog/'
+    | '/portfolio/'
     | '/admin/kategori'
+    | '/admin/layanan'
     | '/admin/order'
     | '/admin/portfolio'
     | '/admin/seller'
@@ -353,7 +383,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/portfolio'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/akun'
@@ -363,9 +392,12 @@ export interface FileRouteTypes {
     | '/invoice/$token'
     | '/kategori/$slug'
     | '/p/$slug'
+    | '/portfolio/$service'
     | '/store/$slug'
     | '/blog'
+    | '/portfolio'
     | '/admin/kategori'
+    | '/admin/layanan'
     | '/admin/order'
     | '/admin/portfolio'
     | '/admin/seller'
@@ -397,9 +429,12 @@ export interface FileRouteTypes {
     | '/invoice/$token'
     | '/kategori/$slug'
     | '/p/$slug'
+    | '/portfolio/$service'
     | '/store/$slug'
     | '/blog/'
+    | '/portfolio/'
     | '/_authenticated/admin/kategori'
+    | '/_authenticated/admin/layanan'
     | '/_authenticated/admin/order'
     | '/_authenticated/admin/portfolio'
     | '/_authenticated/admin/seller'
@@ -421,7 +456,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
-  PortfolioRoute: typeof PortfolioRoute
+  PortfolioRoute: typeof PortfolioRouteWithChildren
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AuthSignInRoute: typeof AuthSignInRoute
@@ -534,6 +569,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/portfolio/': {
+      id: '/portfolio/'
+      path: '/'
+      fullPath: '/portfolio/'
+      preLoaderRoute: typeof PortfolioIndexRouteImport
+      parentRoute: typeof PortfolioRoute
+    }
+    '/portfolio/$service': {
+      id: '/portfolio/$service'
+      path: '/$service'
+      fullPath: '/portfolio/$service'
+      preLoaderRoute: typeof PortfolioServiceRouteImport
+      parentRoute: typeof PortfolioRoute
+    }
     '/store/$slug': {
       id: '/store/$slug'
       path: '/store/$slug'
@@ -553,6 +602,13 @@ declare module '@tanstack/react-router' {
       path: '/kategori'
       fullPath: '/admin/kategori'
       preLoaderRoute: typeof AuthenticatedAdminKategoriRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/layanan': {
+      id: '/_authenticated/admin/layanan'
+      path: '/layanan'
+      fullPath: '/admin/layanan'
+      preLoaderRoute: typeof AuthenticatedAdminLayananRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/order': {
@@ -665,6 +721,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminKategoriRoute: typeof AuthenticatedAdminKategoriRoute
+  AuthenticatedAdminLayananRoute: typeof AuthenticatedAdminLayananRoute
   AuthenticatedAdminOrderRoute: typeof AuthenticatedAdminOrderRoute
   AuthenticatedAdminPortfolioRoute: typeof AuthenticatedAdminPortfolioRoute
   AuthenticatedAdminSellerRoute: typeof AuthenticatedAdminSellerRoute
@@ -686,6 +743,7 @@ interface AuthenticatedAdminRouteRouteChildren {
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
     AuthenticatedAdminKategoriRoute: AuthenticatedAdminKategoriRoute,
+    AuthenticatedAdminLayananRoute: AuthenticatedAdminLayananRoute,
     AuthenticatedAdminOrderRoute: AuthenticatedAdminOrderRoute,
     AuthenticatedAdminPortfolioRoute: AuthenticatedAdminPortfolioRoute,
     AuthenticatedAdminSellerRoute: AuthenticatedAdminSellerRoute,
@@ -722,10 +780,24 @@ const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
 const AuthenticatedRouteRouteWithChildren =
   AuthenticatedRouteRoute._addFileChildren(AuthenticatedRouteRouteChildren)
 
+interface PortfolioRouteChildren {
+  PortfolioServiceRoute: typeof PortfolioServiceRoute
+  PortfolioIndexRoute: typeof PortfolioIndexRoute
+}
+
+const PortfolioRouteChildren: PortfolioRouteChildren = {
+  PortfolioServiceRoute: PortfolioServiceRoute,
+  PortfolioIndexRoute: PortfolioIndexRoute,
+}
+
+const PortfolioRouteWithChildren = PortfolioRoute._addFileChildren(
+  PortfolioRouteChildren,
+)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
-  PortfolioRoute: PortfolioRoute,
+  PortfolioRoute: PortfolioRouteWithChildren,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AuthSignInRoute: AuthSignInRoute,

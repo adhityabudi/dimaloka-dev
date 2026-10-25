@@ -16,4 +16,5 @@
 - Media bucket is private (workspace blocks public buckets); uploads store 10-year signed URLs.
 - Payment-stage invoices preserve contract items separately from the current amount due; linked settlement invoices require a paid DP and database validation to prevent double billing or mismatched balances. Shared payment calculations live in `src/lib/invoice-payments.ts` so public, admin, and buyer views agree.
 - Category-specific service presentations use dedicated site components selected by category slug; keep the generic category listing unchanged and source visible service prices from loader data.
-- Portfolio page content and projects use one admin-managed site_settings document, read through public functions and shared cards, so Website previews and the Portfolio page stay synchronized; SEO fields are validated on save in both UI and database.
+
+- Service landing pages and portfolios are keyed by category slug in `src/lib/services.ts` (site_settings docs `service_<slug>`, `portfolio_<slug>`, Website keeps `portfolio_page`, master `portfolio_master`) with in-code dummy defaults, so admin edits, master cards, and service sections stay in sync; portfolio SEO is validated in UI and DB.
