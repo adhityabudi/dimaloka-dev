@@ -40,6 +40,7 @@ import { Route as AuthenticatedAdminSettingRouteImport } from './routes/_authent
 import { Route as AuthenticatedAdminTestimoniRouteImport } from './routes/_authenticated/admin/testimoni'
 import { Route as AuthenticatedCheckoutSlugRouteImport } from './routes/_authenticated/checkout.$slug'
 import { Route as AuthenticatedPesananIdRouteImport } from './routes/_authenticated/pesanan.$id'
+import { Route as ApiPublicAioImageRouteImport } from './routes/api/public/aio-image'
 import { Route as AuthenticatedAdminAioIndexRouteImport } from './routes/_authenticated/admin/aio.index'
 import { Route as AuthenticatedAdminAioPromptsRouteImport } from './routes/_authenticated/admin/aio.prompts'
 import { Route as AuthenticatedAdminAioSettingsRouteImport } from './routes/_authenticated/admin/aio.settings'
@@ -215,6 +216,11 @@ const AuthenticatedPesananIdRoute = AuthenticatedPesananIdRouteImport.update({
   path: '/pesanan/$id',
   getParentRoute: () => AuthenticatedRouteRoute,
 } as any)
+const ApiPublicAioImageRoute = ApiPublicAioImageRouteImport.update({
+  id: '/api/public/aio-image',
+  path: '/api/public/aio-image',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedAdminAioIndexRoute =
   AuthenticatedAdminAioIndexRouteImport.update({
     id: '/',
@@ -324,6 +330,7 @@ export interface FileRoutesByFullPath {
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/checkout/$slug': typeof AuthenticatedCheckoutSlugRoute
   '/pesanan/$id': typeof AuthenticatedPesananIdRoute
+  '/api/public/aio-image': typeof ApiPublicAioImageRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/aio/prompts': typeof AuthenticatedAdminAioPromptsRoute
   '/admin/aio/settings': typeof AuthenticatedAdminAioSettingsRoute
@@ -366,6 +373,7 @@ export interface FileRoutesByTo {
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/checkout/$slug': typeof AuthenticatedCheckoutSlugRoute
   '/pesanan/$id': typeof AuthenticatedPesananIdRoute
+  '/api/public/aio-image': typeof ApiPublicAioImageRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/aio/prompts': typeof AuthenticatedAdminAioPromptsRoute
   '/admin/aio/settings': typeof AuthenticatedAdminAioSettingsRoute
@@ -413,6 +421,7 @@ export interface FileRoutesById {
   '/_authenticated/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
   '/_authenticated/checkout/$slug': typeof AuthenticatedCheckoutSlugRoute
   '/_authenticated/pesanan/$id': typeof AuthenticatedPesananIdRoute
+  '/api/public/aio-image': typeof ApiPublicAioImageRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/aio/prompts': typeof AuthenticatedAdminAioPromptsRoute
   '/_authenticated/admin/aio/settings': typeof AuthenticatedAdminAioSettingsRoute
@@ -460,6 +469,7 @@ export interface FileRouteTypes {
     | '/admin/testimoni'
     | '/checkout/$slug'
     | '/pesanan/$id'
+    | '/api/public/aio-image'
     | '/admin/'
     | '/admin/aio/prompts'
     | '/admin/aio/settings'
@@ -502,6 +512,7 @@ export interface FileRouteTypes {
     | '/admin/testimoni'
     | '/checkout/$slug'
     | '/pesanan/$id'
+    | '/api/public/aio-image'
     | '/admin'
     | '/admin/aio/prompts'
     | '/admin/aio/settings'
@@ -548,6 +559,7 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/testimoni'
     | '/_authenticated/checkout/$slug'
     | '/_authenticated/pesanan/$id'
+    | '/api/public/aio-image'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/aio/prompts'
     | '/_authenticated/admin/aio/settings'
@@ -580,6 +592,7 @@ export interface RootRouteChildren {
   StoreSlugRoute: typeof StoreSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
   LayananIndexRoute: typeof LayananIndexRoute
+  ApiPublicAioImageRoute: typeof ApiPublicAioImageRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -801,6 +814,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedPesananIdRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
     }
+    '/api/public/aio-image': {
+      id: '/api/public/aio-image'
+      path: '/api/public/aio-image'
+      fullPath: '/api/public/aio-image'
+      preLoaderRoute: typeof ApiPublicAioImageRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/admin/aio/': {
       id: '/_authenticated/admin/aio/'
       path: '/'
@@ -1012,6 +1032,7 @@ const rootRouteChildren: RootRouteChildren = {
   StoreSlugRoute: StoreSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
   LayananIndexRoute: LayananIndexRoute,
+  ApiPublicAioImageRoute: ApiPublicAioImageRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

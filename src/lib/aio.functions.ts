@@ -2,6 +2,7 @@ import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { AIO_FEATURES, aioPromptSchema, aioRequestSchema, aioUserMessage, parseAioOutput } from "./aio";
+import { groundArticleLinks, validateArticleLinks } from "./aio-article";
 
 async function admin(context: { supabase: any; userId: string }) {
   const { assertSeoAdmin } = await import("./ai-seo.server");
@@ -16,9 +17,30 @@ export const aiGenerate = createServerFn({ method: "POST" }).middleware([require
   if (!settings.enabled) throw new Error("AI dinonaktifkan oleh admin");
   const prompt = await loadPrompt(context.supabase, data.feature);
   const model = data.model || prompt.model || settings.model;
-  const text = await callGateway({ model, system: prompt.system_prompt, user: aioUserMessage(data.feature, data.input), temperature: prompt.temperature, max_tokens: settings.max_tokens });
-  try { return { content: JSON.stringify(parseAioOutput(data.feature, text)), model }; }
+  const { loadArticleLinks } = await import("./aio-catalog.server");
+  const links = data.feature === "article_generate" ? await loadArticleLinks(context.supabase) : [];
+  const system = data.feature === "article_generate" ? `${prompt.system_prompt}\n\nAturan tautan wajib: gunakan hanya URL persis dari katalog berikut untuk link Markdown. Pilih 1–3 tautan relevan secara alami, jangan membuat URL sendiri, jangan menambahkan gambar Markdown atau link eksternal. Katalog: ${JSON.stringify(links)}` : prompt.system_prompt;
+  const text = await callGateway({ model, system, user: aioUserMessage(data.feature, data.input), temperature: prompt.temperature, max_tokens: settings.max_tokens });
+  try {
+    const output = parseAioOutput(data.feature, text);
+    if (data.feature === "article_generate") {
+      const article = parseAioOutput("article_generate", text);
+      article.content_markdown = groundArticleLinks(article.content_markdown, links);
+      article.cta = groundArticleLinks(article.cta, links);
+      article.faq = article.faq.map(f => ({ q: groundArticleLinks(f.q, links), a: groundArticleLinks(f.a, links) }));
+      return { content: JSON.stringify(article), model, links };
+    }
+    return { content: JSON.stringify(output), model, links };
+  }
   catch { throw new Error("Jawaban AI bukan JSON yang sesuai format. Coba generate ulang atau naikkan max tokens."); }
+});
+
+export const checkAioArticleLinks = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: unknown) => z.object({ content: z.string().max(100000) }).parse(d)).handler(async ({ context, data }) => {
+  await admin(context);
+  const { loadArticleLinks } = await import("./aio-catalog.server");
+  const links = await loadArticleLinks(context.supabase);
+  validateArticleLinks(parseAioOutput("article_generate", data.content), links);
+  return { ok: true };
 });
 
 export const listAioPrompts = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).handler(async ({ context }) => {
