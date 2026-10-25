@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Copy, ExternalLink, Plus, Send, XCircle } from "lucide-react";
+import { CheckCircle2, Copy, ExternalLink, Eye, Plus, Send, XCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
@@ -46,6 +46,7 @@ function Page() {
                 <TableCell><Badge variant={i.status === "paid" ? "default" : "secondary"}>{label[i.status]}</Badge></TableCell>
                 <TableCell>{tanggal(i.created_at)}</TableCell>
                 <TableCell className="whitespace-nowrap text-right">
+                  <Button size="sm" variant="ghost" asChild><Link to="/admin/invoice/$id" params={{ id: i.id }}><Eye /> Pratinjau</Link></Button>
                   <Button size="sm" variant="ghost" onClick={() => copy(i)}><Copy /> Salin link</Button>
                   {i.status === "draft" && <Button size="sm" variant="ghost" onClick={() => setStatus(i.id, "sent")}><Send /> Kirim</Button>}
                   {i.status !== "paid" && i.status !== "cancelled" && <Button size="sm" variant="ghost" onClick={() => setStatus(i.id, "paid")}><CheckCircle2 /> Tandai dibayar</Button>}
