@@ -5,6 +5,7 @@ import { ProductCard } from "@/components/site/ProductCard";
 import { WaCta } from "@/components/site/WaCta";
 import { CategoryIcon } from "@/components/site/CategoryIcon";
 import { jsonLd, pageMeta } from "@/lib/site";
+import { WebsiteServicePage } from "@/components/site/WebsiteServicePage";
 
 export const Route = createFileRoute("/kategori/$slug")({
   loader: async ({ params }) => {
@@ -36,6 +37,7 @@ const features = [
 function CategoryPage() {
   const { category: c, products } = Route.useLoaderData();
   const { layout } = useLoaderData({ from: "__root__" });
+  if (c.slug === "website") return <WebsiteServicePage products={products} phone={layout.settings.contact_whatsapp} />;
   return (
     <>
       <section className="bg-gradient-navy text-navy-foreground">
