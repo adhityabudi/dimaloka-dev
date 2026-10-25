@@ -113,6 +113,9 @@ function AnnisaPage() {
   const remaining = Math.max(0, QUESTION_QUOTA - used);
   const quotaHabis = remaining <= 0;
   useEffect(() => {
+    setUsed(readUsedQuota());
+  }, []);
+  useEffect(() => {
     if (!busy && !blocked && !quotaHabis) textarea.current?.focus();
   }, [busy, blocked, quotaHabis]);
   const send = async (text: string) => {
