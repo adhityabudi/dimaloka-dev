@@ -60,6 +60,6 @@
 - [x] Verify saved article/service results on public pages and test SEO validation.
 
 # AIO article images and links
-- [ ] Generate a title-relevant cover automatically and retain it in saved articles.
-- [ ] Ground and validate internal links against available products/services.
-- [ ] Allow article/image/link edits before posting and verify the public result.
+- [x] Generate a title-relevant cover automatically and retain it in saved articles.
+- [x] Ground and validate internal links against available products/services.
+- [x] Allow article/image/link edits before posting and verify the public result.
