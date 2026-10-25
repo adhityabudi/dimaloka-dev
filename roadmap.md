@@ -45,6 +45,6 @@
 - [x] Add keyword-driven AI recommendations to article creation/editing and verify the saved result.
 
 # Admin page recovery
-- [ ] Prevent saving settings before loading finishes and expose fetch failures.
-- [ ] Refresh article data after saving and show article loading/failure states.
-- [ ] Verify admin navigation, article edits, and settings persistence.
+- [x] Prevent saving settings before loading finishes and expose fetch failures.
+- [x] Refresh article data after saving and show article loading/failure states.
+- [x] Verify admin navigation, article edits, and settings persistence.
