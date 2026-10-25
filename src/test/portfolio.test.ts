@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { defaultPortfolio, filterPortfolio, portfolioPage, validProjectUrl } from "@/lib/portfolio";
+import { defaultPortfolio, filterPortfolio, liveHref, portfolioPage, validProjectUrl } from "@/lib/portfolio";
 
 describe("Portfolio visibility and filtering", () => {
   it("falls back to available projects when page data is missing", () => {

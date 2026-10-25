@@ -2,15 +2,13 @@ import { useState } from "react";
 import { ArrowUpRight, ChevronLeft, ChevronRight, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
-import { waLink } from "@/lib/format";
-import { liveUrl, type PortfolioProject } from "@/lib/portfolio";
+import { liveHref, type PortfolioProject } from "@/lib/portfolio";
 
 export function PortfolioCard({ project: p, whatsapp }: { project: PortfolioProject; whatsapp?: string }) {
   const [open, setOpen] = useState(false);
   const [slide, setSlide] = useState(0);
   const images = [p.image, ...p.gallery].filter(Boolean);
-  const live = liveUrl(p);
-  const liveHref = live ?? (p.live_enabled !== false && whatsapp ? waLink(whatsapp, `Halo Dimaloka, saya ingin melihat demo live ${p.title}.`) : null);
+  const live = liveHref(p, whatsapp);
   return <>
     <article className="group overflow-hidden rounded-lg border bg-card transition-shadow hover:shadow-card">
       <div className="relative border-b bg-background">
