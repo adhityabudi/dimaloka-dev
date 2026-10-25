@@ -133,7 +133,7 @@ function Index() {
         </div>
         <div className="mt-10 grid gap-5 md:grid-cols-4">
           {c.steps.map((s, i) => { const Icon = steps[i].icon; return (
-            <div key={s.t} className="relative rounded-2xl border bg-card p-6 shadow-card">
+            <div key={i} className="relative rounded-2xl border bg-card p-6 shadow-card">
               <span className="absolute right-5 top-4 text-5xl font-extrabold text-navy/5">0{i + 1}</span>
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-cta"><Icon className="h-6 w-6" /></div>
               <h3 className="mt-4 font-bold text-navy">{s.title}</h3>
