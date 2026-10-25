@@ -147,6 +147,8 @@ function RootComponent() {
       router.invalidate();
       if (event === "SIGNED_OUT") queryClient.clear();
       else queryClient.invalidateQueries();
+      const next = event === "SIGNED_IN" ? sessionStorage.getItem("after-login") : null;
+      if (next && next.startsWith("/") && !next.startsWith("//")) { sessionStorage.removeItem("after-login"); router.navigate({ href: next }); }
     });
     return () => data.subscription.unsubscribe();
   }, [router, queryClient]);
