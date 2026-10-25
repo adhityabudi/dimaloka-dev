@@ -37,7 +37,20 @@ export const defaultPortfolio: PortfolioPage = {
 };
 export function portfolioPage(value: unknown): PortfolioPage {
   if (!value || typeof value !== "object" || Array.isArray(value)) return defaultPortfolio;
-  return { ...defaultPortfolio, ...(value as Partial<PortfolioPage>) };
+  const input = value as Record<string, unknown>;
+  const result = { ...defaultPortfolio };
+  for (const key of Object.keys(defaultPortfolio) as (keyof PortfolioPage)[]) {
+    if (key === "projects" || key === "categories" || key === "keywords") continue;
+    if (typeof input[key] === "string") result[key] = input[key];
+  }
+  for (const key of ["categories", "keywords"] as const) {
+    if (Array.isArray(input[key])) result[key] = input[key].filter((item): item is string => typeof item === "string");
+  }
+  if (Array.isArray(input.projects)) {
+    result.projects = input.projects.filter((item): item is PortfolioProject => !!item && typeof item === "object" && typeof item.id === "string" && typeof item.title === "string" && typeof item.category === "string")
+      .map(p => ({ ...p, gallery: Array.isArray(p.gallery) ? p.gallery.filter(image => typeof image === "string") : [] }));
+  }
+  return result;
 }
 export function filterPortfolio(projects: PortfolioProject[], category: string, search: string) {
   const query = search.trim().toLocaleLowerCase("id");

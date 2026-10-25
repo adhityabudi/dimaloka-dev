@@ -2,9 +2,10 @@ import { Link } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { PortfolioCard } from "./PortfolioCard";
-import { filterPortfolio, type PortfolioPage } from "@/lib/portfolio";
+import { filterPortfolio, portfolioPage, type PortfolioPage } from "@/lib/portfolio";
 
-export function PortfolioSection({ page }: { page: PortfolioPage }) {
+export function PortfolioSection({ page: value }: { page?: PortfolioPage | null }) {
+  const page = portfolioPage(value);
   const projects = filterPortfolio(page.projects, "Semua", "").filter(p => p.featured).slice(0, 3);
   return <section className="border-y bg-muted py-14 sm:py-20"><div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16">
     <p className="text-xs font-semibold uppercase text-primary-strong">Portfolio Website</p>

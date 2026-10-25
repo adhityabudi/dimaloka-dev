@@ -1,7 +1,16 @@
 import { describe, expect, it } from "vitest";
-import { defaultPortfolio, filterPortfolio, validProjectUrl } from "@/lib/portfolio";
+import { defaultPortfolio, filterPortfolio, portfolioPage, validProjectUrl } from "@/lib/portfolio";
 
 describe("Portfolio visibility and filtering", () => {
+  it("falls back to available projects when page data is missing", () => {
+    expect(portfolioPage(undefined).projects.map(p => p.id)).toEqual(["aruna", "lumiere", "nusa"]);
+    expect(portfolioPage(null).projects.map(p => p.id)).toEqual(["aruna", "lumiere", "nusa"]);
+  });
+  it("normalizes null collections without replacing intentionally empty projects", () => {
+    expect(portfolioPage({ projects: null, categories: null }).projects).toHaveLength(3);
+    expect(portfolioPage({ projects: [] }).projects).toEqual([]);
+    expect(portfolioPage({ projects: [null, {}] }).projects).toEqual([]);
+  });
   it("keeps unpublished projects off public pages", () => {
     const hidden = { ...defaultPortfolio.projects[0], id: "hidden", published: false };
     expect(filterPortfolio([...defaultPortfolio.projects, hidden], "Semua", "").map(p => p.id)).not.toContain("hidden");
