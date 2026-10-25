@@ -28,6 +28,7 @@ import { Route as PortfolioServiceRouteImport } from './routes/portfolio.$servic
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminKategoriRouteImport } from './routes/_authenticated/admin/kategori'
+import { Route as AuthenticatedAdminLayananRouteImport } from './routes/_authenticated/admin/layanan'
 import { Route as AuthenticatedAdminOrderRouteImport } from './routes/_authenticated/admin/order'
 import { Route as AuthenticatedAdminPortfolioRouteImport } from './routes/_authenticated/admin/portfolio'
 import { Route as AuthenticatedAdminSellerRouteImport } from './routes/_authenticated/admin/seller'
@@ -139,6 +140,12 @@ const AuthenticatedAdminKategoriRoute =
     path: '/kategori',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedAdminLayananRoute =
+  AuthenticatedAdminLayananRouteImport.update({
+    id: '/layanan',
+    path: '/layanan',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminOrderRoute = AuthenticatedAdminOrderRouteImport.update({
   id: '/order',
   path: '/order',
@@ -246,6 +253,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/portfolio/': typeof PortfolioIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
@@ -279,6 +287,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/portfolio': typeof PortfolioIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
@@ -316,6 +325,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/portfolio/': typeof PortfolioIndexRoute
   '/_authenticated/admin/kategori': typeof AuthenticatedAdminKategoriRoute
+  '/_authenticated/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/_authenticated/admin/order': typeof AuthenticatedAdminOrderRoute
   '/_authenticated/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/_authenticated/admin/seller': typeof AuthenticatedAdminSellerRoute
@@ -353,6 +363,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/portfolio/'
     | '/admin/kategori'
+    | '/admin/layanan'
     | '/admin/order'
     | '/admin/portfolio'
     | '/admin/seller'
@@ -386,6 +397,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/portfolio'
     | '/admin/kategori'
+    | '/admin/layanan'
     | '/admin/order'
     | '/admin/portfolio'
     | '/admin/seller'
@@ -422,6 +434,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/portfolio/'
     | '/_authenticated/admin/kategori'
+    | '/_authenticated/admin/layanan'
     | '/_authenticated/admin/order'
     | '/_authenticated/admin/portfolio'
     | '/_authenticated/admin/seller'
@@ -591,6 +604,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminKategoriRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/layanan': {
+      id: '/_authenticated/admin/layanan'
+      path: '/layanan'
+      fullPath: '/admin/layanan'
+      preLoaderRoute: typeof AuthenticatedAdminLayananRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/order': {
       id: '/_authenticated/admin/order'
       path: '/order'
@@ -701,6 +721,7 @@ declare module '@tanstack/react-router' {
 
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminKategoriRoute: typeof AuthenticatedAdminKategoriRoute
+  AuthenticatedAdminLayananRoute: typeof AuthenticatedAdminLayananRoute
   AuthenticatedAdminOrderRoute: typeof AuthenticatedAdminOrderRoute
   AuthenticatedAdminPortfolioRoute: typeof AuthenticatedAdminPortfolioRoute
   AuthenticatedAdminSellerRoute: typeof AuthenticatedAdminSellerRoute
@@ -722,6 +743,7 @@ interface AuthenticatedAdminRouteRouteChildren {
 const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren =
   {
     AuthenticatedAdminKategoriRoute: AuthenticatedAdminKategoriRoute,
+    AuthenticatedAdminLayananRoute: AuthenticatedAdminLayananRoute,
     AuthenticatedAdminOrderRoute: AuthenticatedAdminOrderRoute,
     AuthenticatedAdminPortfolioRoute: AuthenticatedAdminPortfolioRoute,
     AuthenticatedAdminSellerRoute: AuthenticatedAdminSellerRoute,

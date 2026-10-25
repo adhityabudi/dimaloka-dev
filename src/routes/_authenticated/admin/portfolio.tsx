@@ -10,7 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Field, GalleryInput, ImageInput, PageHeader, SeoFields, TagInput, uploadMedia } from "@/components/admin/fields";
 import { useSettings } from "@/components/admin/useSettings";
-import { defaultPortfolio, validProjectUrl, type PortfolioPage, type PortfolioProject } from "@/lib/portfolio";
+import { validProjectUrl, type PortfolioPage, type PortfolioProject } from "@/lib/portfolio";
 import { MASTER_KEY, SERVICE_NAMES, SERVICE_SLUGS, masterPage, portfolioKey, servicePortfolio, type PortfolioMaster, type ServiceSlug } from "@/lib/services";
 import { pageMeta } from "@/lib/site";
 
