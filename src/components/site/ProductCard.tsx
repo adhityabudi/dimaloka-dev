@@ -34,8 +34,8 @@ export function ProductCard({ p }: { p: CardProduct }) {
         {p.sellers && <p className="text-xs text-muted-foreground">oleh {p.sellers.name}</p>}
         <div className="mt-auto flex items-end justify-between pt-2">
           <div>
-            <p className="text-[11px] text-muted-foreground">Mulai dari</p>
-            <p className="font-extrabold text-primary-strong">{rupiah(p.price)}</p>
+            <p className="text-[11px] text-muted-foreground">{p.price > 0 ? "Mulai dari" : "Penawaran"}</p>
+            <p className="font-extrabold text-primary-strong">{p.price > 0 ? rupiah(p.price) : "Sesuai kebutuhan"}</p>
           </div>
           <span className="flex items-center gap-1 text-xs font-semibold text-navy">
             <Star className="h-3.5 w-3.5 fill-primary text-primary" /> 4.9

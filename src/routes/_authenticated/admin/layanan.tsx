@@ -1,4 +1,4 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ArrowDown, ArrowUp, Pencil, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
@@ -22,6 +22,18 @@ const empty = { name: "", slug: "", icon: "Sparkles", description: "", is_active
 
 function Page() {
   const qc = useQueryClient();
+  const router = useRouter();
+  const [busy, setBusy] = useState<string | null>(null);
+  const refresh = async () => { await qc.invalidateQueries(); await router.invalidate(); };
+  const toggle = async (c: (typeof data)[number], enabled: boolean) => {
+    setBusy(c.id);
+    try {
+      const { error } = await supabase.from("categories").update({ is_active: enabled }).eq("id", c.id);
+      if (error) throw error;
+      await refresh();
+      toast.success(enabled ? "Layanan diaktifkan" : "Layanan dinonaktifkan; produk dan pesanan tetap tersimpan");
+    } catch (e) { toast.error(e instanceof Error ? e.message : "Status gagal disimpan"); } finally { setBusy(null); }
+  };
   const { data = [] } = useQuery({
     queryKey: ["adm-cats"],
     queryFn: async () => {
@@ -43,18 +55,18 @@ function Page() {
     if (res.error) return toast.error(res.error.message);
     toast.success("Layanan disimpan");
     setEdit(null);
-    qc.invalidateQueries({ queryKey: ["adm-cats"] });
+    void refresh();
   };
   const move = async (i: number, dir: -1 | 1) => {
     const a = data[i], b = data[i + dir];
     if (!b) return;
     await Promise.all([supabase.from("categories").update({ sort_order: b.sort_order }).eq("id", a.id), supabase.from("categories").update({ sort_order: a.sort_order }).eq("id", b.id)]);
-    qc.invalidateQueries({ queryKey: ["adm-cats"] });
+    void refresh();
   };
   const del = async (id: string) => {
     if (!confirm("Hapus layanan ini?")) return;
     const { error } = await supabase.from("categories").delete().eq("id", id);
-    if (error) toast.error(error.message); else qc.invalidateQueries({ queryKey: ["adm-cats"] });
+    if (error) toast.error(error.message); else void refresh();
   };
 
   return (
@@ -69,7 +81,7 @@ function Page() {
                 <TableCell><div className="flex gap-1"><Button size="icon" variant="ghost" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Naik"><ArrowUp /></Button><Button size="icon" variant="ghost" onClick={() => move(i, 1)} disabled={i === data.length - 1} aria-label="Turun"><ArrowDown /></Button></div></TableCell>
                 <TableCell><div className="flex items-center gap-2 font-semibold"><CategoryIcon icon={c.icon} className="h-4 w-4 text-primary" /> {c.name}</div><p className="text-xs text-muted-foreground">/{c.slug}</p></TableCell>
                 <TableCell>{c.count}</TableCell>
-                <TableCell>{c.is_active ? <span className="font-semibold text-success">Aktif</span> : <span className="text-muted-foreground">Nonaktif</span>}</TableCell>
+                <TableCell><label className="flex items-center gap-2"><Switch aria-label={`Aktifkan ${c.name}`} checked={c.is_active} disabled={busy !== null} onCheckedChange={enabled => toggle(c, enabled)} /><span className="text-sm">{c.is_active ? "Aktif" : "Nonaktif"}</span></label></TableCell>
                 <TableCell className="text-right"><Button size="icon" variant="ghost" onClick={() => setEdit(c)} aria-label="Edit"><Pencil /></Button><Button size="icon" variant="ghost" onClick={() => del(c.id)} aria-label="Hapus"><Trash2 /></Button></TableCell>
               </TableRow>
             ))}

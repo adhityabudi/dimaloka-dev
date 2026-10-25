@@ -1,5 +1,5 @@
 import websiteHero from "@/assets/website-profile-mockups.webp";
-import websiteDetail from "@/assets/website-design-detail.jpg";
+import websiteDetail from "@/assets/website-custom-design.jpg";
 import adsHero from "@/assets/svc-digital-marketing-hero.jpg";
 import adsDetail from "@/assets/svc-digital-marketing-a.jpg";
 import adsCreative from "@/assets/svc-digital-marketing-b.jpg";

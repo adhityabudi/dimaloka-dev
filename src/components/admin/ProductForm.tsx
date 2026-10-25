@@ -1,5 +1,5 @@
-import { useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useNavigate, useRouter } from "@tanstack/react-router";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -17,8 +17,10 @@ type Pkg = { name: string; price: number; items: string[] };
 
 export function ProductForm({ initial }: { initial?: any }) {
   const navigate = useNavigate();
+  const qc = useQueryClient();
+  const router = useRouter();
   const [v, setV] = useState<any>(
-    initial ?? { title: "", slug: "", short_description: "", description: "", features: [], benefits: [], tags: [], cover_image: "", gallery: [], price: 0, packages: [], status: "draft", is_featured: false, whatsapp_cta: "", seo_title: "", seo_description: "", keywords: [], category_id: null, seller_id: null },
+    initial ?? { title: "", slug: "", short_description: "", description: "", features: [], benefits: [], tags: [], cover_image: "", gallery: [], price: 0, packages: [], status: "draft", is_featured: false, is_active: true, whatsapp_cta: "", seo_title: "", seo_description: "", keywords: [], category_id: null, seller_id: null },
   );
   const set = (patch: any) => setV((x: any) => ({ ...x, ...patch }));
   const { data: opts } = useQuery({
@@ -46,6 +48,7 @@ export function ProductForm({ initial }: { initial?: any }) {
     if (row.packages.length && !Number(row.price)) row.price = Math.min(...row.packages.map((p: Pkg) => Number(p.price)));
     const res = id ? await supabase.from("products").update(row).eq("id", id) : await supabase.from("products").insert(row);
     if (res.error) return toast.error(res.error.message.includes("duplicate") ? "Slug sudah dipakai" : res.error.message);
+    await qc.invalidateQueries(); await router.invalidate();
     toast.success("Produk disimpan");
     navigate({ to: "/admin/produk" });
   };
@@ -92,6 +95,7 @@ export function ProductForm({ initial }: { initial?: any }) {
                 <SelectContent><SelectItem value="draft">Draft</SelectItem><SelectItem value="published">Published</SelectItem></SelectContent>
               </Select>
             </Field>
+            <label className="flex items-center gap-2 text-sm font-semibold"><Switch aria-label="Produk aktif" checked={v.is_active ?? true} onCheckedChange={is_active => set({ is_active })} /> Aktif (tampil jika published dan layanan aktif)</label>
             <label className="flex items-center gap-2 text-sm font-semibold"><Switch checked={v.is_featured} onCheckedChange={(f) => set({ is_featured: f })} /> Featured (HOT)</label>
             <Field label="Layanan">
               <Select value={v.category_id ?? ""} onValueChange={(c) => set({ category_id: c })}>
