@@ -73,6 +73,6 @@
 - [ ] Activate live index/click/traffic/bounce reports — waiting for Google connections declined by the user.
 
 # Annisa AI
-- [ ] Add public single-session chat, navigation, safe Markdown, quick questions, reset and Stop.
-- [ ] Add editable assistant prompt, public catalog grounding, durable request limits and safety blocks.
-- [ ] Test concrete limits and verify real chat, follow-up, reset, admin prompt editing and narrow public settings.
+- [x] Add public single-session chat, navigation, safe Markdown, quick questions, reset and Stop.
+- [x] Add editable assistant prompt, public catalog grounding, durable request limits and safety blocks.
+- [x] Test concrete limits and verify real chat, follow-up, reset, admin prompt editing and narrow public settings.

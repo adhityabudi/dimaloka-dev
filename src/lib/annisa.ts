@@ -6,7 +6,7 @@ export const ANNISA_WINDOW_SECONDS = 900;
 export const ANNISA_REFUSAL =
   "Maaf, saya hanya bisa membantu seputar SEO, optimasi digital, dan layanan Dimaloka. Ada yang bisa saya bantu soal itu?";
 export const ANNISA_WELCOME =
-  "Halo! 👋 Saya Annisa AI, asisten Dimaloka.\n\nSaya bisa bantu kamu seputar:\n🚀 SEO & optimasi digital marketing\n📈 Iklan Google Ads & Meta Ads\n🛠 Produk & layanan Dimaloka\n\nMau tanya apa hari ini?";
+  "Halo! 👋 Saya Annisa AI, asisten Dimaloka.\n\nSaya bisa bantu kamu seputar:\n\n- 🚀 SEO & optimasi digital marketing\n- 📈 Iklan Google Ads & Meta Ads\n- 🛠 Produk & layanan Dimaloka\n\nMau tanya apa hari ini?";
 export const annisaTextSchema = z
   .string()
   .max(ANNISA_INPUT_LIMIT)
