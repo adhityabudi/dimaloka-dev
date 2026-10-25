@@ -40,8 +40,8 @@ describe("Annisa public safety", () => {
     expect(safeAnnisaOutput("<b>SEO</b>")).toBe("SEO");
     expect(safeAnnisaOutput("[x](data:text/html,test)")).toBe("x");
   });
-  it("uses 20 messages per 15 minutes", () => {
-    expect(ANNISA_RATE_LIMIT).toBe(20);
-    expect(ANNISA_WINDOW_SECONDS).toBe(15 * 60);
+  it("allows 5 questions per visitor per 24 hours", () => {
+    expect(ANNISA_RATE_LIMIT).toBe(5);
+    expect(ANNISA_WINDOW_SECONDS).toBe(24 * 60 * 60);
   });
 });

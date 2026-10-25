@@ -1,8 +1,11 @@
 import { z } from "zod";
 
 export const ANNISA_INPUT_LIMIT = 2000;
-export const ANNISA_RATE_LIMIT = 20;
-export const ANNISA_WINDOW_SECONDS = 900;
+/** Maximum questions each visitor connection may send per window (shared with the DB guard). */
+export const ANNISA_RATE_LIMIT = 5;
+export const ANNISA_WINDOW_SECONDS = 24 * 60 * 60;
+export const ANNISA_QUOTA_MESSAGE =
+  "Batas 5 pertanyaan untuk hari ini sudah tercapai. Silakan coba lagi besok atau hubungi kami via WhatsApp.";
 export const ANNISA_REFUSAL =
   "Maaf, saya hanya bisa membantu seputar SEO, optimasi digital, dan layanan Dimaloka. Ada yang bisa saya bantu soal itu?";
 export const ANNISA_WELCOME =

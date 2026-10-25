@@ -601,6 +601,7 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      assistant_quota_status: { Args: { _subject: string }; Returns: Json }
       consume_assistant_request: {
         Args: { _block?: boolean; _subject: string }
         Returns: Json
