@@ -61,7 +61,7 @@ export function InvoiceView({ invoice: inv, settings: s, preview = false }: { in
           {items[0] && <div className="mb-4 rounded bg-muted px-3 py-3 text-sm font-bold break-words">{settlement ? `Pelunasan kontrak #${inv.parent_invoice_number ?? ""} (Termin 1)` : items[0].name}</div>}
           {settlement && <div className="mb-3 rounded bg-muted px-3 py-3 text-[11px]"><p className="font-bold text-navy-2">Rincian Invoice Utama</p><p className="mt-1 text-muted-foreground">Invoice: {inv.parent_invoice_number} — {items[0]?.name}</p></div>}
 
-          <table className="w-full table-fixed border text-[10px] sm:text-[11px]">
+          <table className="w-full table-fixed border text-[9px] sm:text-[11px] [&_td:last-child]:whitespace-nowrap [&_td:last-child]:text-[9px] sm:[&_td:last-child]:text-[11px]">
             <thead className="bg-invoice-ink text-navy-foreground">
               <tr className="text-left text-[9px] font-bold uppercase">
                 <th className="w-[39%] border-r border-navy-foreground/30 px-2 py-3">Item</th>
@@ -74,7 +74,7 @@ export function InvoiceView({ invoice: inv, settings: s, preview = false }: { in
               {items.map((it, i) => (
                 <tr key={i} className="border-b">
                    <td className="border-r px-2 py-3 font-semibold break-words">{it.name}</td>
-                   <td className="border-r px-2 py-3 break-words">{rupiah(it.price)}</td>
+                   <td className="border-r px-1 py-3 whitespace-nowrap sm:px-2">{rupiah(it.price)}</td>
                    <td className="border-r px-1.5 py-3">{it.qty}</td>
                    <td className="px-2 py-3 text-right break-words">{rupiah(it.qty * it.price)}</td>
                 </tr>
@@ -85,7 +85,7 @@ export function InvoiceView({ invoice: inv, settings: s, preview = false }: { in
               </tr>
                <tr className="border-b border-invoice-ink bg-muted">
                  <td colSpan={3} className="border-r px-2 py-3 text-right text-sm font-bold">{staged ? "TOTAL INVOICE UTAMA" : "TOTAL"}</td>
-                 <td className="px-2 py-3 text-right text-xs font-bold break-words sm:text-sm">{rupiah(payment.total)}</td>
+                 <td className="px-1 py-3 text-right font-bold sm:px-2">{rupiah(payment.total)}</td>
               </tr>
               {staged && <>
                 <tr className="border-b bg-invoice-warning text-invoice-warning-foreground"><td colSpan={3} className="border-r px-2 py-3 text-right font-bold">{settlement ? "DP Dibayarkan" : "DP Termin 1/2"} ({percentage(payment.dpPercent)}%)</td><td className="px-2 py-3 text-right font-bold">{settlement || paid ? "− " : ""}{rupiah(payment.dp)}</td></tr>
