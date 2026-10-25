@@ -7,3 +7,6 @@
 # Website presentation
 - [x] Redesign the Website category with a distinctive editorial composition.
 - [x] Verify layout, images, and service links on desktop and mobile.
+- [x] Review the full reference and rebuild the service-page sections with original concrete copy.
+- [x] Replace the stretched opening visual with proportional new website mockups.
+- [x] Verify the revised page, all sections, and service links.
