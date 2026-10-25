@@ -23,6 +23,7 @@ import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as InvoiceTokenRouteImport } from './routes/invoice.$token'
 import { Route as KategoriSlugRouteImport } from './routes/kategori.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
+import { Route as PortfolioIndexRouteImport } from './routes/portfolio.index'
 import { Route as PortfolioServiceRouteImport } from './routes/portfolio.$service'
 import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
@@ -111,6 +112,11 @@ const PSlugRoute = PSlugRouteImport.update({
   id: '/p/$slug',
   path: '/p/$slug',
   getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioIndexRoute = PortfolioIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => PortfolioRoute,
 } as any)
 const PortfolioServiceRoute = PortfolioServiceRouteImport.update({
   id: '/$service',
@@ -238,6 +244,7 @@ export interface FileRoutesByFullPath {
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/portfolio/': typeof PortfolioIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -258,7 +265,6 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/portfolio': typeof PortfolioRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/akun': typeof AuthenticatedAkunRoute
@@ -271,6 +277,7 @@ export interface FileRoutesByTo {
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/portfolio': typeof PortfolioIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -307,6 +314,7 @@ export interface FileRoutesById {
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/portfolio/': typeof PortfolioIndexRoute
   '/_authenticated/admin/kategori': typeof AuthenticatedAdminKategoriRoute
   '/_authenticated/admin/order': typeof AuthenticatedAdminOrderRoute
   '/_authenticated/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -343,6 +351,7 @@ export interface FileRouteTypes {
     | '/portfolio/$service'
     | '/store/$slug'
     | '/blog/'
+    | '/portfolio/'
     | '/admin/kategori'
     | '/admin/order'
     | '/admin/portfolio'
@@ -363,7 +372,6 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/portfolio'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/akun'
@@ -376,6 +384,7 @@ export interface FileRouteTypes {
     | '/portfolio/$service'
     | '/store/$slug'
     | '/blog'
+    | '/portfolio'
     | '/admin/kategori'
     | '/admin/order'
     | '/admin/portfolio'
@@ -411,6 +420,7 @@ export interface FileRouteTypes {
     | '/portfolio/$service'
     | '/store/$slug'
     | '/blog/'
+    | '/portfolio/'
     | '/_authenticated/admin/kategori'
     | '/_authenticated/admin/order'
     | '/_authenticated/admin/portfolio'
@@ -545,6 +555,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/p/$slug'
       preLoaderRoute: typeof PSlugRouteImport
       parentRoute: typeof rootRouteImport
+    }
+    '/portfolio/': {
+      id: '/portfolio/'
+      path: '/'
+      fullPath: '/portfolio/'
+      preLoaderRoute: typeof PortfolioIndexRouteImport
+      parentRoute: typeof PortfolioRoute
     }
     '/portfolio/$service': {
       id: '/portfolio/$service'
@@ -743,10 +760,12 @@ const AuthenticatedRouteRouteWithChildren =
 
 interface PortfolioRouteChildren {
   PortfolioServiceRoute: typeof PortfolioServiceRoute
+  PortfolioIndexRoute: typeof PortfolioIndexRoute
 }
 
 const PortfolioRouteChildren: PortfolioRouteChildren = {
   PortfolioServiceRoute: PortfolioServiceRoute,
+  PortfolioIndexRoute: PortfolioIndexRoute,
 }
 
 const PortfolioRouteWithChildren = PortfolioRoute._addFileChildren(

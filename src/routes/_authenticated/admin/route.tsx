@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
-import { BarChart3, FileText, FolderTree, Home, Images, LogOut, Menu, MessageSquareQuote, Package, Receipt, Search, Settings, ShoppingBag, Store, X } from "lucide-react";
+import { BarChart3, FileText, FolderTree, Home, Images, LayoutTemplate, LogOut, Menu, MessageSquareQuote, Package, Receipt, Search, Settings, ShoppingBag, Store, X } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/dimaloka-logo.png.asset.json";
