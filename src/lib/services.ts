@@ -94,7 +94,7 @@ export const portfolioDefaults: Record<ServiceSlug, PortfolioPage> = {
     cta_title: "Ingin website Anda lebih mudah ditemukan?", cta_description: "Kirimkan alamat website Anda. Kami bantu melihat bagian yang perlu diperbaiki lebih dulu.", cta_button: "Konsultasi SEO",
     categories: ["SEO Toko Online", "SEO Lokal", "Audit Teknis"],
     projects: [
-      proj("modernhome", "ModernHome Furniture", "SEO Toko Online", "Konsep optimasi halaman kategori dan produk untuk toko furnitur online.", seo1, "Laporan pertumbuhan kunjungan organik dan peringkat kata kunci toko furnitur"),
+      proj("modernhome", "ModernHome Furniture", "SEO Toko Online", "Konsep optimasi halaman katalog dan produk untuk toko furnitur online.", seo1, "Laporan pertumbuhan kunjungan organik dan peringkat kata kunci toko furnitur"),
       proj("anderson-law", "Kantor Hukum Lokal", "SEO Lokal", "Konsep optimasi profil bisnis Google agar kantor hukum muncul di pencarian area sekitar.", seo2, "Hasil pencarian Google Maps yang menampilkan kantor hukum di ponsel"),
       proj("wandermore", "WanderMore Travel", "Audit Teknis", "Konsep audit kecepatan halaman, struktur data, dan kesehatan website travel.", seo3, "Laporan audit SEO teknis website travel di layar tablet"),
     ],
