@@ -12,26 +12,21 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/u
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Field, PageHeader } from "@/components/admin/fields";
 import { rupiah, tanggal } from "@/lib/format";
+import { ORDER_STATUS } from "@/lib/checkout";
 
 export const Route = createFileRoute("/_authenticated/admin/order")({ component: Page });
 
-export const ORDER_STATUS = [
-  { v: "new", l: "Baru" },
-  { v: "contacted", l: "Dihubungi" },
-  { v: "in_progress", l: "Dikerjakan" },
-  { v: "completed", l: "Selesai" },
-  { v: "cancelled", l: "Dibatalkan" },
-] as const;
 
 function Page() {
   const qc = useQueryClient();
   const [filter, setFilter] = useState("all");
   const [edit, setEdit] = useState<any>(null);
   const [view, setView] = useState<any>(null);
+  const [q, setQ] = useState("");
   const { data = [] } = useQuery({ queryKey: ["adm-orders"], queryFn: async () => (await supabase.from("orders").select("*, products(title), sellers(name)").order("created_at", { ascending: false })).data ?? [] });
   const { data: products = [] } = useQuery({ queryKey: ["adm-prod-opts"], queryFn: async () => (await supabase.from("products").select("id,title,seller_id,price,packages").order("title")).data ?? [] });
   const set = (p: any) => setEdit((e: any) => ({ ...e, ...p }));
-  const rows = data.filter((o) => filter === "all" || o.status === filter);
+  const rows = data.filter((o: any) => (filter === "all" || o.status === filter) && `${o.order_number ?? ""} ${o.buyer_name ?? ""} ${o.buyer_wa ?? ""} ${o.products?.title ?? ""}`.toLowerCase().includes(q.toLowerCase()));
   const prod: any = products.find((p) => p.id === edit?.product_id);
 
   const updateStatus = async (id: string, status: any) => {
@@ -54,7 +49,8 @@ function Page() {
 
   return (
     <div>
-      <PageHeader title="Order" desc="Catat order dari chat/WhatsApp dan pantau statusnya." action={<Button onClick={() => setEdit({ product_id: "", package_name: "", amount: 0, buyer_name: "", buyer_wa: "", buyer_email: "", notes: "", status: "new" })}><Plus /> Catat Order</Button>} />
+      <PageHeader title="Pesanan" desc="Pantau pesanan dari checkout website, konfirmasi pembayaran, dan kirim update progres ke client." action={<Button onClick={() => setEdit({ product_id: "", package_name: "", amount: 0, buyer_name: "", buyer_wa: "", buyer_email: "", notes: "", status: "new" })}><Plus /> Catat Order Manual</Button>} />
+      <Input className="mb-3 max-w-sm" placeholder="Cari no. pesanan, nama, atau layanan" value={q} onChange={(e) => setQ(e.target.value)} />
       <div className="mb-4 flex flex-wrap gap-2">
         {[{ v: "all", l: "Semua" }, ...ORDER_STATUS].map((s) => <Button key={s.v} size="sm" variant={filter === s.v ? "default" : "outline"} onClick={() => setFilter(s.v)}>{s.l}</Button>)}
       </div>
@@ -64,7 +60,7 @@ function Page() {
           <TableBody>
             {rows.map((o: any) => (
               <TableRow key={o.id}>
-                <TableCell><p className="font-semibold">{o.buyer_name}</p><p className="text-xs text-muted-foreground">{o.buyer_wa}</p></TableCell>
+                <TableCell><p className="font-mono text-xs text-muted-foreground">{o.order_number}</p><p className="font-semibold">{o.buyer_name}</p><p className="text-xs text-muted-foreground">{o.buyer_wa}</p></TableCell>
                 <TableCell>{o.products?.title}</TableCell>
                 <TableCell>{o.package_name}</TableCell>
                 <TableCell>{rupiah(o.amount)}</TableCell>
@@ -76,8 +72,8 @@ function Page() {
                 </TableCell>
                 <TableCell>{tanggal(o.created_at)}</TableCell>
                 <TableCell className="whitespace-nowrap text-right">
-                  <Button size="icon" variant="ghost" onClick={() => setView(o)} aria-label="Detail"><Eye /></Button>
-                  <Button size="sm" variant="outline" asChild><Link to="/admin/invoice/new" search={{ order: o.id }}><Receipt /> Buat Invoice</Link></Button>
+                  <Button size="sm" asChild><Link to="/admin/order/$id" params={{ id: o.id }}><Eye /> Kelola</Link></Button>
+                  <Button size="icon" variant="ghost" onClick={() => setView(o)} aria-label="Ringkas"><Receipt /></Button>
                 </TableCell>
               </TableRow>
             ))}

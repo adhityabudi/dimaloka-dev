@@ -209,9 +209,48 @@ export type Database = {
           },
         ]
       }
+      order_updates: {
+        Row: {
+          created_at: string
+          created_by: string | null
+          id: string
+          note: string | null
+          order_id: string
+          progress: number | null
+          title: string
+        }
+        Insert: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          order_id: string
+          progress?: number | null
+          title: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          note?: string | null
+          order_id?: string
+          progress?: number | null
+          title?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_updates_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       orders: {
         Row: {
           amount: number
+          brief: string | null
           buyer_email: string | null
           buyer_id: string | null
           buyer_name: string | null
@@ -219,13 +258,17 @@ export type Database = {
           created_at: string
           id: string
           notes: string | null
+          order_number: string | null
           package_name: string | null
+          payment_stage: string
           product_id: string | null
+          progress: number
           seller_id: string | null
           status: Database["public"]["Enums"]["order_status"]
         }
         Insert: {
           amount?: number
+          brief?: string | null
           buyer_email?: string | null
           buyer_id?: string | null
           buyer_name?: string | null
@@ -233,13 +276,17 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string | null
+          order_number?: string | null
           package_name?: string | null
+          payment_stage?: string
           product_id?: string | null
+          progress?: number
           seller_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
         }
         Update: {
           amount?: number
+          brief?: string | null
           buyer_email?: string | null
           buyer_id?: string | null
           buyer_name?: string | null
@@ -247,8 +294,11 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string | null
+          order_number?: string | null
           package_name?: string | null
+          payment_stage?: string
           product_id?: string | null
+          progress?: number
           seller_id?: string | null
           status?: Database["public"]["Enums"]["order_status"]
         }
@@ -552,6 +602,9 @@ export type Database = {
         | "in_progress"
         | "completed"
         | "cancelled"
+        | "awaiting_payment"
+        | "paid"
+        | "revision"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -688,6 +741,9 @@ export const Constants = {
         "in_progress",
         "completed",
         "cancelled",
+        "awaiting_payment",
+        "paid",
+        "revision",
       ],
     },
   },

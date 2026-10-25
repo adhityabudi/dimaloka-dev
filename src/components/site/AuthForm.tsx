@@ -8,7 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Logo } from "./Logo";
 
-export function AuthForm({ mode }: { mode: "in" | "up" }) {
+export function AuthForm({ mode, redirect }: { mode: "in" | "up"; redirect?: string }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -21,16 +21,16 @@ export function AuthForm({ mode }: { mode: "in" | "up" }) {
     setBusy(true);
     try {
       if (mode === "up") {
-        const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin, data: { full_name: name } } });
+        const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: window.location.origin + (redirect ?? ""), data: { full_name: name } } });
         if (error) throw error;
         if (!data.session) setSent(true);
-        else navigate({ to: "/" });
+        else if (redirect) navigate({ href: redirect }); else navigate({ to: "/" });
       } else {
         const { error } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         const { data: u } = await supabase.auth.getUser();
         const { data: admin } = await supabase.rpc("has_role", { _user_id: u.user!.id, _role: "admin" });
-        navigate({ to: admin ? "/admin" : "/akun" });
+        if (redirect) navigate({ href: redirect }); else navigate({ to: admin ? "/admin" : "/akun" });
       }
     } catch (err: any) {
       toast.error(err.message ?? "Gagal");
@@ -40,9 +40,10 @@ export function AuthForm({ mode }: { mode: "in" | "up" }) {
   };
 
   const google = async () => {
+    if (redirect) sessionStorage.setItem("after-login", redirect);
     const r = await lovable.auth.signInWithOAuth("google", { redirect_uri: window.location.origin });
     if (r.error) toast.error("Gagal masuk dengan Google");
-    else if (!r.redirected) navigate({ to: "/akun" });
+    else if (!r.redirected) { sessionStorage.removeItem("after-login"); if (redirect) navigate({ href: redirect }); else navigate({ to: "/akun" }); }
   };
 
   return (
@@ -68,7 +69,7 @@ export function AuthForm({ mode }: { mode: "in" | "up" }) {
           </>
         )}
         <p className="mt-6 text-center text-sm text-muted-foreground">
-          {mode === "in" ? <>Belum punya akun? <Link to="/auth/sign-up" className="font-bold text-primary-strong">Daftar</Link></> : <>Sudah punya akun? <Link to="/auth/sign-in" className="font-bold text-primary-strong">Masuk</Link></>}
+          {mode === "in" ? <>Belum punya akun? <Link to="/auth/sign-up" search={{ redirect }} className="font-bold text-primary-strong">Daftar</Link></> : <>Sudah punya akun? <Link to="/auth/sign-in" search={{ redirect }} className="font-bold text-primary-strong">Masuk</Link></>}
         </p>
       </div>
     </div>

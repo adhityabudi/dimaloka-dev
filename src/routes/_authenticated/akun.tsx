@@ -1,9 +1,11 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useQuery } from "@tanstack/react-query";
+import { ChevronRight } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { rupiah, tanggal } from "@/lib/format";
 import { Badge } from "@/components/ui/badge";
 import { paymentKind } from "@/lib/invoice-payments";
+import { orderStatusLabel } from "@/lib/checkout";
 
 export const Route = createFileRoute("/_authenticated/akun")({
   head: () => ({ meta: [{ title: "Akun Saya | Dimaloka" }, { name: "robots", content: "noindex" }] }),
@@ -24,15 +26,15 @@ function Akun() {
     <div className="mx-auto max-w-5xl px-4 py-10">
       <h1 className="text-3xl font-extrabold text-navy">Akun Saya</h1>
       <p className="text-muted-foreground">{user.email}</p>
-      <h2 className="mt-10 text-xl font-extrabold text-navy">Riwayat Order</h2>
+      <h2 className="mt-10 text-xl font-extrabold text-navy">Pesanan Saya</h2>
       <div className="mt-4 space-y-3">
         {(orders.data ?? []).map((o: any) => (
-          <div key={o.id} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-4">
-            <div><p className="font-bold">{o.products?.title ?? "Layanan"}</p><p className="text-sm text-muted-foreground">{o.package_name} · {tanggal(o.created_at)}</p></div>
-            <div className="flex items-center gap-3"><span className="font-bold">{rupiah(o.amount)}</span><Badge variant="secondary">{o.status}</Badge></div>
-          </div>
+          <Link key={o.id} to="/pesanan/$id" params={{ id: o.id }} className="flex flex-wrap items-center justify-between gap-2 rounded-xl border p-4 hover:border-primary">
+            <div><p className="font-mono text-xs text-muted-foreground">{o.order_number}</p><p className="font-bold">{o.products?.title ?? "Layanan"}</p><p className="text-sm text-muted-foreground">{o.package_name ? `Paket ${o.package_name} · ` : ""}{tanggal(o.created_at)} · progres {o.progress}%</p></div>
+            <div className="flex items-center gap-3"><span className="font-bold">{rupiah(o.amount)}</span><Badge variant={o.status === "awaiting_payment" ? "default" : "secondary"}>{orderStatusLabel(o.status)}</Badge><ChevronRight className="h-4 w-4 text-muted-foreground" /></div>
+          </Link>
         ))}
-        {orders.data?.length === 0 && <p className="text-sm text-muted-foreground">Belum ada order. <Link to="/" className="text-primary-strong underline">Jelajahi layanan</Link></p>}
+        {orders.data?.length === 0 && <p className="text-sm text-muted-foreground">Belum ada pesanan. <Link to="/layanan" search={{ q: "" } as any} className="text-primary-strong underline">Jelajahi layanan</Link></p>}
       </div>
       <h2 className="mt-10 text-xl font-extrabold text-navy">Invoice</h2>
       <div className="mt-4 space-y-3">

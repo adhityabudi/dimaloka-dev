@@ -37,11 +37,14 @@ import { Route as AuthenticatedAdminSellerRouteImport } from './routes/_authenti
 import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin/seo'
 import { Route as AuthenticatedAdminSettingRouteImport } from './routes/_authenticated/admin/setting'
 import { Route as AuthenticatedAdminTestimoniRouteImport } from './routes/_authenticated/admin/testimoni'
+import { Route as AuthenticatedCheckoutSlugRouteImport } from './routes/_authenticated/checkout.$slug'
+import { Route as AuthenticatedPesananIdRouteImport } from './routes/_authenticated/pesanan.$id'
 import { Route as AuthenticatedAdminArtikelIndexRouteImport } from './routes/_authenticated/admin/artikel/index'
 import { Route as AuthenticatedAdminArtikelNewRouteImport } from './routes/_authenticated/admin/artikel/new'
 import { Route as AuthenticatedAdminInvoiceIndexRouteImport } from './routes/_authenticated/admin/invoice/index'
 import { Route as AuthenticatedAdminInvoiceIdRouteImport } from './routes/_authenticated/admin/invoice/$id'
 import { Route as AuthenticatedAdminInvoiceNewRouteImport } from './routes/_authenticated/admin/invoice/new'
+import { Route as AuthenticatedAdminOrderIdRouteImport } from './routes/_authenticated/admin/order_.$id'
 import { Route as AuthenticatedAdminProdukIndexRouteImport } from './routes/_authenticated/admin/produk/index'
 import { Route as AuthenticatedAdminProdukNewRouteImport } from './routes/_authenticated/admin/produk/new'
 import { Route as AuthenticatedAdminArtikelIdEditRouteImport } from './routes/_authenticated/admin/artikel/$id.edit'
@@ -192,6 +195,17 @@ const AuthenticatedAdminTestimoniRoute =
     path: '/testimoni',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
+const AuthenticatedCheckoutSlugRoute =
+  AuthenticatedCheckoutSlugRouteImport.update({
+    id: '/checkout/$slug',
+    path: '/checkout/$slug',
+    getParentRoute: () => AuthenticatedRouteRoute,
+  } as any)
+const AuthenticatedPesananIdRoute = AuthenticatedPesananIdRouteImport.update({
+  id: '/pesanan/$id',
+  path: '/pesanan/$id',
+  getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
 const AuthenticatedAdminArtikelIndexRoute =
   AuthenticatedAdminArtikelIndexRouteImport.update({
     id: '/artikel/',
@@ -220,6 +234,12 @@ const AuthenticatedAdminInvoiceNewRoute =
   AuthenticatedAdminInvoiceNewRouteImport.update({
     id: '/invoice/new',
     path: '/invoice/new',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminOrderIdRoute =
+  AuthenticatedAdminOrderIdRouteImport.update({
+    id: '/order_/$id',
+    path: '/order/$id',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminProdukIndexRoute =
@@ -274,10 +294,13 @@ export interface FileRoutesByFullPath {
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/setting': typeof AuthenticatedAdminSettingRoute
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/checkout/$slug': typeof AuthenticatedCheckoutSlugRoute
+  '/pesanan/$id': typeof AuthenticatedPesananIdRoute
   '/admin/': typeof AuthenticatedAdminIndexRoute
   '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
   '/admin/invoice/$id': typeof AuthenticatedAdminInvoiceIdRoute
   '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
+  '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
   '/admin/invoice/': typeof AuthenticatedAdminInvoiceIndexRoute
@@ -310,10 +333,13 @@ export interface FileRoutesByTo {
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/setting': typeof AuthenticatedAdminSettingRoute
   '/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/checkout/$slug': typeof AuthenticatedCheckoutSlugRoute
+  '/pesanan/$id': typeof AuthenticatedPesananIdRoute
   '/admin': typeof AuthenticatedAdminIndexRoute
   '/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
   '/admin/invoice/$id': typeof AuthenticatedAdminInvoiceIdRoute
   '/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
+  '/admin/order/$id': typeof AuthenticatedAdminOrderIdRoute
   '/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/admin/artikel': typeof AuthenticatedAdminArtikelIndexRoute
   '/admin/invoice': typeof AuthenticatedAdminInvoiceIndexRoute
@@ -350,10 +376,13 @@ export interface FileRoutesById {
   '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/_authenticated/admin/setting': typeof AuthenticatedAdminSettingRoute
   '/_authenticated/admin/testimoni': typeof AuthenticatedAdminTestimoniRoute
+  '/_authenticated/checkout/$slug': typeof AuthenticatedCheckoutSlugRoute
+  '/_authenticated/pesanan/$id': typeof AuthenticatedPesananIdRoute
   '/_authenticated/admin/': typeof AuthenticatedAdminIndexRoute
   '/_authenticated/admin/artikel/new': typeof AuthenticatedAdminArtikelNewRoute
   '/_authenticated/admin/invoice/$id': typeof AuthenticatedAdminInvoiceIdRoute
   '/_authenticated/admin/invoice/new': typeof AuthenticatedAdminInvoiceNewRoute
+  '/_authenticated/admin/order_/$id': typeof AuthenticatedAdminOrderIdRoute
   '/_authenticated/admin/produk/new': typeof AuthenticatedAdminProdukNewRoute
   '/_authenticated/admin/artikel/': typeof AuthenticatedAdminArtikelIndexRoute
   '/_authenticated/admin/invoice/': typeof AuthenticatedAdminInvoiceIndexRoute
@@ -390,10 +419,13 @@ export interface FileRouteTypes {
     | '/admin/seo'
     | '/admin/setting'
     | '/admin/testimoni'
+    | '/checkout/$slug'
+    | '/pesanan/$id'
     | '/admin/'
     | '/admin/artikel/new'
     | '/admin/invoice/$id'
     | '/admin/invoice/new'
+    | '/admin/order/$id'
     | '/admin/produk/new'
     | '/admin/artikel/'
     | '/admin/invoice/'
@@ -426,10 +458,13 @@ export interface FileRouteTypes {
     | '/admin/seo'
     | '/admin/setting'
     | '/admin/testimoni'
+    | '/checkout/$slug'
+    | '/pesanan/$id'
     | '/admin'
     | '/admin/artikel/new'
     | '/admin/invoice/$id'
     | '/admin/invoice/new'
+    | '/admin/order/$id'
     | '/admin/produk/new'
     | '/admin/artikel'
     | '/admin/invoice'
@@ -465,10 +500,13 @@ export interface FileRouteTypes {
     | '/_authenticated/admin/seo'
     | '/_authenticated/admin/setting'
     | '/_authenticated/admin/testimoni'
+    | '/_authenticated/checkout/$slug'
+    | '/_authenticated/pesanan/$id'
     | '/_authenticated/admin/'
     | '/_authenticated/admin/artikel/new'
     | '/_authenticated/admin/invoice/$id'
     | '/_authenticated/admin/invoice/new'
+    | '/_authenticated/admin/order_/$id'
     | '/_authenticated/admin/produk/new'
     | '/_authenticated/admin/artikel/'
     | '/_authenticated/admin/invoice/'
@@ -693,6 +731,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminTestimoniRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/checkout/$slug': {
+      id: '/_authenticated/checkout/$slug'
+      path: '/checkout/$slug'
+      fullPath: '/checkout/$slug'
+      preLoaderRoute: typeof AuthenticatedCheckoutSlugRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/_authenticated/pesanan/$id': {
+      id: '/_authenticated/pesanan/$id'
+      path: '/pesanan/$id'
+      fullPath: '/pesanan/$id'
+      preLoaderRoute: typeof AuthenticatedPesananIdRouteImport
+      parentRoute: typeof AuthenticatedRouteRoute
+    }
     '/_authenticated/admin/artikel/': {
       id: '/_authenticated/admin/artikel/'
       path: '/artikel'
@@ -726,6 +778,13 @@ declare module '@tanstack/react-router' {
       path: '/invoice/new'
       fullPath: '/admin/invoice/new'
       preLoaderRoute: typeof AuthenticatedAdminInvoiceNewRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
+    '/_authenticated/admin/order_/$id': {
+      id: '/_authenticated/admin/order_/$id'
+      path: '/order/$id'
+      fullPath: '/admin/order/$id'
+      preLoaderRoute: typeof AuthenticatedAdminOrderIdRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
     '/_authenticated/admin/produk/': {
@@ -772,6 +831,7 @@ interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminArtikelNewRoute: typeof AuthenticatedAdminArtikelNewRoute
   AuthenticatedAdminInvoiceIdRoute: typeof AuthenticatedAdminInvoiceIdRoute
   AuthenticatedAdminInvoiceNewRoute: typeof AuthenticatedAdminInvoiceNewRoute
+  AuthenticatedAdminOrderIdRoute: typeof AuthenticatedAdminOrderIdRoute
   AuthenticatedAdminProdukNewRoute: typeof AuthenticatedAdminProdukNewRoute
   AuthenticatedAdminArtikelIndexRoute: typeof AuthenticatedAdminArtikelIndexRoute
   AuthenticatedAdminInvoiceIndexRoute: typeof AuthenticatedAdminInvoiceIndexRoute
@@ -795,6 +855,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminArtikelNewRoute: AuthenticatedAdminArtikelNewRoute,
     AuthenticatedAdminInvoiceIdRoute: AuthenticatedAdminInvoiceIdRoute,
     AuthenticatedAdminInvoiceNewRoute: AuthenticatedAdminInvoiceNewRoute,
+    AuthenticatedAdminOrderIdRoute: AuthenticatedAdminOrderIdRoute,
     AuthenticatedAdminProdukNewRoute: AuthenticatedAdminProdukNewRoute,
     AuthenticatedAdminArtikelIndexRoute: AuthenticatedAdminArtikelIndexRoute,
     AuthenticatedAdminInvoiceIndexRoute: AuthenticatedAdminInvoiceIndexRoute,
@@ -811,11 +872,15 @@ const AuthenticatedAdminRouteRouteWithChildren =
 interface AuthenticatedRouteRouteChildren {
   AuthenticatedAdminRouteRoute: typeof AuthenticatedAdminRouteRouteWithChildren
   AuthenticatedAkunRoute: typeof AuthenticatedAkunRoute
+  AuthenticatedCheckoutSlugRoute: typeof AuthenticatedCheckoutSlugRoute
+  AuthenticatedPesananIdRoute: typeof AuthenticatedPesananIdRoute
 }
 
 const AuthenticatedRouteRouteChildren: AuthenticatedRouteRouteChildren = {
   AuthenticatedAdminRouteRoute: AuthenticatedAdminRouteRouteWithChildren,
   AuthenticatedAkunRoute: AuthenticatedAkunRoute,
+  AuthenticatedCheckoutSlugRoute: AuthenticatedCheckoutSlugRoute,
+  AuthenticatedPesananIdRoute: AuthenticatedPesananIdRoute,
 }
 
 const AuthenticatedRouteRouteWithChildren =

@@ -29,6 +29,13 @@
       "when": 1792890698904,
       "tag": "0003_service_portfolio_seo_validation",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1792893488672,
+      "tag": "0004_checkout_orders",
+      "breakpoints": true
     }
   ]
 }
