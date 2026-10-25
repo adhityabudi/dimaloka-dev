@@ -8,7 +8,7 @@ export const AIO_FEATURE_LABELS: Record<AioFeature, string> = {
   website_content: "Generate Konten Website",
   product_seo: "Generate Deskripsi + SEO Produk",
 };
-export const AIO_MODELS = ["deepseek-v4-pro", "claude-opus-5", "gpt-6-astra", "glm-5.3"] as const;
+export const AIO_MODELS = ["deepseek-v4-pro", "claude-opus-5-5", "gpt-6-astra", "glm-5.3"] as const;
 export const AIO_DEFAULT_MODEL = "deepseek-v4-pro";
 export const AIO_DEFAULT_MAX_TOKENS = 2048;
 
