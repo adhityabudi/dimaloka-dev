@@ -1,9 +1,8 @@
-# Invoice payments
 # Current service focus
-- [ ] Focus the public catalog on the six requested services, preserving other entries disabled.
-- [ ] Add independent admin activation switches for services and products with consistent public/checkout visibility.
-- [ ] Write editable landing-page copy for missing priority services without inventing prices.
-- [ ] Test visibility rules and verify admin switches and public pages.
+- [x] Focus the public catalog on the six requested services, preserving other entries disabled.
+- [x] Add independent admin activation switches for services and products with consistent public/checkout visibility.
+- [x] Write editable landing-page copy for missing priority services without inventing prices.
+- [x] Test visibility rules and verify admin switches and public pages.
 
 # Invoice payments
 - [x] Store full payment, DP, and linked settlement invoices securely.

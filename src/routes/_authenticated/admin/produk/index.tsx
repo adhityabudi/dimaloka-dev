@@ -59,7 +59,7 @@ function Page() {
                 <TableCell><div className="flex items-center gap-3">{p.cover_image && <img src={p.cover_image} alt="" className="h-10 w-14 rounded object-cover" />}<div><p className="font-semibold">{p.title}</p>{p.is_featured && <span className="text-[10px] font-bold text-coral">HOT</span>}</div></div></TableCell>
                 <TableCell>{p.categories?.name}</TableCell>
                 <TableCell>{p.sellers?.name}</TableCell>
-                <TableCell>{rupiah(p.price)}</TableCell>
+                <TableCell>{p.price > 0 ? rupiah(p.price) : "Belum ditetapkan"}</TableCell>
                 <TableCell><Badge variant={p.status === "published" ? "default" : "secondary"}>{p.status}</Badge></TableCell>
                 <TableCell><label className="flex items-center gap-2"><Switch aria-label={`Aktifkan ${p.title}`} checked={p.is_active} disabled={busy !== null} onCheckedChange={enabled => toggle(p.id, enabled)} /><span className="text-xs">{p.is_active ? "Aktif" : "Nonaktif"}</span></label>{p.is_active && p.categories?.is_active === false && <p className="mt-1 text-xs text-muted-foreground">Layanan induk nonaktif</p>}</TableCell>
                 <TableCell className="text-right whitespace-nowrap"><Button size="icon" variant="ghost" asChild><Link to="/admin/produk/$id/edit" params={{ id: p.id }} aria-label="Edit"><Pencil /></Link></Button><Button size="icon" variant="ghost" onClick={() => del(p.id)} aria-label="Hapus"><Trash2 /></Button></TableCell>
