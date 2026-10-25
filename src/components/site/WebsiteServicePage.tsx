@@ -27,15 +27,15 @@ export function WebsiteServicePage({ products, phone }: { products: Service[]; p
     <section className="relative isolate overflow-hidden bg-navy text-navy-foreground">
       <div className="mx-auto max-w-7xl px-6 pt-6 sm:px-10 lg:px-16">
         <nav aria-label="Breadcrumb" className="relative z-10 flex items-center gap-2 text-xs text-navy-foreground/60"><Link to="/" className="hover:text-primary">Beranda</Link><ChevronRight className="size-3" /><span>Pembuatan Website</span></nav>
-        <div className="relative pb-8 pt-10 md:pb-16 md:pt-16">
+        <div className="relative pb-6 pt-7 md:pb-16 md:pt-16">
           <div className="relative z-10 max-w-[520px] md:w-[48%]">
             <p className="text-xs font-semibold uppercase text-primary">Dimaloka · Website untuk Bisnis</p>
-            <h1 className="mt-5 text-4xl font-bold leading-[1.15] lg:text-5xl">Jasa Pembuatan Website Company Profile</h1>
-            <p className="mt-5 max-w-md text-base leading-7 text-navy-foreground/75">Perkenalkan perusahaan Anda dengan website yang profesional. Tampilkan layanan, pengalaman, dan informasi bisnis yang membantu calon pelanggan mengenal Anda lebih dekat.</p>
+            <h1 className="mt-4 text-3xl font-bold leading-[1.15] sm:text-4xl lg:text-5xl">Jasa Pembuatan Website Company Profile</h1>
+            <p className="mt-4 max-w-md text-sm leading-6 text-navy-foreground/75 sm:text-base sm:leading-7">Perkenalkan perusahaan Anda dengan website yang profesional. Tampilkan layanan, pengalaman, dan informasi bisnis yang membantu calon pelanggan mengenal Anda lebih dekat.</p>
             <div className="mt-7 flex flex-wrap items-center gap-3"><Button asChild className="h-12 rounded-md px-5 font-semibold"><a href={contact} target="_blank" rel="noreferrer">Konsultasi Website <ArrowUpRight className="size-4" /></a></Button><Button asChild variant="link" className="h-12 text-navy-foreground"><a href="#layanan-website">Lihat layanan <ArrowDown className="size-4" /></a></Button></div>
-            <div className="mt-9 flex flex-wrap gap-x-5 gap-y-3 text-xs text-navy-foreground/70"><span className="flex items-center gap-2"><LayoutTemplate className="size-4" />Company Profile</span><span className="flex items-center gap-2"><MonitorSmartphone className="size-4" />Desktop & Mobile</span></div>
+            <div className="mt-5 flex flex-wrap gap-x-5 gap-y-3 text-xs text-navy-foreground/70 md:mt-9"><span className="flex items-center gap-2"><LayoutTemplate className="size-4" />Company Profile</span><span className="flex items-center gap-2"><MonitorSmartphone className="size-4" />Desktop & Mobile</span></div>
           </div>
-          <img src={mockups} alt="Contoh website company profile untuk perusahaan konsultasi dan logistik" width={1024} height={1024} fetchPriority="high" className="mx-auto mt-6 block h-auto w-full max-w-[380px] object-contain md:absolute md:inset-y-0 md:right-0 md:my-auto md:h-full md:max-h-[540px] md:w-[48%] md:max-w-[520px]" />
+          <img src={mockups} alt="Contoh website company profile untuk perusahaan konsultasi dan logistik" width={1024} height={1024} fetchPriority="high" className="mx-auto mt-5 block h-auto w-full max-w-[180px] object-contain sm:max-w-[320px] md:absolute md:inset-y-0 md:right-0 md:my-auto md:h-full md:max-h-[540px] md:w-[48%] md:max-w-[520px]" />
         </div>
       </div>
     </section>
