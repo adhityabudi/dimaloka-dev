@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
@@ -26,6 +27,7 @@ import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminKategoriRouteImport } from './routes/_authenticated/admin/kategori'
 import { Route as AuthenticatedAdminOrderRouteImport } from './routes/_authenticated/admin/order'
+import { Route as AuthenticatedAdminPortfolioRouteImport } from './routes/_authenticated/admin/portfolio'
 import { Route as AuthenticatedAdminSellerRouteImport } from './routes/_authenticated/admin/seller'
 import { Route as AuthenticatedAdminSeoRouteImport } from './routes/_authenticated/admin/seo'
 import { Route as AuthenticatedAdminSettingRouteImport } from './routes/_authenticated/admin/setting'
@@ -47,6 +49,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PortfolioRoute = PortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
   getParentRoute: () => rootRouteImport,
 } as any)
 const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
@@ -125,6 +132,12 @@ const AuthenticatedAdminOrderRoute = AuthenticatedAdminOrderRouteImport.update({
   path: '/order',
   getParentRoute: () => AuthenticatedAdminRouteRoute,
 } as any)
+const AuthenticatedAdminPortfolioRoute =
+  AuthenticatedAdminPortfolioRouteImport.update({
+    id: '/portfolio',
+    path: '/portfolio',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
 const AuthenticatedAdminSellerRoute =
   AuthenticatedAdminSellerRouteImport.update({
     id: '/seller',
@@ -205,6 +218,7 @@ const AuthenticatedAdminProdukIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/portfolio': typeof PortfolioRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -219,6 +233,7 @@ export interface FileRoutesByFullPath {
   '/blog/': typeof BlogIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
+  '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/setting': typeof AuthenticatedAdminSettingRoute
@@ -236,6 +251,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/portfolio': typeof PortfolioRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/akun': typeof AuthenticatedAkunRoute
@@ -249,6 +265,7 @@ export interface FileRoutesByTo {
   '/blog': typeof BlogIndexRoute
   '/admin/kategori': typeof AuthenticatedAdminKategoriRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
+  '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/admin/seller': typeof AuthenticatedAdminSellerRoute
   '/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/admin/setting': typeof AuthenticatedAdminSettingRoute
@@ -268,6 +285,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/portfolio': typeof PortfolioRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
@@ -282,6 +300,7 @@ export interface FileRoutesById {
   '/blog/': typeof BlogIndexRoute
   '/_authenticated/admin/kategori': typeof AuthenticatedAdminKategoriRoute
   '/_authenticated/admin/order': typeof AuthenticatedAdminOrderRoute
+  '/_authenticated/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
   '/_authenticated/admin/seller': typeof AuthenticatedAdminSellerRoute
   '/_authenticated/admin/seo': typeof AuthenticatedAdminSeoRoute
   '/_authenticated/admin/setting': typeof AuthenticatedAdminSettingRoute
@@ -301,6 +320,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/portfolio'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/admin'
@@ -315,6 +335,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/admin/kategori'
     | '/admin/order'
+    | '/admin/portfolio'
     | '/admin/seller'
     | '/admin/seo'
     | '/admin/setting'
@@ -332,6 +353,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/portfolio'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/akun'
@@ -345,6 +367,7 @@ export interface FileRouteTypes {
     | '/blog'
     | '/admin/kategori'
     | '/admin/order'
+    | '/admin/portfolio'
     | '/admin/seller'
     | '/admin/seo'
     | '/admin/setting'
@@ -363,6 +386,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/portfolio'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/_authenticated/admin'
@@ -377,6 +401,7 @@ export interface FileRouteTypes {
     | '/blog/'
     | '/_authenticated/admin/kategori'
     | '/_authenticated/admin/order'
+    | '/_authenticated/admin/portfolio'
     | '/_authenticated/admin/seller'
     | '/_authenticated/admin/seo'
     | '/_authenticated/admin/setting'
@@ -396,6 +421,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  PortfolioRoute: typeof PortfolioRoute
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   AuthSignInRoute: typeof AuthSignInRoute
@@ -422,6 +448,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/portfolio': {
+      id: '/portfolio'
+      path: '/portfolio'
+      fullPath: '/portfolio'
+      preLoaderRoute: typeof PortfolioRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/robots.txt': {
@@ -529,6 +562,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminOrderRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/portfolio': {
+      id: '/_authenticated/admin/portfolio'
+      path: '/portfolio'
+      fullPath: '/admin/portfolio'
+      preLoaderRoute: typeof AuthenticatedAdminPortfolioRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/seller': {
       id: '/_authenticated/admin/seller'
       path: '/seller'
@@ -626,6 +666,7 @@ declare module '@tanstack/react-router' {
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminKategoriRoute: typeof AuthenticatedAdminKategoriRoute
   AuthenticatedAdminOrderRoute: typeof AuthenticatedAdminOrderRoute
+  AuthenticatedAdminPortfolioRoute: typeof AuthenticatedAdminPortfolioRoute
   AuthenticatedAdminSellerRoute: typeof AuthenticatedAdminSellerRoute
   AuthenticatedAdminSeoRoute: typeof AuthenticatedAdminSeoRoute
   AuthenticatedAdminSettingRoute: typeof AuthenticatedAdminSettingRoute
@@ -646,6 +687,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
   {
     AuthenticatedAdminKategoriRoute: AuthenticatedAdminKategoriRoute,
     AuthenticatedAdminOrderRoute: AuthenticatedAdminOrderRoute,
+    AuthenticatedAdminPortfolioRoute: AuthenticatedAdminPortfolioRoute,
     AuthenticatedAdminSellerRoute: AuthenticatedAdminSellerRoute,
     AuthenticatedAdminSeoRoute: AuthenticatedAdminSeoRoute,
     AuthenticatedAdminSettingRoute: AuthenticatedAdminSettingRoute,
@@ -683,6 +725,7 @@ const AuthenticatedRouteRouteWithChildren =
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  PortfolioRoute: PortfolioRoute,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
   AuthSignInRoute: AuthSignInRoute,

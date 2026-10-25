@@ -15,6 +15,13 @@
       "when": 1792887848312,
       "tag": "0001_invoice_payment_stages",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1792889617780,
+      "tag": "0002_portfolio_page_seo_validation",
+      "breakpoints": true
     }
   ]
 }

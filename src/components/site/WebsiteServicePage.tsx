@@ -6,6 +6,8 @@ import responsiveDesign from "@/assets/website-responsive-design.jpg";
 import { Button } from "@/components/ui/button";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { rupiah, waLink } from "@/lib/format";
+import { PortfolioSection } from "./PortfolioSection";
+import { type PortfolioPage } from "@/lib/portfolio";
 
 type Service = { id: string; slug: string; title: string; short_description: string | null; price: number; sellers?: { name: string; slug: string } | null };
 const foundations = [
@@ -21,7 +23,7 @@ const questions = [
   { q: "Berapa lama pengerjaan website?", a: "Waktu pengerjaan bergantung pada jumlah halaman, fitur, dan kesiapan materi. Jadwal serta tahapan pekerjaan dapat disepakati setelah kebutuhan website ditentukan." },
 ];
 
-export function WebsiteServicePage({ products, phone }: { products: Service[]; phone?: string }) {
+export function WebsiteServicePage({ products, phone, portfolio }: { products: Service[]; phone?: string; portfolio: PortfolioPage }) {
   const contact = waLink(phone, "Halo Dimaloka, saya ingin konsultasi pembuatan website. Boleh dibantu memilih layanan yang sesuai?");
   return <>
     <section className="relative isolate overflow-hidden bg-navy text-navy-foreground">
@@ -51,6 +53,8 @@ export function WebsiteServicePage({ products, phone }: { products: Service[]; p
     <section className="border-y bg-muted py-14 sm:py-20"><div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16"><div className="mx-auto max-w-2xl text-center"><p className="text-xs font-semibold uppercase text-primary-strong">Konten & Pencarian</p><h2 className="mt-4 text-3xl font-bold sm:text-4xl">Website yang mudah dipahami,<br />oleh pengunjung dan mesin pencari.</h2><p className="mt-5 text-sm leading-7 text-muted-foreground">Informasi yang terstruktur menjadi dasar penting untuk memperkenalkan bisnis Anda melalui pencarian online.</p></div><div className="mt-12 grid gap-x-12 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">{foundations.map(f => <div key={f.title}><f.icon className="size-6 text-navy-2" /><h3 className="mt-4 text-base font-bold">{f.title}</h3><p className="mt-3 text-sm leading-7 text-muted-foreground">{f.text}</p></div>)}</div></div></section>
 
     <section id="layanan-website" className="scroll-mt-24 py-14 sm:py-20"><div className="mx-auto max-w-7xl px-6 sm:px-10 lg:px-16"><p className="text-xs font-semibold uppercase text-primary-strong">Layanan Pembuatan Website</p><div className="mt-4 flex flex-wrap items-end justify-between gap-4"><h2 className="text-3xl font-bold sm:text-4xl">Pilih sesuai kebutuhan bisnis.</h2><span className="text-sm text-muted-foreground">{products.length} layanan tersedia</span></div><div className="mt-9 grid gap-6 md:grid-cols-2">{products.map(p => <article key={p.id} className="rounded-lg border bg-card p-6 sm:p-8"><Code2 className="size-7 text-primary-strong" /><h3 className="mt-5 text-2xl font-bold">{p.title}</h3><p className="mt-3 min-h-14 text-sm leading-7 text-muted-foreground">{p.short_description}</p><div className="mt-6 flex flex-wrap items-center justify-between gap-5 border-t pt-6"><div><p className="text-xs text-muted-foreground">Mulai dari</p><p className="mt-1 text-2xl font-bold">{rupiah(p.price)}</p></div><Button asChild variant="outline" className="h-11 rounded-md"><Link to="/p/$slug" params={{ slug: p.slug }}>Detail layanan <ArrowUpRight className="size-4" /></Link></Button></div></article>)}</div>{products.length === 0 && <p className="mt-8 text-muted-foreground">Belum ada layanan tersedia.</p>}</div></section>
+
+    <PortfolioSection page={portfolio} />
 
     <section className="border-t py-14 sm:py-20"><div className="mx-auto grid max-w-7xl gap-10 px-6 sm:px-10 lg:grid-cols-[0.8fr_1.2fr] lg:gap-20 lg:px-16"><div><p className="text-xs font-semibold uppercase text-primary-strong">Sebelum Memulai</p><h2 className="mt-4 text-3xl font-bold leading-tight">Pertanyaan tentang<br />pembuatan website.</h2><p className="mt-5 text-sm leading-7 text-muted-foreground">Masih ada yang ingin ditanyakan? Sampaikan kebutuhan Anda melalui WhatsApp.</p></div><Accordion type="single" collapsible>{questions.map((f,i) => <AccordionItem key={f.q} value={`q-${i}`}><AccordionTrigger className="py-5 text-left text-sm font-semibold">{f.q}</AccordionTrigger><AccordionContent className="text-sm leading-7 text-muted-foreground">{f.a}</AccordionContent></AccordionItem>)}</Accordion></div></section>
 

@@ -1,5 +1,5 @@
 import { createFileRoute, Link, Outlet, redirect, useNavigate } from "@tanstack/react-router";
-import { BarChart3, FileText, FolderTree, Home, LogOut, Menu, MessageSquareQuote, Package, Receipt, Search, Settings, ShoppingBag, Store, X } from "lucide-react";
+import { BarChart3, FileText, FolderTree, Home, Images, LogOut, Menu, MessageSquareQuote, Package, Receipt, Search, Settings, ShoppingBag, Store, X } from "lucide-react";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import logo from "@/assets/dimaloka-logo.png.asset.json";
@@ -22,6 +22,7 @@ const nav = [
   { to: "/admin/invoice", label: "Invoice", icon: Receipt },
   { to: "/admin/testimoni", label: "Testimoni", icon: MessageSquareQuote },
   { to: "/admin/artikel", label: "Artikel", icon: FileText },
+  { to: "/admin/portfolio", label: "Portfolio", icon: Images },
   { to: "/admin/seo", label: "Optimasi SEO", icon: Search },
   { to: "/admin/setting", label: "Setting", icon: Settings },
 ] as const;

@@ -10,6 +10,7 @@ export const Route = createFileRoute("/sitemap.xml")({
         const urls: { loc: string; lastmod?: string }[] = [
           { loc: "/" },
           { loc: "/blog" },
+          { loc: "/portfolio" },
           ...d.categories.map((c) => ({ loc: `/kategori/${c.slug}`, lastmod: c.created_at })),
           ...d.products.map((p) => ({ loc: `/p/${p.slug}`, lastmod: p.updated_at })),
           ...d.sellers.map((s) => ({ loc: `/store/${s.slug}`, lastmod: s.created_at })),
