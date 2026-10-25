@@ -63,3 +63,9 @@
 - [x] Generate a title-relevant cover automatically and retain it in saved articles.
 - [x] Ground and validate internal links against available products/services.
 - [x] Allow article/image/link edits before posting and verify the public result.
+
+# SEO subscriptions
+- [ ] Confirm and enable an eligible automatic payment provider.
+- [ ] Add subscription packages and recurring checkout.
+- [ ] Connect subscription management and recurring invoices to admin/member views.
+- [ ] Verify recurring payment events and invoice synchronization.
