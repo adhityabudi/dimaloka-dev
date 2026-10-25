@@ -12,6 +12,7 @@ export const Route = createFileRoute("/sitemap.xml")({
           { loc: "/" },
           { loc: "/layanan" },
           { loc: "/blog" },
+          { loc: "/assisstant-ai" },
           { loc: "/portfolio" },
           ...["website", "desain-grafis", "digital-marketing", "seo", "aplikasi", "video"].map((s) => ({ loc: `/portfolio/${s}` })),
           ...d.categories.map((c) => ({ loc: `/layanan/${c.slug}` })),

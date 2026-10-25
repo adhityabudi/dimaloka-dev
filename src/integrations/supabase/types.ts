@@ -112,6 +112,27 @@ export type Database = {
           },
         ]
       }
+      assistant_rate_limits: {
+        Row: {
+          blocked_until: string | null
+          count: number
+          subject: string
+          window_start: string
+        }
+        Insert: {
+          blocked_until?: string | null
+          count?: number
+          subject: string
+          window_start?: string
+        }
+        Update: {
+          blocked_until?: string | null
+          count?: number
+          subject?: string
+          window_start?: string
+        }
+        Relationships: []
+      }
       categories: {
         Row: {
           created_at: string
@@ -580,6 +601,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      consume_assistant_request: {
+        Args: { _block?: boolean; _subject: string }
+        Returns: Json
+      }
       get_invoice_by_token: {
         Args: { _token: string }
         Returns: {

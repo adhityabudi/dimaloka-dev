@@ -10,17 +10,17 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { listAioPrompts, resetAioPrompt, saveAioPrompt } from "@/lib/aio.functions";
-import { AIO_MODELS, type AioFeature } from "@/lib/aio";
+import { AIO_MODELS, type AioPromptFeature } from "@/lib/aio";
 import { tanggal as formatDate } from "@/lib/format";
 
-export const Route = createFileRoute("/_authenticated/admin/aio/prompts")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/aio/prompts")({ head: () => ({ meta: [{ title: "Prompt Library Annisa & AIO | Dimaloka" }, { name: "description", content: "Kelola prompt AIO dan Annisa AI Dimaloka." }, { property: "og:title", content: "Prompt Library | Dimaloka" }, { property: "og:description", content: "Pengaturan prompt Annisa AI dan AIO." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }] }), component: Page });
 
 type Row = Awaited<ReturnType<typeof listAioPrompts>>[number];
 
 function Page() {
   const list = useServerFn(listAioPrompts);
   const q = useQuery({ queryKey: ["aio-prompts"], queryFn: () => list(), retry: false });
-  const [editing, setEditing] = useState<AioFeature | null>(null);
+  const [editing, setEditing] = useState<AioPromptFeature | null>(null);
   if (q.isLoading) return <p>Memuat…</p>;
   if (q.isError) return <p role="alert" className="text-destructive">{(q.error as Error).message}</p>;
   const current = q.data?.find((r) => r.feature === editing);

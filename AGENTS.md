@@ -10,6 +10,8 @@
 <!-- LOVABLE:END -->
 
 ## Dimaloka architecture
+- Annisa uses a public TanStack streaming route and AI Elements for a nonpersistent single conversation; trusted hosting IPs key atomic service-only rate guards, while catalog reads use a publishable client and private prompt/config reads are narrowly scoped server-side. No message content is stored; full history is resent for contextual answers, and answer text is safety-checked before delivery.
+- Public site_settings reads use an explicit presentation-key policy; AI configuration stays admin-only to prevent exposing internal settings through SSR layout data.
 - SEO reports use an admin-checked server function for published inventory; unconnected Google metrics remain null, never inferred from publication or sitemap counts.
 - AIO articles ground Markdown links in the current published-product/active-service catalog and revalidate before saving. Covers use an admin-authenticated streaming image route, upload completed images to private media storage, and retain editable article/cover state before explicit publication.
 - AI token limits share client-safe constants with server validation; all AI settings editors preserve the existing token budget when changing other settings to avoid resetting generation limits.
