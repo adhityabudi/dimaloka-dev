@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Dimaloka architecture
+- Products have independent is_active and publication status; public RLS requires an active parent service, while checkout/AIO validate the same rule through catalog-visibility.ts and historical orders stay accessible. Priority service pages reuse the editable service presentation registry rather than hardcoded routes.
 - Annisa uses a public TanStack streaming route and AI Elements for a nonpersistent single conversation; trusted hosting IPs key atomic service-only quota guards (the DB function is the source of truth, GET /api/annisa only reports remaining quota, and the UI never counts locally so resets cannot restore it), while catalog reads use a publishable client and private prompt/config reads are narrowly scoped server-side. No message content is stored; full history is resent for contextual answers, and answer text is safety-checked before delivery.
 - Public site_settings reads use an explicit presentation-key policy; AI configuration stays admin-only to prevent exposing internal settings through SSR layout data.
 - SEO reports use an admin-checked server function for published inventory; unconnected Google metrics remain null, never inferred from publication or sitemap counts.
