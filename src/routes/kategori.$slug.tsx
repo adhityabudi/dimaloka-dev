@@ -1,6 +1,7 @@
 import { createFileRoute, Link, notFound, useLoaderData } from "@tanstack/react-router";
 import { BadgeCheck, ChevronRight, Clock, ShieldCheck, Wallet } from "lucide-react";
-import { getCategory } from "@/lib/public.functions";
+import { getCategory, getPortfolio } from "@/lib/public.functions";
+import { portfolioPage } from "@/lib/portfolio";
 import { ProductCard } from "@/components/site/ProductCard";
 import { WaCta } from "@/components/site/WaCta";
 import { CategoryIcon } from "@/components/site/CategoryIcon";
@@ -11,7 +12,7 @@ export const Route = createFileRoute("/kategori/$slug")({
   loader: async ({ params }) => {
     const d = await getCategory({ data: { slug: params.slug } });
     if (!d) throw notFound();
-    return d;
+    return { ...d, portfolio: params.slug === "website" ? await getPortfolio() : null };
   },
   head: ({ loaderData, matches }) => {
     if (!loaderData) return { meta: [{ title: "Kategori tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
@@ -35,9 +36,9 @@ const features = [
 ];
 
 function CategoryPage() {
-  const { category: c, products } = Route.useLoaderData();
+  const { category: c, products, portfolio } = Route.useLoaderData();
   const { layout } = useLoaderData({ from: "__root__" });
-  if (c.slug === "website") return <WebsiteServicePage products={products} phone={layout.settings.contact_whatsapp} />;
+  if (c.slug === "website") return <WebsiteServicePage products={products} phone={layout.settings.contact_whatsapp} portfolio={portfolioPage(portfolio)} />;
   return (
     <>
       <section className="bg-gradient-navy text-navy-foreground">

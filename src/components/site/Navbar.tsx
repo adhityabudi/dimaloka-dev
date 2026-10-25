@@ -39,6 +39,7 @@ export function Navbar() {
               ))}
             </DropdownMenuContent>
           </DropdownMenu>
+          <Link to="/portfolio" className="rounded-lg px-3 py-2 hover:bg-muted" activeProps={{ className: "text-primary-strong" }}>Portfolio</Link>
           <Link to="/blog" className="rounded-lg px-3 py-2 hover:bg-muted" activeProps={{ className: "text-primary-strong" }}>Blog</Link>
         </nav>
         <div className="ml-auto hidden items-center gap-2 lg:flex">
@@ -76,7 +77,8 @@ export function Navbar() {
               </Link>
             ))}
           </div>
-          <Link to="/blog" onClick={() => setOpen(false)} className="mt-3 block py-2 font-semibold">Blog</Link>
+          <Link to="/portfolio" onClick={() => setOpen(false)} className="mt-3 block py-2 font-semibold">Portfolio</Link>
+          <Link to="/blog" onClick={() => setOpen(false)} className="block py-2 font-semibold">Blog</Link>
           <div className="mt-3 flex gap-2">
             {user ? (
               <>

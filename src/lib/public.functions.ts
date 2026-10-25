@@ -94,6 +94,12 @@ export const listArticles = createServerFn({ method: "GET" }).handler(async () =
   return data ?? [];
 });
 
+export const getPortfolio = createServerFn({ method: "GET" }).handler(async () => {
+  const { data, error } = await pub().from("site_settings").select("value").eq("key", "portfolio_page").maybeSingle();
+  if (error) throw new Error("Portfolio belum dapat dimuat. Silakan coba kembali.");
+  return data?.value ?? null;
+});
+
 export const getArticle = createServerFn({ method: "GET" })
   .inputValidator((d: { slug: string }) => d)
   .handler(async ({ data }) => {
