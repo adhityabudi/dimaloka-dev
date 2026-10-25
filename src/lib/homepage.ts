@@ -1,4 +1,4 @@
-import hero from "@/assets/hero.png";
+import hero from "@/assets/hero.webp";
 
 export const HOMEPAGE_KEY = "homepage_page";
 export type ClientLogo = { id: string; name: string; image: string };

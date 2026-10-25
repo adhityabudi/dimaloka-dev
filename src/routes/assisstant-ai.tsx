@@ -17,7 +17,7 @@ import {
   PromptInputSubmit,
 } from "@/components/ai-elements/prompt-input";
 import { Shimmer } from "@/components/ai-elements/shimmer";
-import annisa from "@/assets/annisa-ai.png";
+import annisa from "@/assets/annisa-ai.webp";
 import {
   ANNISA_INPUT_LIMIT,
   ANNISA_QUOTA_MESSAGE,

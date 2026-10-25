@@ -64,7 +64,7 @@ function Index() {
             </div>
           </div>
           <div className="relative">
-            <img src={c.hero_image} alt={c.hero_alt} width={1024} height={1024} className="hero-float mx-auto h-auto w-full max-w-lg object-contain drop-shadow-2xl" />
+            <img src={c.hero_image} alt={c.hero_alt} width={1024} height={1024} fetchPriority="high" className="hero-float mx-auto h-auto w-full max-w-lg object-contain drop-shadow-2xl" />
           </div>
         </div>
       </section>

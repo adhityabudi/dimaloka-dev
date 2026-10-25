@@ -53,7 +53,7 @@ function ProductPage() {
             <div className="mt-3 flex gap-2 overflow-x-auto">
               {gallery.map((g, i) => (
                 <button key={i} onClick={() => setImg(i)} className={`h-16 w-24 shrink-0 overflow-hidden rounded-lg border-2 ${i === img ? "border-primary" : "border-transparent"}`}>
-                  <img src={g} alt={`Thumbnail ${i + 1}`} className="h-full w-full object-cover" />
+                  <img loading="lazy" decoding="async" src={g} alt={`Thumbnail ${i + 1}`} className="h-full w-full object-cover" />
                 </button>
               ))}
             </div>

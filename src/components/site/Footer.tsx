@@ -13,7 +13,7 @@ export function Footer() {
     <footer className="bg-gradient-navy text-navy-foreground">
       <div className="mx-auto grid max-w-7xl gap-10 px-4 py-14 md:grid-cols-2 lg:grid-cols-5">
         <div className="lg:col-span-2">
-          <div className="inline-block rounded-xl bg-background px-3 py-2"><img src={logo.url} alt="Dimaloka" className="h-7 w-auto" /></div>
+          <div className="inline-block rounded-xl bg-background px-3 py-2"><img src={logo.url} alt="Dimaloka" loading="lazy" decoding="async" className="h-7 w-auto" /></div>
           <p className="mt-4 max-w-sm text-sm text-navy-foreground/70">{s.footer_about}</p>
           <div className="mt-5 flex gap-3">
             {social.instagram && <a href={social.instagram} target="_blank" rel="noreferrer" aria-label="Instagram" className="rounded-lg bg-navy-foreground/10 p-2 hover:bg-primary"><Instagram className="h-4 w-4" /></a>}

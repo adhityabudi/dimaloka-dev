@@ -1,6 +1,6 @@
 import { Link } from "@tanstack/react-router";
 import { ArrowDown, ArrowUpRight, Check, ChevronRight, Code2, FileText, LayoutTemplate, MessageCircle, MonitorSmartphone, Search } from "lucide-react";
-import mockups from "@/assets/website-profile-mockups.png";
+import mockups from "@/assets/website-profile-mockups.webp";
 import customDesign from "@/assets/website-custom-design.jpg";
 import responsiveDesign from "@/assets/website-responsive-design.jpg";
 import { Button } from "@/components/ui/button";
