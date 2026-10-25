@@ -1,8 +1,8 @@
-import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { createFileRoute, useNavigate, useRouter } from "@tanstack/react-router";
 import { useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { useServerFn } from "@tanstack/react-start";
-import { Copy, FileDown, Loader2, Sparkles } from "lucide-react";
+import { Copy, ExternalLink, FileDown, Loader2, Send, Sparkles } from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -12,8 +12,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { aiGenerate } from "@/lib/aio.functions";
 import { AIO_FEATURES, AIO_FEATURE_LABELS, articleDraftFromAi, articleMarkdown, articleSeoPatchFromAi, productDraftFromAi, type AioFeature, type AioOutput } from "@/lib/aio";
 import { stripHtml } from "@/lib/format";
+import { aioArticlePublication, aioArticleSeoImplementation, aioProductImplementation, aioServiceImplementation } from "@/lib/aio-publication";
 
-export const Route = createFileRoute("/_authenticated/admin/aio/")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/aio/")({ component: Page, head: () => ({ meta: [{ title: "AI Generator | Admin Dimaloka" }, { name: "description", content: "Buat dan terapkan artikel, SEO, dan konten layanan Dimaloka." }, { property: "og:title", content: "AI Generator | Admin Dimaloka" }, { property: "og:description", content: "Buat dan terapkan artikel, SEO, dan konten layanan Dimaloka." }, { property: "og:type", content: "website" }, { name: "twitter:card", content: "summary" }, { name: "robots", content: "noindex, nofollow" }] }) });
 
 const FIELDS: Record<AioFeature, { key: string; label: string; long?: boolean; required?: boolean }[]> = {
   article_generate: [{ key: "topic", label: "Judul / topik", required: true }, { key: "focus_keyword", label: "Focus keyword", required: true }, { key: "tone", label: "Tone (mis. kasual-profesional)" }],
@@ -35,23 +36,77 @@ async function uniqueSlug(table: "articles" | "products", base: string) {
 function Page() {
   const qc = useQueryClient();
   const navigate = useNavigate();
+  const router = useRouter();
   const generate = useServerFn(aiGenerate);
   const [feature, setFeature] = useState<AioFeature>("article_generate");
   const [input, setInput] = useState<Record<string, string>>({});
   const [articleId, setArticleId] = useState("manual");
+  const [productId, setProductId] = useState("");
+  const [serviceId, setServiceId] = useState("");
+  const [targetKeywords, setTargetKeywords] = useState("");
+  const [implemented, setImplemented] = useState<string | null>(null);
   const [result, setResult] = useState<{ feature: AioFeature; content: any; model: string } | null>(null);
   const [busy, setBusy] = useState(false), [saving, setSaving] = useState(false), [error, setError] = useState("");
   const articles = useQuery({ queryKey: ["aio-articles"], queryFn: async () => {
-    const { data, error } = await supabase.from("articles").select("id,title,content,focus_keyword").order("updated_at", { ascending: false });
+    const { data, error } = await supabase.from("articles").select("id,title,slug,status,content,focus_keyword,seo_title,seo_description,keywords").order("updated_at", { ascending: false });
     if (error) throw error; return data;
   }, enabled: feature === "article_seo" });
+  const targets = useQuery({ queryKey: ["aio-targets"], queryFn: async () => {
+    const [products, services] = await Promise.all([supabase.from("products").select("id,title,slug,price,category_id"), supabase.from("categories").select("id,name,slug,keywords").eq("is_active", true)]);
+    if (products.error || services.error) throw new Error("Tujuan implementasi tidak dapat dimuat");
+    return { products: products.data ?? [], services: services.data ?? [] };
+  } });
   const fields = FIELDS[feature];
   const ready = fields.every((f) => !f.required || (input[f.key] ?? "").trim());
 
   const run = async () => {
-    setBusy(true); setError(""); setResult(null);
+    setBusy(true); setError(""); setResult(null); setImplemented(null);
     try { const r = await generate({ data: { feature, input: Object.fromEntries(fields.map((f) => [f.key, input[f.key] ?? ""])) } }); setResult({ feature, content: JSON.parse(r.content), model: r.model }); }
     catch (e) { setError(e instanceof Error ? e.message : "Generate gagal"); } finally { setBusy(false); }
+  };
+
+  const implement = async () => {
+    if (!result || implemented) return;
+    if (!window.confirm(result.feature === "article_generate" ? "Posting artikel ini sekarang ke website?" : "Terapkan hasil ini ke tujuan yang dipilih? Konten tujuan akan diperbarui dan dipublikasikan.")) return;
+    setSaving(true); setError("");
+    try {
+      let url = "";
+      if (result.feature === "article_generate") {
+        const row = aioArticlePublication(result.content);
+        const slug = await uniqueSlug("articles", row.slug);
+        const { data, error } = await supabase.from("articles").insert({ ...row, slug }).select("id,slug,status").single();
+        if (error) throw error;
+        if (data.status !== "published") throw new Error("Artikel belum dipublikasikan");
+        url = `/blog/${data.slug}`;
+      } else if (result.feature === "article_seo") {
+        const existing = articles.data?.find(a => a.id === articleId);
+        if (!existing) throw new Error("Pilih artikel tujuan terlebih dahulu");
+        const patch = aioArticleSeoImplementation(result.content, existing);
+        const { data, error } = await supabase.from("articles").update({ ...patch, status: "published", published_at: existing.status === "published" ? undefined : new Date().toISOString() }).eq("id", existing.id).select("slug,status,seo_title,seo_description").single();
+        if (error) throw error;
+        if (data.seo_title !== patch.seo_title || data.seo_description !== patch.seo_description || data.status !== "published") throw new Error("SEO belum berhasil diterapkan");
+        url = `/blog/${data.slug}`;
+      } else if (result.feature === "product_seo") {
+        const existing = targets.data?.products.find(p => p.id === productId);
+        if (!existing) throw new Error("Pilih produk tujuan terlebih dahulu agar harga dan paket tetap terjaga");
+        const patch = aioProductImplementation(result.content, existing.title);
+        const { data, error } = await supabase.from("products").update(patch).eq("id", existing.id).select("slug,status,seo_title,seo_description").single();
+        if (error) throw error;
+        if (data.seo_title !== patch.seo_title || data.seo_description !== patch.seo_description || data.status !== "published") throw new Error("Produk belum berhasil diterapkan");
+        url = `/p/${data.slug}`;
+      } else {
+        const existing = targets.data?.services.find(s => s.id === serviceId);
+        if (!existing) throw new Error("Pilih halaman layanan tujuan terlebih dahulu");
+        const patch = aioServiceImplementation(result.content, targetKeywords.split(","));
+        const { data, error } = await supabase.from("categories").update(patch).eq("id", existing.id).select("slug,description,seo_title,seo_description").single();
+        if (error) throw error;
+        if (data.description !== patch.description || data.seo_title !== patch.seo_title || data.seo_description !== patch.seo_description) throw new Error("Konten belum berhasil diterapkan");
+        url = `/layanan/${data.slug}`;
+      }
+      await qc.invalidateQueries(); await router.invalidate();
+      setImplemented(url); toast.success("Hasil AIO berhasil diterapkan ke website");
+    } catch (e) { const message = e instanceof Error ? e.message : "Implementasi gagal"; setError(message); toast.error(message); }
+    finally { setSaving(false); }
   };
 
   const saveDraft = async () => {
@@ -83,7 +138,7 @@ function Page() {
   return <div className="space-y-6">
     <section className="space-y-4 rounded-2xl border bg-card p-6 shadow-card">
       <label className="block space-y-2 text-sm font-semibold">Fitur AI
-        <Select value={feature} onValueChange={(v) => { setFeature(v as AioFeature); setResult(null); setError(""); }}><SelectTrigger aria-label="Fitur AI"><SelectValue /></SelectTrigger><SelectContent>{AIO_FEATURES.map((f) => <SelectItem key={f} value={f}>{AIO_FEATURE_LABELS[f]}</SelectItem>)}</SelectContent></Select>
+        <Select value={feature} disabled={busy || saving} onValueChange={(v) => { setFeature(v as AioFeature); setResult(null); setError(""); setImplemented(null); }}><SelectTrigger aria-label="Fitur AI"><SelectValue /></SelectTrigger><SelectContent>{AIO_FEATURES.map((f) => <SelectItem key={f} value={f}>{AIO_FEATURE_LABELS[f]}</SelectItem>)}</SelectContent></Select>
       </label>
       {feature === "article_seo" && <label className="block space-y-2 text-sm font-semibold">Ambil dari artikel
         <Select value={articleId} onValueChange={(id) => { setArticleId(id); const a = articles.data?.find((x) => x.id === id); if (a) setInput({ title: a.title, article: stripHtml(a.content), focus_keyword: a.focus_keyword ?? "" }); }}><SelectTrigger aria-label="Artikel"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="manual">Tempel manual</SelectItem>{articles.data?.map((a) => <SelectItem key={a.id} value={a.id}>{a.title}</SelectItem>)}</SelectContent></Select>
@@ -100,9 +155,15 @@ function Page() {
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="outline" onClick={() => copy(JSON.stringify(result.content, null, 2))}><Copy /> Copy JSON</Button>
           {result.feature === "article_generate" && <Button size="sm" variant="outline" onClick={() => copy(articleMarkdown(result.content))}><Copy /> Copy Markdown</Button>}
-          {result.feature !== "website_content" && <Button size="sm" disabled={saving} onClick={saveDraft}>{saving ? <Loader2 className="animate-spin" /> : <FileDown />} Simpan ke draft</Button>}
+          {result.feature !== "website_content" && <Button size="sm" variant="outline" disabled={saving || !!implemented} onClick={saveDraft}>{saving ? <Loader2 className="animate-spin" /> : <FileDown />} Simpan ke draft</Button>}
+          <Button size="sm" disabled={saving || !!implemented || (result.feature === "article_seo" && articleId === "manual") || (result.feature === "product_seo" && !productId) || (result.feature === "website_content" && (!serviceId || !targetKeywords.trim()))} onClick={implement}>{saving ? <Loader2 className="animate-spin" /> : <Send />}{result.feature === "article_generate" ? "Posting Artikel" : "Terapkan ke Website"}</Button>
         </div>
       </div>
+      {result.feature === "article_seo" && articleId === "manual" && <p className="text-sm text-muted-foreground">Pilih artikel tujuan pada kolom Ambil dari artikel.</p>}
+      {result.feature === "product_seo" && <label className="block space-y-2 text-sm font-semibold">Produk tujuan<Select value={productId} disabled={saving || !!implemented} onValueChange={setProductId}><SelectTrigger aria-label="Produk tujuan"><SelectValue placeholder="Pilih produk" /></SelectTrigger><SelectContent>{targets.data?.products.map(p => <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>)}</SelectContent></Select></label>}
+      {result.feature === "website_content" && <div className="space-y-3"><label className="block space-y-2 text-sm font-semibold">Halaman layanan tujuan<Select value={serviceId} disabled={saving || !!implemented} onValueChange={id => { setServiceId(id); setTargetKeywords(targets.data?.services.find(s => s.id === id)?.keywords.join(", ") ?? ""); }}><SelectTrigger aria-label="Halaman layanan tujuan"><SelectValue placeholder="Pilih halaman layanan" /></SelectTrigger><SelectContent>{targets.data?.services.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent></Select></label><label className="block space-y-2 text-sm font-semibold">Keyword halaman<Input aria-label="Keyword halaman" disabled={saving || !!implemented} value={targetKeywords} onChange={e => setTargetKeywords(e.target.value)} /></label></div>}
+      {targets.isError && <p role="alert" className="text-destructive">Tujuan implementasi tidak dapat dimuat.</p>}
+      {implemented && <div role="status" className="flex flex-wrap items-center gap-3 text-success"><p>Berhasil diterapkan ke website</p><Button asChild variant="outline" size="sm"><a href={implemented} target="_blank" rel="noreferrer"><ExternalLink /> Lihat di Website</a></Button></div>}
       <Preview feature={result.feature} c={result.content} />
     </section>}
   </div>;
