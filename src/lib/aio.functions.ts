@@ -17,7 +17,7 @@ export const aiGenerate = createServerFn({ method: "POST" }).middleware([require
   const prompt = await loadPrompt(context.supabase, data.feature);
   const model = data.model || prompt.model || settings.model;
   const text = await callGateway({ model, system: prompt.system_prompt, user: aioUserMessage(data.feature, data.input), temperature: prompt.temperature, max_tokens: settings.max_tokens });
-  try { return { content: parseAioOutput(data.feature, text) as Record<string, unknown>, model }; }
+  try { return { content: JSON.stringify(parseAioOutput(data.feature, text)), model }; }
   catch { throw new Error("Jawaban AI bukan JSON yang sesuai format. Coba generate ulang atau naikkan max tokens."); }
 });
 

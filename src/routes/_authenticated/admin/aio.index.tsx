@@ -50,7 +50,7 @@ function Page() {
 
   const run = async () => {
     setBusy(true); setError(""); setResult(null);
-    try { const r = await generate({ data: { feature, input: Object.fromEntries(fields.map((f) => [f.key, input[f.key] ?? ""])) } }); setResult({ feature, ...r }); }
+    try { const r = await generate({ data: { feature, input: Object.fromEntries(fields.map((f) => [f.key, input[f.key] ?? ""])) } }); setResult({ feature, content: JSON.parse(r.content), model: r.model }); }
     catch (e) { setError(e instanceof Error ? e.message : "Generate gagal"); } finally { setBusy(false); }
   };
 
