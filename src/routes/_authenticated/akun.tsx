@@ -34,7 +34,7 @@ function Akun() {
             <div className="flex items-center gap-3"><span className="font-bold">{rupiah(o.amount)}</span><Badge variant={o.status === "awaiting_payment" ? "default" : "secondary"}>{orderStatusLabel(o.status)}</Badge><ChevronRight className="h-4 w-4 text-muted-foreground" /></div>
           </Link>
         ))}
-        {orders.data?.length === 0 && <p className="text-sm text-muted-foreground">Belum ada pesanan. <Link to="/layanan" className="text-primary-strong underline">Jelajahi layanan</Link></p>}
+        {orders.data?.length === 0 && <p className="text-sm text-muted-foreground">Belum ada pesanan. <Link to="/layanan" search={{ q: "" } as any} className="text-primary-strong underline">Jelajahi layanan</Link></p>}
       </div>
       <h2 className="mt-10 text-xl font-extrabold text-navy">Invoice</h2>
       <div className="mt-4 space-y-3">
