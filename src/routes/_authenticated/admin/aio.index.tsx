@@ -9,8 +9,10 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
-import { aiGenerate } from "@/lib/aio.functions";
+import { aiGenerate, checkAioArticleLinks } from "@/lib/aio.functions";
 import { AIO_FEATURES, AIO_FEATURE_LABELS, articleDraftFromAi, articleMarkdown, articleSeoPatchFromAi, productDraftFromAi, type AioFeature, type AioOutput } from "@/lib/aio";
+import { AioArticleEditor } from "@/components/admin/AioArticleEditor";
+import type { ArticleLink } from "@/lib/aio-article";
 import { stripHtml } from "@/lib/format";
 import { aioArticlePublication, aioArticleSeoImplementation, aioProductImplementation, aioServiceImplementation } from "@/lib/aio-publication";
 
@@ -38,6 +40,10 @@ function Page() {
   const navigate = useNavigate();
   const router = useRouter();
   const generate = useServerFn(aiGenerate);
+  const checkLinks = useServerFn(checkAioArticleLinks);
+  const [cover, setCover] = useState("");
+  const [imageBusy, setImageBusy] = useState(false);
+  const [articleLinks, setArticleLinks] = useState<ArticleLink[]>([]);
   const [feature, setFeature] = useState<AioFeature>("article_generate");
   const [input, setInput] = useState<Record<string, string>>({});
   const [articleId, setArticleId] = useState("manual");
@@ -60,8 +66,8 @@ function Page() {
   const ready = fields.every((f) => !f.required || (input[f.key] ?? "").trim());
 
   const run = async () => {
-    setBusy(true); setError(""); setResult(null); setImplemented(null);
-    try { const r = await generate({ data: { feature, input: Object.fromEntries(fields.map((f) => [f.key, input[f.key] ?? ""])) } }); setResult({ feature, content: JSON.parse(r.content), model: r.model }); }
+    setBusy(true); setError(""); setResult(null); setImplemented(null); setCover("");
+    try { const r = await generate({ data: { feature, input: Object.fromEntries(fields.map((f) => [f.key, input[f.key] ?? ""])) } }); setArticleLinks(r.links); setResult({ feature, content: JSON.parse(r.content), model: r.model }); }
     catch (e) { setError(e instanceof Error ? e.message : "Generate gagal"); } finally { setBusy(false); }
   };
 
@@ -72,7 +78,9 @@ function Page() {
     try {
       let url = "";
       if (result.feature === "article_generate") {
-        const row = aioArticlePublication(result.content);
+        await checkLinks({ data: { content: JSON.stringify(result.content) } });
+        if (!cover) throw new Error("Generate atau unggah gambar artikel sebelum posting");
+        const row = { ...aioArticlePublication(result.content), cover_image: cover, og_image: cover };
         const slug = await uniqueSlug("articles", row.slug);
         const { data, error } = await supabase.from("articles").insert({ ...row, slug }).select("id,slug,status").single();
         if (error) throw error;
@@ -114,7 +122,8 @@ function Page() {
     setSaving(true);
     try {
       if (result.feature === "article_generate") {
-        const draft = articleDraftFromAi(result.content);
+        await checkLinks({ data: { content: JSON.stringify(result.content) } });
+        const draft = { ...articleDraftFromAi(result.content), cover_image: cover || null, og_image: cover || null };
         const { data, error } = await supabase.from("articles").insert({ ...draft, slug: await uniqueSlug("articles", draft.slug) }).select("id").single();
         if (error) throw error;
         await qc.invalidateQueries({ queryKey: ["adm-articles"] });
@@ -138,7 +147,7 @@ function Page() {
   return <div className="space-y-6">
     <section className="space-y-4 rounded-2xl border bg-card p-6 shadow-card">
       <label className="block space-y-2 text-sm font-semibold">Fitur AI
-        <Select value={feature} disabled={busy || saving} onValueChange={(v) => { setFeature(v as AioFeature); setResult(null); setError(""); setImplemented(null); }}><SelectTrigger aria-label="Fitur AI"><SelectValue /></SelectTrigger><SelectContent>{AIO_FEATURES.map((f) => <SelectItem key={f} value={f}>{AIO_FEATURE_LABELS[f]}</SelectItem>)}</SelectContent></Select>
+        <Select value={feature} disabled={busy || saving || imageBusy} onValueChange={(v) => { setFeature(v as AioFeature); setResult(null); setError(""); setImplemented(null); }}><SelectTrigger aria-label="Fitur AI"><SelectValue /></SelectTrigger><SelectContent>{AIO_FEATURES.map((f) => <SelectItem key={f} value={f}>{AIO_FEATURE_LABELS[f]}</SelectItem>)}</SelectContent></Select>
       </label>
       {feature === "article_seo" && <label className="block space-y-2 text-sm font-semibold">Ambil dari artikel
         <Select value={articleId} onValueChange={(id) => { setArticleId(id); const a = articles.data?.find((x) => x.id === id); if (a) setInput({ title: a.title, article: stripHtml(a.content), focus_keyword: a.focus_keyword ?? "" }); }}><SelectTrigger aria-label="Artikel"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="manual">Tempel manual</SelectItem>{articles.data?.map((a) => <SelectItem key={a.id} value={a.id}>{a.title}</SelectItem>)}</SelectContent></Select>
@@ -146,7 +155,7 @@ function Page() {
       {fields.map((f) => <label key={f.key} className="block space-y-2 text-sm font-semibold">{f.label}{f.required && " *"}
         {f.long ? <Textarea aria-label={f.label} rows={f.key === "article" ? 12 : 4} value={input[f.key] ?? ""} onChange={(e) => setInput({ ...input, [f.key]: e.target.value })} /> : <Input aria-label={f.label} value={input[f.key] ?? ""} onChange={(e) => setInput({ ...input, [f.key]: e.target.value })} />}
       </label>)}
-      <Button disabled={busy || !ready} onClick={run}>{busy ? <Loader2 className="animate-spin" /> : <Sparkles />}{busy ? "AI sedang menulis…" : "Generate"}</Button>
+      <Button disabled={busy || saving || imageBusy || !ready} onClick={run}>{busy ? <Loader2 className="animate-spin" /> : <Sparkles />}{busy ? "AI sedang menulis…" : "Generate"}</Button>
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
     </section>
     {result && <section className="space-y-4 rounded-2xl border bg-card p-6 shadow-card">
@@ -155,15 +164,16 @@ function Page() {
         <div className="flex flex-wrap gap-2">
           <Button size="sm" variant="outline" onClick={() => copy(JSON.stringify(result.content, null, 2))}><Copy /> Copy JSON</Button>
           {result.feature === "article_generate" && <Button size="sm" variant="outline" onClick={() => copy(articleMarkdown(result.content))}><Copy /> Copy Markdown</Button>}
-          {result.feature !== "website_content" && <Button size="sm" variant="outline" disabled={saving || !!implemented} onClick={saveDraft}>{saving ? <Loader2 className="animate-spin" /> : <FileDown />} Simpan ke draft</Button>}
-          <Button size="sm" disabled={saving || !!implemented || (result.feature === "article_seo" && articleId === "manual") || (result.feature === "product_seo" && !productId) || (result.feature === "website_content" && (!serviceId || !targetKeywords.trim()))} onClick={implement}>{saving ? <Loader2 className="animate-spin" /> : <Send />}{result.feature === "article_generate" ? "Posting Artikel" : "Terapkan ke Website"}</Button>
+          {result.feature !== "website_content" && <Button size="sm" variant="outline" disabled={saving || imageBusy || !!implemented} onClick={saveDraft}>{saving ? <Loader2 className="animate-spin" /> : <FileDown />} Simpan ke draft</Button>}
+          <Button size="sm" disabled={saving || imageBusy || !!implemented || (result.feature === "article_seo" && articleId === "manual") || (result.feature === "product_seo" && !productId) || (result.feature === "website_content" && (!serviceId || !targetKeywords.trim()))} onClick={implement}>{saving ? <Loader2 className="animate-spin" /> : <Send />}{result.feature === "article_generate" ? "Posting Artikel" : "Terapkan ke Website"}</Button>
         </div>
       </div>
       {result.feature === "article_seo" && articleId === "manual" && <p className="text-sm text-muted-foreground">Pilih artikel tujuan pada kolom Ambil dari artikel.</p>}
-      {result.feature === "product_seo" && <label className="block space-y-2 text-sm font-semibold">Produk tujuan<Select value={productId} disabled={saving || !!implemented} onValueChange={setProductId}><SelectTrigger aria-label="Produk tujuan"><SelectValue placeholder="Pilih produk" /></SelectTrigger><SelectContent>{targets.data?.products.map(p => <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>)}</SelectContent></Select></label>}
-      {result.feature === "website_content" && <div className="space-y-3"><label className="block space-y-2 text-sm font-semibold">Halaman layanan tujuan<Select value={serviceId} disabled={saving || !!implemented} onValueChange={id => { setServiceId(id); setTargetKeywords(targets.data?.services.find(s => s.id === id)?.keywords.join(", ") ?? ""); }}><SelectTrigger aria-label="Halaman layanan tujuan"><SelectValue placeholder="Pilih halaman layanan" /></SelectTrigger><SelectContent>{targets.data?.services.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent></Select></label><label className="block space-y-2 text-sm font-semibold">Keyword halaman<Input aria-label="Keyword halaman" disabled={saving || !!implemented} value={targetKeywords} onChange={e => setTargetKeywords(e.target.value)} /></label></div>}
+      {result.feature === "product_seo" && <label className="block space-y-2 text-sm font-semibold">Produk tujuan<Select value={productId} disabled={saving || imageBusy || !!implemented} onValueChange={setProductId}><SelectTrigger aria-label="Produk tujuan"><SelectValue placeholder="Pilih produk" /></SelectTrigger><SelectContent>{targets.data?.products.map(p => <SelectItem key={p.id} value={p.id}>{p.title}</SelectItem>)}</SelectContent></Select></label>}
+      {result.feature === "website_content" && <div className="space-y-3"><label className="block space-y-2 text-sm font-semibold">Halaman layanan tujuan<Select value={serviceId} disabled={saving || imageBusy || !!implemented} onValueChange={id => { setServiceId(id); setTargetKeywords(targets.data?.services.find(s => s.id === id)?.keywords.join(", ") ?? ""); }}><SelectTrigger aria-label="Halaman layanan tujuan"><SelectValue placeholder="Pilih halaman layanan" /></SelectTrigger><SelectContent>{targets.data?.services.map(s => <SelectItem key={s.id} value={s.id}>{s.name}</SelectItem>)}</SelectContent></Select></label><label className="block space-y-2 text-sm font-semibold">Keyword halaman<Input aria-label="Keyword halaman" disabled={saving || imageBusy || !!implemented} value={targetKeywords} onChange={e => setTargetKeywords(e.target.value)} /></label></div>}
       {targets.isError && <p role="alert" className="text-destructive">Tujuan implementasi tidak dapat dimuat.</p>}
       {implemented && <div role="status" className="flex flex-wrap items-center gap-3 text-success"><p>Berhasil diterapkan ke website</p><Button asChild variant="outline" size="sm"><a href={implemented} target="_blank" rel="noreferrer"><ExternalLink /> Lihat di Website</a></Button></div>}
+      {result.feature === "article_generate" && <AioArticleEditor value={result.content} onChange={content => setResult({ ...result, content })} links={articleLinks} cover={cover} onCover={setCover} onBusy={setImageBusy} disabled={saving || !!implemented} />}
       <Preview feature={result.feature} c={result.content} />
     </section>}
   </div>;
