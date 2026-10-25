@@ -1,3 +1,4 @@
+import { publicPageHead } from "@/lib/structured-data";
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, CreditCard, Eye, LayoutGrid, MessageCircle, Quote, ShieldCheck, Star, Zap } from "lucide-react";
 import { HOMEPAGE_KEY, homepageContent } from "@/lib/homepage";
@@ -7,25 +8,13 @@ import { CategoryIcon } from "@/components/site/CategoryIcon";
 import { ProductCard } from "@/components/site/ProductCard";
 import { WaCta } from "@/components/site/WaCta";
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel";
-import { jsonLd, pageMeta } from "@/lib/site";
+import { pageMeta } from "@/lib/site";
 import { tanggal, waLink } from "@/lib/format";
 
 export const Route = createFileRoute("/")({
   loader: () => getHome(),
-  head: ({ matches }) => {
-    const root: any = matches[0]?.loaderData;
-    const s = root?.layout?.settings ?? {};
-    const origin = root?.origin ?? "";
-    const title = s.global_seo_title ?? "Dimaloka — Marketplace Jasa Digital Terpercaya";
-    const description = s.global_seo_description ?? "Marketplace jasa digital terpercaya.";
-    return {
-      meta: [...pageMeta({ title, description, image: homepageContent(s[HOMEPAGE_KEY]).hero_image }), { name: "keywords", content: (s.global_keywords ?? []).join(", ") }],
-      links: origin ? [{ rel: "canonical", href: `${origin}/` }] : [],
-      scripts: [
-        jsonLd({ "@context": "https://schema.org", "@type": "Organization", name: "Dimaloka", url: origin, email: s.contact_email }),
-        jsonLd({ "@context": "https://schema.org", "@type": "WebSite", name: "Dimaloka", url: origin }),
-      ],
-    };
+  head: ({ loaderData, matches }) => {
+    return publicPageHead("home", loaderData, matches[0]?.loaderData as any);
   },
   component: Index,
 });

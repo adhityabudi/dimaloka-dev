@@ -13,6 +13,7 @@ export function pageMeta(o: { title: string; description: string; image?: string
     { name: "twitter:title", content: o.title },
     { name: "twitter:description", content: o.description },
   ];
+  if (o.path) meta.push({ property: "og:url", content: o.path });
   if (o.image && o.image.startsWith("https://")) {
     meta.push({ property: "og:image", content: o.image }, { name: "twitter:image", content: o.image });
   }
@@ -20,5 +21,5 @@ export function pageMeta(o: { title: string; description: string; image?: string
 }
 
 export function jsonLd(obj: unknown) {
-  return { type: "application/ld+json", children: JSON.stringify(obj) };
+  return { type: "application/ld+json", children: JSON.stringify(obj).replace(/</g, "\\u003c").replace(/>/g, "\\u003e").replace(/&/g, "\\u0026").replace(/\u2028/g, "\\u2028").replace(/\u2029/g, "\\u2029") };
 }

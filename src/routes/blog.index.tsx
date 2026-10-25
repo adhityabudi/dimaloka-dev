@@ -1,3 +1,4 @@
+import { publicPageHead } from "@/lib/structured-data";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { listArticles } from "@/lib/public.functions";
 import { pageMeta } from "@/lib/site";
@@ -5,12 +6,8 @@ import { tanggal } from "@/lib/format";
 
 export const Route = createFileRoute("/blog/")({
   loader: () => listArticles(),
-  head: ({ matches }) => {
-    const origin = (matches[0]?.loaderData as any)?.origin ?? "";
-    return {
-      meta: pageMeta({ title: "Blog Dimaloka — Tips Bisnis & Digital Marketing", description: "Kumpulan artikel seputar pembuatan website, SEO, desain, dan digital marketing untuk membantu bisnis Anda tumbuh di era digital bersama Dimaloka." }),
-      links: origin ? [{ rel: "canonical", href: `${origin}/blog` }] : [],
-    };
+  head: ({ loaderData, matches }) => {
+    return publicPageHead("blog", loaderData, matches[0]?.loaderData as any);
   },
   component: BlogList,
 });

@@ -31,3 +31,8 @@
 - [x] Add structured Homepage copy, image, client-logo, and section settings.
 - [x] Add Homepage editor to Halaman Layanan and connect saved content to the public page.
 - [x] Verify saving and reading back copy/images/logos in admin and on mobile.
+
+# Automatic SEO schema
+- [x] Generate page-specific structured data from current public/admin content.
+- [x] Align metadata, canonical URLs, crawler access, and private-page indexing.
+- [x] Test schema accuracy and verify admin changes in rendered public structured data.

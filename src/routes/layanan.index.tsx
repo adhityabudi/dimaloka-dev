@@ -4,7 +4,7 @@ import { Search } from "lucide-react";
 import { useEffect, useState } from "react";
 import { getServiceDirectory } from "@/lib/public.functions";
 import { filterServices } from "@/lib/service-search";
-import { pageMeta } from "@/lib/site";
+import { publicPageHead } from "@/lib/structured-data";
 import { ProductCard } from "@/components/site/ProductCard";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ const directory = queryOptions({ queryKey: ["public-service-directory"], queryFn
 export const Route = createFileRoute("/layanan/")({
   validateSearch: (search: Record<string, unknown>) => ({ q: typeof search.q === "string" ? search.q.slice(0, 200) : "" }),
   loader: ({ context }) => context.queryClient.ensureQueryData(directory),
-  head: () => ({ meta: pageMeta({ title: "Cari Layanan Digital | Dimaloka", description: "Temukan layanan website, desain grafis, digital marketing, SEO, aplikasi mobile, dan video sesuai kebutuhan bisnis Anda di Dimaloka." }) }),
+  head: ({ loaderData, matches }) => publicPageHead("directory", loaderData, matches[0]?.loaderData as any),
   component: ServiceDirectory,
 });
 function ServiceDirectory() {

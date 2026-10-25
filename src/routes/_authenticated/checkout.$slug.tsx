@@ -11,6 +11,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
+import { pageMeta } from "@/lib/site";
 
 export const Route = createFileRoute("/_authenticated/checkout/$slug")({
   validateSearch: (s: Record<string, unknown>): { paket?: string } => ({ paket: typeof s.paket === "string" ? s.paket : undefined }),
@@ -19,7 +20,7 @@ export const Route = createFileRoute("/_authenticated/checkout/$slug")({
     if (!d) throw notFound();
     return d.product;
   },
-  head: () => ({ meta: [{ title: "Checkout | Dimaloka" }, { name: "robots", content: "noindex" }] }),
+  head: () => ({ meta: [...pageMeta({ title: "Checkout | Dimaloka", description: "Lengkapi pesanan layanan digital Anda di Dimaloka." }), { name: "robots", content: "noindex, nofollow" }] }),
   component: Checkout,
 });
 

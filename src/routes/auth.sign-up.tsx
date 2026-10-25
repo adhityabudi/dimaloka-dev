@@ -4,6 +4,7 @@ import { AuthForm } from "@/components/site/AuthForm";
 export const Route = createFileRoute("/auth/sign-up")({
   head: () => ({
     meta: [
+      { name: "robots", content: "noindex, follow" },
       { title: "Daftar Akun | Dimaloka" },
       { name: "description", content: "Daftar akun Dimaloka gratis untuk melacak order dan invoice layanan digital Anda." },
       { property: "og:title", content: "Daftar Akun | Dimaloka" },

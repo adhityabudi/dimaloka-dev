@@ -89,8 +89,6 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     const meta: any[] = [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: s.global_seo_title ?? "Dimaloka — Marketplace Jasa Digital" },
-      { name: "description", content: s.global_seo_description ?? "Marketplace jasa digital terpercaya." },
       { name: "author", content: "Dimaloka" },
       { property: "og:site_name", content: "Dimaloka" },
       { property: "og:type", content: "website" },

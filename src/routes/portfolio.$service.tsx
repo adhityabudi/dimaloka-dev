@@ -1,10 +1,11 @@
+import { publicPageHead } from "@/lib/structured-data";
 import { createFileRoute, Link, notFound, useLoaderData } from "@tanstack/react-router";
 import { useState } from "react";
 import { ArrowUpRight, ChevronRight, Search, X } from "lucide-react";
 import { getServicePortfolio } from "@/lib/public.functions";
 import { filterPortfolio } from "@/lib/portfolio";
 import { isServiceSlug, SERVICE_NAMES, servicePortfolio } from "@/lib/services";
-import { pageMeta, jsonLd } from "@/lib/site";
+import { pageMeta } from "@/lib/site";
 import { waLink } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -16,10 +17,8 @@ export const Route = createFileRoute("/portfolio/$service")({
     return { slug: params.service, value: await getServicePortfolio({ data: { slug: params.service } }) };
   },
   head: ({ loaderData, matches }) => {
-    if (!loaderData) return { meta: [{ title: "Portfolio tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
-    const p = servicePortfolio(loaderData.slug, loaderData.value);
-    const origin = (matches[0]?.loaderData as { origin?: string })?.origin;
-    return { meta: [...pageMeta({ title: p.seo_title, description: p.seo_description, image: p.cover_image }), { name: "keywords", content: p.keywords.join(", ") }], links: origin ? [{ rel: "canonical", href: `${origin}/portfolio/${loaderData.slug}` }] : [], scripts: [jsonLd({ "@context": "https://schema.org", "@type": "CollectionPage", name: p.seo_title, description: p.seo_description })] };
+    if (!loaderData) return { meta: [...pageMeta({ title: "Halaman tidak tersedia | Dimaloka", description: "Halaman yang Anda cari tidak tersedia." }), { name: "robots", content: "noindex" }] };
+    return publicPageHead("servicePortfolio", loaderData, matches[0]?.loaderData as any);
   },
   component: Portfolio,
 });
