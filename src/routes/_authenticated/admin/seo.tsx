@@ -41,7 +41,7 @@ function Page() {
       };
       return [
         ...(p.data ?? []).map((x) => ({ type: "Produk", id: x.id, title: x.title, url: `/p/${x.slug}`, edit: "produk", ...base(x) })),
-        ...(c.data ?? []).map((x) => ({ type: "Layanan", id: x.id, title: x.name, url: `/kategori/${x.slug}`, edit: "layanan", ...base(x) })),
+        ...(c.data ?? []).map((x) => ({ type: "Layanan", id: x.id, title: x.name, url: `/layanan/${x.slug}`, edit: "layanan", ...base(x) })),
         ...(a.data ?? []).map((x) => ({ type: "Artikel", id: x.id, title: x.title, url: `/blog/${x.slug}`, edit: "artikel", ...base(x), score: scoreArticle(x as any).score })),
       ];
     },

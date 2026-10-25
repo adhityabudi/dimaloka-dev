@@ -87,7 +87,7 @@ function Page() {
               <Field label="Ikon" hint="Nama ikon lucide (mis. Globe, Palette) atau emoji"><Input value={edit.icon ?? ""} onChange={(e) => set({ icon: e.target.value })} /></Field>
               <Field label="Deskripsi"><Textarea value={edit.description ?? ""} onChange={(e) => set({ description: e.target.value })} /></Field>
               <label className="flex items-center gap-2 text-sm font-semibold"><Switch checked={edit.is_active} onCheckedChange={(v) => set({ is_active: v })} /> Aktif (tampil publik)</label>
-              <SeoFields v={edit} set={set} slugPath={`/kategori/${edit.slug}`} />
+              <SeoFields v={edit} set={set} slugPath={`/layanan/${edit.slug}`} />
               <Button onClick={save} className="w-full">Simpan</Button>
             </div>
           )}

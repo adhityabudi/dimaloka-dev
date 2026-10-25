@@ -76,7 +76,7 @@ function Index() {
             </div>
           </div>
           <div className="relative">
-            <img src={hero} alt="Ilustrasi layanan digital Dimaloka" width={1024} height={1024} className="mx-auto w-full max-w-lg drop-shadow-2xl" />
+            <img src={hero} alt="Ilustrasi layanan digital Dimaloka" width={1024} height={1024} className="hero-float mx-auto w-full max-w-lg drop-shadow-2xl" />
           </div>
         </div>
       </section>
@@ -105,7 +105,7 @@ function Index() {
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {data.categories.map((c, i) => (
-            <Link key={c.id} to="/kategori/$slug" params={{ slug: c.slug }} className="group relative flex gap-4 rounded-2xl border bg-card p-5 shadow-card transition hover:-translate-y-1 hover:border-primary/50">
+            <Link key={c.id} to="/layanan/$slug" params={{ slug: c.slug }} className="group relative flex gap-4 rounded-2xl border bg-card p-5 shadow-card transition hover:-translate-y-1 hover:border-primary/50">
               <div className={`flex h-14 w-14 shrink-0 items-center justify-center rounded-xl ${i % 3 === 0 ? "bg-accent text-primary-strong" : i % 3 === 1 ? "bg-secondary text-navy-2" : "bg-muted text-sky"}`}>
                 <CategoryIcon icon={c.icon} className="h-7 w-7" />
               </div>

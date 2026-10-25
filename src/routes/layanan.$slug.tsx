@@ -10,7 +10,7 @@ import { WebsiteServicePage } from "@/components/site/WebsiteServicePage";
 import { ServiceLandingPage } from "@/components/site/ServiceLandingPage";
 import { LANDING_SLUGS, serviceContent, servicePortfolio } from "@/lib/services";
 
-export const Route = createFileRoute("/kategori/$slug")({
+export const Route = createFileRoute("/layanan/$slug")({
   loader: async ({ params }) => {
     const d = await getCategory({ data: { slug: params.slug } });
     if (!d) throw notFound();
@@ -21,7 +21,7 @@ export const Route = createFileRoute("/kategori/$slug")({
     if (!loaderData) return { meta: [{ title: "Layanan tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
     const c = loaderData.category;
     const origin = (matches[0]?.loaderData as any)?.origin ?? "";
-    const url = `${origin}/kategori/${c.slug}`;
+    const url = `${origin}/layanan/${c.slug}`;
     return {
       meta: [...pageMeta({ title: c.seo_title || `${c.name} | Dimaloka`, description: c.seo_description || c.description || "" }), { name: "keywords", content: c.keywords.join(", ") }],
       links: origin ? [{ rel: "canonical", href: url }] : [],
