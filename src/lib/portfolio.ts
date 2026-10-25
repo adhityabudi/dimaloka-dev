@@ -1,6 +1,7 @@
 import aruna from "@/assets/portfolio-aruna.jpg";
 import lumiere from "@/assets/portfolio-lumiere.jpg";
 import nusa from "@/assets/portfolio-nusa.jpg";
+import { waLink } from "@/lib/format";
 
 export type PortfolioProject = {
   id: string; title: string; category: string; description: string;
@@ -60,6 +61,11 @@ export function normalizePortfolio(defaults: PortfolioPage, value: unknown): Por
 export function portfolioPage(value: unknown): PortfolioPage { return normalizePortfolio(defaultPortfolio, value); }
 export function liveUrl(p: PortfolioProject) {
   return p.live_enabled !== false && validProjectUrl(p.url) ? p.url : null;
+}
+export function liveHref(p: PortfolioProject, whatsapp?: string) {
+  const url = liveUrl(p);
+  if (url) return url;
+  return p.live_enabled !== false && whatsapp ? waLink(whatsapp, `Halo Dimaloka, saya ingin melihat demo live ${p.title}.`) : null;
 }
 export function filterPortfolio(projects: PortfolioProject[], category: string, search: string) {
   const query = search.trim().toLocaleLowerCase("id");
