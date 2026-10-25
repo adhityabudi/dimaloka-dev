@@ -38,6 +38,6 @@
 - [x] Test schema accuracy and verify admin changes in rendered public structured data.
 
 # AI SEO assistant
-- [ ] Configure secure DollarDesa access and admin-only model settings.
-- [ ] Add content/keyword inputs and reviewable SEO recommendations.
-- [ ] Verify permissions, recommendation parsing, and the admin generation flow.
+- [x] Configure secure DollarDesa access and admin-only model settings.
+- [x] Add content/keyword inputs and reviewable SEO recommendations.
+- [x] Verify permissions, recommendation parsing, and the admin generation flow.
