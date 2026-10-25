@@ -41,3 +41,5 @@
 - [x] Configure secure DollarDesa access and admin-only model settings.
 - [x] Add content/keyword inputs and reviewable SEO recommendations.
 - [x] Verify permissions, recommendation parsing, and the admin generation flow.
+- [x] Add content selection, opportunity discovery, editable recommendations, and explicit SEO application.
+- [x] Add keyword-driven AI recommendations to article creation/editing and verify the saved result.

@@ -12,6 +12,7 @@ import { Progress } from "@/components/ui/progress";
 import { Field, ImageInput, PageHeader, RichEditor, SeoFields } from "./fields";
 import { slugify } from "@/lib/format";
 import { canPublish, scoreArticle } from "@/lib/seo";
+import { ArticleAiSeo } from "./ArticleAiSeo";
 
 export function ArticleForm({ initial }: { initial?: any }) {
   const navigate = useNavigate();
@@ -49,6 +50,7 @@ export function ArticleForm({ initial }: { initial?: any }) {
             <Field label="OG image (opsional)"><ImageInput value={v.og_image} onChange={(c) => set({ og_image: c })} /></Field>
           </div>
           <SeoFields v={v} set={set} slugPath={`/blog/${v.slug}`} keywordMode="both" />
+          <ArticleAiSeo value={v} onChange={set} />
         </div>
         <div className="space-y-5">
           <div className="space-y-4 rounded-2xl border bg-card p-5 shadow-card">

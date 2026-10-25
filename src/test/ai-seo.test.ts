@@ -1,8 +1,19 @@
 import { describe, expect, it } from "vitest";
 import { aiSeoInputSchema, parseAiSeoResult } from "../lib/ai-seo";
 import { assertSeoAdmin, readSeoStream } from "../lib/ai-seo.server";
+import { seoApplication, contentToHtml } from "../lib/ai-seo-application";
 
 describe("AI SEO recommendations", () => {
+  const draft = { seo_title: "Jasa Website Dimaloka", seo_description: "a".repeat(150), content: "## Layanan website\n\nKonten revisi" };
+  it("applies edited metadata without replacing content by default", () => {
+    expect(seoApplication(draft, "article", false)).toEqual({ seo_title: draft.seo_title, seo_description: draft.seo_description });
+  });
+  it("only replaces article content when explicitly selected and preserves status and keyword", () => {
+    expect(seoApplication(draft, "article", true)).toEqual({ seo_title: draft.seo_title, seo_description: draft.seo_description, content: "<h2>Layanan website</h2><p>Konten revisi</p>" });
+  });
+  it("escapes untrusted generated HTML instead of executing it", () => {
+    expect(contentToHtml('<script>alert(1)</script>')).toBe('<p>&lt;script&gt;alert(1)&lt;/script&gt;</p>');
+  });
   const recommendation = { titles: ["Jasa Website Bisnis | Dimaloka"], descriptions: ["a".repeat(150)], improvements: [{ priority: "tinggi", issue: "Subjudul kurang", suggestion: "Tambahkan subjudul sesuai layanan." }], revised_content: "Konten revisi sesuai fakta awal." };
   it("parses gateway JSON into title, description and content improvements", () => {
     expect(parseAiSeoResult(JSON.stringify(recommendation))).toEqual(recommendation);
