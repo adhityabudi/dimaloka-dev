@@ -25,4 +25,11 @@ describe("Portfolio visibility and filtering", () => {
     expect(validProjectUrl("javascript:alert(1)")).toBe(false);
     expect(validProjectUrl("https://example.com")).toBe(true);
   });
+  it("falls back to a WhatsApp demo link when the project has no live URL", () => {
+    const demo = defaultPortfolio.projects[0];
+    expect(liveHref(demo, "6281234567890")).toBe("https://wa.me/6281234567890?text=" + encodeURIComponent(`Halo Dimaloka, saya ingin melihat demo live ${demo.title}.`));
+    expect(liveHref({ ...demo, live_enabled: false }, "6281234567890")).toBeNull();
+    expect(liveHref({ ...demo, url: "https://aruna.example" }, "6281234567890")).toBe("https://aruna.example");
+    expect(liveHref(demo)).toBeNull();
+  });
 });
