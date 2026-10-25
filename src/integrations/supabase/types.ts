@@ -131,13 +131,17 @@ export type Database = {
           buyer_id: string | null
           buyer_name: string | null
           buyer_wa: string | null
+          contract_total: number | null
           created_at: string
+          dp_amount: number
           due_date: string | null
           id: string
           invoice_number: string | null
           items: Json
           order_id: string | null
           paid_at: string | null
+          parent_invoice_id: string | null
+          payment_stage: string
           public_token: string
           status: Database["public"]["Enums"]["invoice_status"]
         }
@@ -147,13 +151,17 @@ export type Database = {
           buyer_id?: string | null
           buyer_name?: string | null
           buyer_wa?: string | null
+          contract_total?: number | null
           created_at?: string
+          dp_amount?: number
           due_date?: string | null
           id?: string
           invoice_number?: string | null
           items?: Json
           order_id?: string | null
           paid_at?: string | null
+          parent_invoice_id?: string | null
+          payment_stage?: string
           public_token?: string
           status?: Database["public"]["Enums"]["invoice_status"]
         }
@@ -163,13 +171,17 @@ export type Database = {
           buyer_id?: string | null
           buyer_name?: string | null
           buyer_wa?: string | null
+          contract_total?: number | null
           created_at?: string
+          dp_amount?: number
           due_date?: string | null
           id?: string
           invoice_number?: string | null
           items?: Json
           order_id?: string | null
           paid_at?: string | null
+          parent_invoice_id?: string | null
+          payment_stage?: string
           public_token?: string
           status?: Database["public"]["Enums"]["invoice_status"]
         }
@@ -186,6 +198,13 @@ export type Database = {
             columns: ["order_id"]
             isOneToOne: false
             referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "invoices_parent_invoice_id_fkey"
+            columns: ["parent_invoice_id"]
+            isOneToOne: false
+            referencedRelation: "invoices"
             referencedColumns: ["id"]
           },
         ]
@@ -493,6 +512,25 @@ export type Database = {
           invoice_number: string
           items: Json
           paid_at: string
+          status: Database["public"]["Enums"]["invoice_status"]
+        }[]
+      }
+      get_invoice_by_token_v2: {
+        Args: { _token: string }
+        Returns: {
+          amount: number
+          buyer_email: string
+          buyer_name: string
+          buyer_wa: string
+          contract_total: number
+          created_at: string
+          dp_amount: number
+          due_date: string
+          invoice_number: string
+          items: Json
+          paid_at: string
+          parent_invoice_number: string
+          payment_stage: string
           status: Database["public"]["Enums"]["invoice_status"]
         }[]
       }

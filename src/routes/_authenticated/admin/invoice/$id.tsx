@@ -13,7 +13,12 @@ function Page() {
   const { id } = Route.useParams();
   const { data: inv, isLoading } = useQuery({
     queryKey: ["adm-invoice", id],
-    queryFn: async () => (await supabase.from("invoices").select("*").eq("id", id).maybeSingle()).data,
+    queryFn: async () => {
+      const { data: invoice } = await supabase.from("invoices").select("*").eq("id", id).maybeSingle();
+      if (!invoice) return null;
+      const parent = invoice.parent_invoice_id ? (await supabase.from("invoices").select("invoice_number").eq("id", invoice.parent_invoice_id).maybeSingle()).data : null;
+      return { ...invoice, parent_invoice_number: parent?.invoice_number };
+    },
   });
   const { data: settings } = useSettings();
   const copy = async () => {

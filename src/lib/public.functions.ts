@@ -109,7 +109,7 @@ export const getInvoice = createServerFn({ method: "GET" })
   .handler(async ({ data }) => {
     if (!/^[0-9a-f-]{36}$/i.test(data.token)) return null;
     const sb = pub();
-    const [{ data: rows }, s] = await Promise.all([sb.rpc("get_invoice_by_token", { _token: data.token }), settings(sb)]);
+    const [{ data: rows }, s] = await Promise.all([sb.rpc("get_invoice_by_token_v2", { _token: data.token }), settings(sb)]);
     const inv = rows?.[0];
     if (!inv) return null;
     return { invoice: inv, settings: s };
