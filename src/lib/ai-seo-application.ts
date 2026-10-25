@@ -6,6 +6,10 @@ export const seoDraftSchema = z.object({
   content: z.string().trim().min(1).max(20000),
 });
 export type SeoDraft = z.infer<typeof seoDraftSchema>;
+/** Only HTML revisions replace the editorial intro; legacy plain summaries keep their layout. */
+export function serviceRevision(description?: string | null) {
+  return description && /<(?:p|h2|h3)[\s>]/i.test(description) ? description : undefined;
+}
 export function contentToHtml(text: string) {
   const escape = (s: string) => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
   return text.split(/\n\s*\n/).filter((s) => s.trim()).map((block) => {

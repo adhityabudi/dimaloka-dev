@@ -12,6 +12,7 @@
 ## Dimaloka architecture
 - Admin settings must finish loading successfully before editing/saving; admin article mutations invalidate list/detail caches so navigation never shows stale saved data.
 - AI SEO uses admin-checked server functions and a fixed DollarDesa endpoint with an environment-only credential; only nonsecret model/enabled settings are stored. A shared editable recommendation editor applies metadata only on explicit action, with content replacement opt-in; article forms still require Save, and status/slug/keyword remain unchanged.
+- Opted-in service HTML revisions from the category description replace the public editorial intro and feed its Service schema; metadata-only changes preserve visible copy. Saved SEO is read back and linked to its exact published page.
 - Public leaf routes derive metadata and JSON-LD through `src/lib/structured-data.ts` from current loader/admin content; services use Service/Offer, never invented ratings, and private transactional pages remain noindex without public entity schema.
 - Homepage presentation is normalized in src/lib/homepage.ts from the homepage_page site_settings document; its admin editor lives inside Halaman Layanan, while products, services, articles, and testimonials retain their existing management sources.
 - Public service URLs use /layanan with permanent redirects from /kategori; service search reads published products through a public server function and uses a shared browser-safe matcher to keep results consistent.

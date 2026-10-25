@@ -9,7 +9,7 @@ import type { ServiceContent } from "@/lib/services";
 
 type Service = { id: string; slug: string; title: string; short_description: string | null; price: number };
 
-export function ServiceLandingPage({ slug, name, content: c, portfolio, products, phone }: { slug: string; name: string; content: ServiceContent; portfolio: PortfolioPage; products: Service[]; phone?: string }) {
+export function ServiceLandingPage({ slug, name, content: c, portfolio, products, phone, revision }: { slug: string; name: string; content: ServiceContent; portfolio: PortfolioPage; products: Service[]; phone?: string; revision?: string }) {
   const contact = waLink(phone, c.wa_message);
   const wrap = "mx-auto max-w-7xl px-6 sm:px-10 lg:px-16";
   return <>
@@ -29,7 +29,7 @@ export function ServiceLandingPage({ slug, name, content: c, portfolio, products
       </div>
     </section>
 
-    <section className="py-14 sm:py-20"><div className="mx-auto max-w-4xl px-6 text-center"><p className="text-xs font-semibold uppercase text-primary-strong">{c.intro_eyebrow}</p><h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">{c.intro_title}</h2><p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-muted-foreground">{c.intro_text}</p></div></section>
+    <section className="py-14 sm:py-20"><div className="mx-auto max-w-4xl px-6 text-center">{revision ? <div className="prose-content text-left" dangerouslySetInnerHTML={{ __html: revision }} /> : <><p className="text-xs font-semibold uppercase text-primary-strong">{c.intro_eyebrow}</p><h2 className="mt-4 text-3xl font-bold leading-tight sm:text-4xl">{c.intro_title}</h2><p className="mx-auto mt-5 max-w-3xl text-base leading-8 text-muted-foreground">{c.intro_text}</p></>}</div></section>
 
     {c.features.map((f, i) => <section key={i} className={i % 2 === 1 ? "bg-muted py-14 sm:py-20" : "pb-14 sm:pb-20" + (i > 0 ? " pt-14 sm:pt-20" : "")}>
       <div className={`${wrap} grid items-center gap-10 lg:grid-cols-2 lg:gap-16`}>

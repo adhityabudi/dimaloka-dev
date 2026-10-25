@@ -1,4 +1,4 @@
-import { useNavigate } from "@tanstack/react-router";
+import { useNavigate, useRouter } from "@tanstack/react-router";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { useState } from "react";
@@ -17,6 +17,7 @@ import { ArticleAiSeo } from "./ArticleAiSeo";
 export function ArticleForm({ initial }: { initial?: any }) {
   const navigate = useNavigate();
   const qc = useQueryClient();
+  const router = useRouter();
   const [v, setV] = useState<any>(initial ?? { title: "", slug: "", excerpt: "", content: "", cover_image: "", og_image: "", author: "Tim Dimaloka", status: "draft", seo_title: "", seo_description: "", focus_keyword: "", keywords: [], category_id: null, published_at: null });
   const set = (patch: any) => setV((x: any) => ({ ...x, ...patch }));
   const { data: cats = [] } = useQuery({ queryKey: ["adm-cat-opts"], queryFn: async () => (await supabase.from("categories").select("id,name").order("sort_order")).data ?? [] });
@@ -35,6 +36,9 @@ export function ArticleForm({ initial }: { initial?: any }) {
     if (res.error) return toast.error(res.error.message.includes("duplicate") ? "Slug sudah dipakai" : res.error.message);
     await qc.invalidateQueries({ queryKey: ["adm-articles"] });
     if (id) await qc.invalidateQueries({ queryKey: ["adm-article", id] });
+    await qc.invalidateQueries({ queryKey: ["ai-seo-sources"] });
+    await qc.invalidateQueries({ queryKey: ["adm-seo-overview"] });
+    await router.invalidate();
     toast.success("Artikel disimpan");
     navigate({ to: "/admin/artikel" });
   };

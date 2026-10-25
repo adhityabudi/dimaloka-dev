@@ -48,3 +48,8 @@
 - [x] Prevent saving settings before loading finishes and expose fetch failures.
 - [x] Refresh article data after saving and show article loading/failure states.
 - [x] Verify admin navigation, article edits, and settings persistence.
+
+# SEO application recovery
+- [ ] Connect opted-in service revisions to public content and schema.
+- [ ] Refresh saved article/public data and show a verifiable SEO application result.
+- [ ] Test application and confirm saved metadata/content through the public page.

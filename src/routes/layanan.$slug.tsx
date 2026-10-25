@@ -10,6 +10,7 @@ import { pageMeta } from "@/lib/site";
 import { WebsiteServicePage } from "@/components/site/WebsiteServicePage";
 import { ServiceLandingPage } from "@/components/site/ServiceLandingPage";
 import { LANDING_SLUGS, serviceContent, servicePortfolio } from "@/lib/services";
+import { serviceRevision } from "@/lib/ai-seo-application";
 
 export const Route = createFileRoute("/layanan/$slug")({
   loader: async ({ params }) => {
@@ -35,9 +36,10 @@ const features = [
 function CategoryPage() {
   const { category: c, products, portfolio, landing } = Route.useLoaderData();
   const { layout } = useLoaderData({ from: "__root__" });
-  if (c.slug === "website") return <WebsiteServicePage products={products} phone={layout.settings.contact_whatsapp} portfolio={portfolioPage(portfolio)} />;
+  const revision = serviceRevision(c.description);
+  if (c.slug === "website") return <WebsiteServicePage products={products} phone={layout.settings.contact_whatsapp} portfolio={portfolioPage(portfolio)} revision={revision} />;
   const slug = LANDING_SLUGS.find(s => s === c.slug);
-  if (slug && landing) return <ServiceLandingPage slug={slug} name={c.name} content={serviceContent(slug, landing.content)} portfolio={servicePortfolio(slug, portfolio)} products={products} phone={layout.settings.contact_whatsapp} />;
+  if (slug && landing) return <ServiceLandingPage slug={slug} name={c.name} content={serviceContent(slug, landing.content)} portfolio={servicePortfolio(slug, portfolio)} products={products} phone={layout.settings.contact_whatsapp} revision={revision} />;
   return (
     <>
       <section className="bg-gradient-navy text-navy-foreground">
