@@ -46,7 +46,7 @@ const proj = (id: string, title: string, category: string, description: string, 
   ({ id, title, category, description, image, image_alt, gallery: [], url: "", is_demo: true, published: true, featured: true });
 
 function pf(p: Partial<PortfolioPage> & Pick<PortfolioPage, "eyebrow" | "description" | "seo_title" | "seo_description" | "keywords" | "section_title" | "section_description" | "cta_title" | "cta_description" | "cta_button" | "categories" | "projects" | "card_title" | "card_description" | "card_image">): PortfolioPage {
-  return { ...defaultPortfolio, title: "Portfolio", cover_image: "", section_button: "Lihat semua portfolio", ...p };
+  return { ...defaultPortfolio, title: `Portfolio ${p.card_title}`, cover_image: "", section_button: "Lihat semua portfolio", ...p };
 }
 
 export const portfolioDefaults: Record<ServiceSlug, PortfolioPage> = {
