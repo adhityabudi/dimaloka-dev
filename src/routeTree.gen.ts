@@ -11,11 +11,13 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteRouteImport } from './routes/_authenticated/route'
+import { Route as AssisstantAiRouteImport } from './routes/assisstant-ai'
 import { Route as PortfolioRouteImport } from './routes/portfolio'
 import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as AuthenticatedAdminRouteRouteImport } from './routes/_authenticated/admin/route'
 import { Route as AuthenticatedAkunRouteImport } from './routes/_authenticated/akun'
+import { Route as ApiAnnisaRouteImport } from './routes/api/annisa'
 import { Route as AuthSignInRouteImport } from './routes/auth.sign-in'
 import { Route as AuthSignUpRouteImport } from './routes/auth.sign-up'
 import { Route as BlogIndexRouteImport } from './routes/blog.index'
@@ -65,6 +67,11 @@ const AuthenticatedRouteRoute = AuthenticatedRouteRouteImport.update({
   id: '/_authenticated',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AssisstantAiRoute = AssisstantAiRouteImport.update({
+  id: '/assisstant-ai',
+  path: '/assisstant-ai',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const PortfolioRoute = PortfolioRouteImport.update({
   id: '/portfolio',
   path: '/portfolio',
@@ -89,6 +96,11 @@ const AuthenticatedAkunRoute = AuthenticatedAkunRouteImport.update({
   id: '/akun',
   path: '/akun',
   getParentRoute: () => AuthenticatedRouteRoute,
+} as any)
+const ApiAnnisaRoute = ApiAnnisaRouteImport.update({
+  id: '/api/annisa',
+  path: '/api/annisa',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const AuthSignInRoute = AuthSignInRouteImport.update({
   id: '/auth/sign-in',
@@ -309,11 +321,13 @@ const AuthenticatedAdminProdukIdEditRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/assisstant-ai': typeof AssisstantAiRoute
   '/portfolio': typeof PortfolioRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/akun': typeof AuthenticatedAkunRoute
+  '/api/annisa': typeof ApiAnnisaRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -356,9 +370,11 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/assisstant-ai': typeof AssisstantAiRoute
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/akun': typeof AuthenticatedAkunRoute
+  '/api/annisa': typeof ApiAnnisaRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -402,11 +418,13 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteRouteWithChildren
+  '/assisstant-ai': typeof AssisstantAiRoute
   '/portfolio': typeof PortfolioRouteWithChildren
   '/robots.txt': typeof RobotsDottxtRoute
   '/sitemap.xml': typeof SitemapDotxmlRoute
   '/_authenticated/admin': typeof AuthenticatedAdminRouteRouteWithChildren
   '/_authenticated/akun': typeof AuthenticatedAkunRoute
+  '/api/annisa': typeof ApiAnnisaRoute
   '/auth/sign-in': typeof AuthSignInRoute
   '/auth/sign-up': typeof AuthSignUpRoute
   '/blog/$slug': typeof BlogSlugRoute
@@ -451,11 +469,13 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/assisstant-ai'
     | '/portfolio'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/admin'
     | '/akun'
+    | '/api/annisa'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/blog/$slug'
@@ -498,9 +518,11 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/assisstant-ai'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/akun'
+    | '/api/annisa'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/blog/$slug'
@@ -543,11 +565,13 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/assisstant-ai'
     | '/portfolio'
     | '/robots.txt'
     | '/sitemap.xml'
     | '/_authenticated/admin'
     | '/_authenticated/akun'
+    | '/api/annisa'
     | '/auth/sign-in'
     | '/auth/sign-up'
     | '/blog/$slug'
@@ -592,9 +616,11 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRouteRoute: typeof AuthenticatedRouteRouteWithChildren
+  AssisstantAiRoute: typeof AssisstantAiRoute
   PortfolioRoute: typeof PortfolioRouteWithChildren
   RobotsDottxtRoute: typeof RobotsDottxtRoute
   SitemapDotxmlRoute: typeof SitemapDotxmlRoute
+  ApiAnnisaRoute: typeof ApiAnnisaRoute
   AuthSignInRoute: typeof AuthSignInRoute
   AuthSignUpRoute: typeof AuthSignUpRoute
   BlogSlugRoute: typeof BlogSlugRoute
@@ -622,6 +648,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/assisstant-ai': {
+      id: '/assisstant-ai'
+      path: '/assisstant-ai'
+      fullPath: '/assisstant-ai'
+      preLoaderRoute: typeof AssisstantAiRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/portfolio': {
@@ -658,6 +691,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/akun'
       preLoaderRoute: typeof AuthenticatedAkunRouteImport
       parentRoute: typeof AuthenticatedRouteRoute
+    }
+    '/api/annisa': {
+      id: '/api/annisa'
+      path: '/api/annisa'
+      fullPath: '/api/annisa'
+      preLoaderRoute: typeof ApiAnnisaRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/auth/sign-in': {
       id: '/auth/sign-in'
@@ -1041,9 +1081,11 @@ const PortfolioRouteWithChildren = PortfolioRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRouteRoute: AuthenticatedRouteRouteWithChildren,
+  AssisstantAiRoute: AssisstantAiRoute,
   PortfolioRoute: PortfolioRouteWithChildren,
   RobotsDottxtRoute: RobotsDottxtRoute,
   SitemapDotxmlRoute: SitemapDotxmlRoute,
+  ApiAnnisaRoute: ApiAnnisaRoute,
   AuthSignInRoute: AuthSignInRoute,
   AuthSignUpRoute: AuthSignUpRoute,
   BlogSlugRoute: BlogSlugRoute,
