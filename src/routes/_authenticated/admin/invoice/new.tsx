@@ -7,6 +7,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Field, PageHeader } from "@/components/admin/fields";
 import { rupiah } from "@/lib/format";
+import { splitPayment } from "@/lib/invoice-payments";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 
 export const Route = createFileRoute("/_authenticated/admin/invoice/new")({
   validateSearch: (s: Record<string, unknown>): { order?: string } => ({ order: typeof s["order"] === "string" ? (s["order"] as string) : undefined }),
@@ -20,6 +22,9 @@ function Page() {
   const navigate = useNavigate();
   const [v, setV] = useState({ buyer_name: "", buyer_wa: "", buyer_email: "", due_date: new Date(Date.now() + 7 * 864e5).toISOString().slice(0, 10), order_id: null as string | null, buyer_id: null as string | null });
   const [items, setItems] = useState<Item[]>([{ name: "", qty: 1, price: 0 }]);
+  const [stage, setStage] = useState("full");
+  const [dp, setDp] = useState(0);
+  const [saving, setSaving] = useState(false);
   const total = items.reduce((s, i) => s + i.qty * i.price, 0);
 
   useEffect(() => {
@@ -33,12 +38,16 @@ function Page() {
 
   const save = async (status: "draft" | "sent") => {
     if (!v.buyer_name || items.some((i) => !i.name)) return toast.error("Lengkapi nama buyer dan item");
+    if (items.some((i) => !Number.isFinite(i.qty) || i.qty < 1 || !Number.isFinite(i.price) || i.price < 0)) return toast.error("Qty dan harga tidak valid");
+    if (stage === "dp") { try { splitPayment(total, dp); } catch (e) { return toast.error(e instanceof Error ? e.message : "DP tidak valid"); } }
+    setSaving(true);
     let buyer_id = v.buyer_id;
     if (!buyer_id && v.buyer_email) {
       const { data: prof } = await supabase.from("profiles").select("id").eq("email", v.buyer_email.trim()).maybeSingle();
       buyer_id = prof?.id ?? null;
     }
-    const { data, error } = await supabase.from("invoices").insert({ ...v, buyer_id, items, amount: total, status }).select("invoice_number,public_token").single();
+    const { data, error } = await supabase.from("invoices").insert({ ...v, buyer_id, items, amount: stage === "dp" ? dp : total, contract_total: total, dp_amount: stage === "dp" ? dp : 0, payment_stage: stage, status }).select("invoice_number,public_token").single();
+    setSaving(false);
     if (error) return toast.error(error.message);
     if (status === "sent") {
       await navigator.clipboard.writeText(`${window.location.origin}/invoice/${data.public_token}`).catch(() => {});
@@ -72,7 +81,12 @@ function Page() {
           <p className="mt-4 text-right text-xl font-extrabold text-primary-strong">Total: {rupiah(total)}</p>
         </div>
         <p className="text-xs text-muted-foreground">Nomor invoice dibuat otomatis (INV-YYYYMM-####).</p>
-        <div className="flex gap-2"><Button variant="outline" onClick={() => save("draft")}>Simpan draft</Button><Button onClick={() => save("sent")} className="flex-1">Buat & salin link</Button></div>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field label="Pembayaran"><Select value={stage} onValueChange={setStage}><SelectTrigger aria-label="Pembayaran"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="full">Full Payment</SelectItem><SelectItem value="dp">Termin 2 tahap — DP & Pelunasan</SelectItem></SelectContent></Select></Field>
+          {stage === "dp" && <Field label="Nominal DP (Rp)"><Input aria-label="Nominal DP" type="number" min={1} max={total - 1} value={dp} onChange={(e) => setDp(Number(e.target.value))} /></Field>}
+        </div>
+        {stage === "dp" && <div className="flex flex-wrap justify-between gap-2 border-y py-3 text-sm"><span>DP 1/2: <b>{rupiah(dp)}</b></span><span>Pelunasan 2/2: <b>{rupiah(Math.max(0, total - dp))}</b></span></div>}
+        <div className="flex gap-2"><Button disabled={saving} variant="outline" onClick={() => save("draft")}>Simpan draft</Button><Button disabled={saving} onClick={() => save("sent")} className="flex-1">Buat & salin link</Button></div>
       </div>
     </div>
   );

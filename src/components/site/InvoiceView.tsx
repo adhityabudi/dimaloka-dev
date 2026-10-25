@@ -3,6 +3,7 @@ import { toast } from "sonner";
 import logo from "@/assets/dimaloka-logo.png.asset.json";
 import { Button } from "@/components/ui/button";
 import { rupiah, tanggal, waLink } from "@/lib/format";
+import { paymentKind, paymentSummary } from "@/lib/invoice-payments";
 
 const statusLabel: Record<string, string> = { sent: "UNPAID", paid: "PAID", cancelled: "CANCELLED", draft: "DRAFT" };
 
@@ -17,6 +18,10 @@ export function InvoiceView({ invoice: inv, settings: s, preview = false }: { in
   const site = (s.site_name as string) || "Dimaloka";
   const badge = paid ? "bg-success/15 text-success" : inv.status === "cancelled" ? "bg-destructive/15 text-destructive" : "bg-primary/15 text-primary-strong";
   const bankList = s.payment_info ? banks(s.payment_info as string) : [];
+  const payment = paymentSummary(inv);
+  const staged = payment.stage !== "full";
+  const settlement = payment.stage === "settlement";
+  const percentage = (n: number) => Number(n.toFixed(1));
   return (
     <div className={preview ? "bg-invoice-paper py-5 print:bg-background print:py-0" : "min-h-screen bg-invoice-paper py-4 sm:py-6 print:bg-background print:py-0"}>
       <div className="mx-auto max-w-[672px] px-3 sm:px-4 print:max-w-none print:px-0">
@@ -28,7 +33,7 @@ export function InvoiceView({ invoice: inv, settings: s, preview = false }: { in
             <div className="text-right">
               <div className="flex items-center justify-end gap-2">
                 <h1 className="text-2xl font-bold text-invoice-heading">INVOICE</h1>
-                <span className={`rounded px-2.5 py-1.5 text-[9px] font-bold ${badge}`}>{statusLabel[inv.status]}</span>
+                <span className={`rounded px-2.5 py-1.5 text-[9px] font-bold ${staged && inv.status !== "cancelled" ? "bg-sky/15 text-navy-2" : badge}`}>{staged && inv.status !== "cancelled" && inv.status !== "draft" ? paymentKind(payment.stage).toUpperCase() : statusLabel[inv.status]}</span>
               </div>
               <p className="mt-2 text-sm font-bold break-all">{inv.invoice_number}</p>
               <div className="mt-2 flex flex-wrap justify-end gap-x-4 gap-y-1 text-[10px] text-muted-foreground">
@@ -53,7 +58,8 @@ export function InvoiceView({ invoice: inv, settings: s, preview = false }: { in
             </div>
           </section>
 
-          {items[0] && <div className="mb-4 rounded bg-muted px-3 py-3 text-sm font-bold break-words">{items[0].name}</div>}
+          {items[0] && <div className="mb-4 rounded bg-muted px-3 py-3 text-sm font-bold break-words">{settlement ? `Pelunasan kontrak #${inv.parent_invoice_number ?? ""} (Termin 1)` : items[0].name}</div>}
+          {settlement && <div className="mb-3 rounded bg-muted px-3 py-3 text-[11px]"><p className="font-bold text-navy-2">Rincian Invoice Utama</p><p className="mt-1 text-muted-foreground">Invoice: {inv.parent_invoice_number} — {items[0]?.name}</p></div>}
 
           <table className="w-full table-fixed border text-[10px] sm:text-[11px]">
             <thead className="bg-invoice-ink text-navy-foreground">
@@ -75,15 +81,20 @@ export function InvoiceView({ invoice: inv, settings: s, preview = false }: { in
               ))}
                <tr className="border-b border-invoice-ink">
                  <td colSpan={3} className="border-r px-2 py-2.5 text-right font-bold">Subtotal</td>
-                 <td className="px-2 py-2.5 text-right break-words">{rupiah(inv.amount)}</td>
+                 <td className="px-2 py-2.5 text-right break-words">{rupiah(payment.total)}</td>
               </tr>
                <tr className="border-b border-invoice-ink bg-muted">
-                 <td colSpan={3} className="border-r px-2 py-3 text-right text-sm font-bold">TOTAL</td>
-                 <td className="px-2 py-3 text-right text-xs font-bold break-words sm:text-sm">{rupiah(inv.amount)}</td>
+                 <td colSpan={3} className="border-r px-2 py-3 text-right text-sm font-bold">{staged ? "TOTAL INVOICE UTAMA" : "TOTAL"}</td>
+                 <td className="px-2 py-3 text-right text-xs font-bold break-words sm:text-sm">{rupiah(payment.total)}</td>
               </tr>
+              {staged && <>
+                <tr className="border-b bg-invoice-warning text-invoice-warning-foreground"><td colSpan={3} className="border-r px-2 py-3 text-right font-bold">{settlement ? "DP Dibayarkan" : "DP Termin 1/2"} ({percentage(payment.dpPercent)}%)</td><td className="px-2 py-3 text-right font-bold">{settlement || paid ? "− " : ""}{rupiah(payment.dp)}</td></tr>
+                {settlement && <tr className="border-b bg-invoice-warning text-primary-strong"><td colSpan={3} className="border-r px-2 py-3 text-right font-bold">Pembayaran Termin Ini (2/2){!paid ? " — Belum Dibayar" : ""}</td><td className="px-2 py-3 text-right font-bold">{paid ? "− " : ""}{rupiah(payment.current)}</td></tr>}
+                <tr className="border-b bg-secondary"><td colSpan={3} className="border-r px-2 py-3 text-right font-bold text-navy-2">{payment.remaining === 0 ? "Status Pembayaran" : "Sisa Pembayaran"}</td><td className={`px-2 py-3 text-right font-bold ${payment.remaining === 0 ? "text-success" : "text-invoice-ink"}`}>{payment.remaining === 0 ? "LUNAS" : rupiah(payment.remaining)}</td></tr>
+              </>}
             </tbody>
           </table>
-          {paid && <div className="mt-3.5 flex justify-end"><span className="rounded-full bg-success/15 px-3 py-2 text-[9px] font-bold text-success">FULL PAYMENT</span></div>}
+          {(paid || staged) && inv.status !== "cancelled" && <div className="mt-3.5 flex justify-end"><span className={`rounded-full px-3 py-2 text-[9px] font-bold ${staged ? "bg-sky/15 text-navy-2" : "bg-success/15 text-success"}`}>{staged ? `${paymentKind(payment.stage).toUpperCase()} (${percentage(payment.percent)}%)${!paid ? " — BELUM DIBAYAR" : ""}` : "FULL PAYMENT"}</span></div>}
 
           {bankList.length > 0 && (
             <section className="mt-5 border-t-2 border-dashed pt-5">
