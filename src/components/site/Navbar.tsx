@@ -27,7 +27,7 @@ export function Navbar() {
         <nav className="hidden items-center gap-1 text-sm font-semibold text-navy lg:flex">
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-muted">
-              Kategori <ChevronDown className="h-4 w-4" />
+              Layanan <ChevronDown className="h-4 w-4" />
             </DropdownMenuTrigger>
             <DropdownMenuContent className="w-64">
               {cats.map((c) => (
@@ -69,7 +69,7 @@ export function Navbar() {
       </div>
       {open && (
         <div className="border-t bg-background px-4 py-4 lg:hidden">
-          <p className="mb-2 text-xs font-bold uppercase text-muted-foreground">Kategori</p>
+          <p className="mb-2 text-xs font-bold uppercase text-muted-foreground">Layanan</p>
           <div className="grid grid-cols-2 gap-2">
             {cats.map((c) => (
               <Link key={c.id} to="/kategori/$slug" params={{ slug: c.slug }} onClick={() => setOpen(false)} className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm font-medium">
