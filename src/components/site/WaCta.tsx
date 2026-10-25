@@ -2,7 +2,7 @@ import { MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { waLink } from "@/lib/format";
 
-export function WaCta({ phone, title = "Bingung pilih layanan?", text = "Konsultasikan kebutuhan Anda gratis bersama tim Dimaloka via WhatsApp." }: { phone?: string; title?: string; text?: string }) {
+export function WaCta({ phone, title = "Bingung pilih layanan?", text = "Konsultasikan kebutuhan Anda gratis bersama tim Dimaloka via WhatsApp.", button = "Konsultasi via WhatsApp", message = "Halo Dimaloka, saya ingin konsultasi layanan." }: { phone?: string; title?: string; text?: string; button?: string; message?: string }) {
   return (
     <section className="mx-auto max-w-7xl px-4 py-12">
       <div className="relative overflow-hidden rounded-3xl bg-gradient-navy px-8 py-12 text-navy-foreground md:px-14">
@@ -14,8 +14,8 @@ export function WaCta({ phone, title = "Bingung pilih layanan?", text = "Konsult
             <p className="mt-2 max-w-xl text-navy-foreground/75">{text}</p>
           </div>
           <Button asChild size="lg" className="h-12 rounded-xl px-6 text-base font-bold shadow-cta">
-            <a href={waLink(phone, "Halo Dimaloka, saya ingin konsultasi layanan.")} target="_blank" rel="noreferrer">
-              <MessageCircle /> Konsultasi via WhatsApp
+            <a href={waLink(phone, message)} target="_blank" rel="noreferrer">
+              <MessageCircle /> {button}
             </a>
           </Button>
         </div>

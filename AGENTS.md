@@ -10,6 +10,7 @@
 <!-- LOVABLE:END -->
 
 ## Dimaloka architecture
+- Homepage presentation is normalized in src/lib/homepage.ts from the homepage_page site_settings document; its admin editor lives inside Halaman Layanan, while products, services, articles, and testimonials retain their existing management sources.
 - Public service URLs use /layanan with permanent redirects from /kategori; service search reads published products through a public server function and uses a shared browser-safe matcher to keep results consistent.
 - Format display dates in Asia/Jakarta explicitly so SSR and browser output agree.
 - Root network-error recovery reloads the document once per failed page and clears its retry marker after successful rendering, so failed loader/query caches cannot trap the preview in an error boundary.

@@ -1,6 +1,6 @@
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { ArrowRight, CheckCircle2, CreditCard, Eye, LayoutGrid, MessageCircle, Quote, ShieldCheck, Star, Zap } from "lucide-react";
-import hero from "@/assets/hero.png";
+import { HOMEPAGE_KEY, homepageContent } from "@/lib/homepage";
 import { getHome } from "@/lib/public.functions";
 import { Button } from "@/components/ui/button";
 import { CategoryIcon } from "@/components/site/CategoryIcon";
@@ -19,7 +19,7 @@ export const Route = createFileRoute("/")({
     const title = s.global_seo_title ?? "Dimaloka — Marketplace Jasa Digital Terpercaya";
     const description = s.global_seo_description ?? "Marketplace jasa digital terpercaya.";
     return {
-      meta: [...pageMeta({ title, description }), { name: "keywords", content: (s.global_keywords ?? []).join(", ") }],
+      meta: [...pageMeta({ title, description, image: homepageContent(s[HOMEPAGE_KEY]).hero_image }), { name: "keywords", content: (s.global_keywords ?? []).join(", ") }],
       links: origin ? [{ rel: "canonical", href: `${origin}/` }] : [],
       scripts: [
         jsonLd({ "@context": "https://schema.org", "@type": "Organization", name: "Dimaloka", url: origin, email: s.contact_email }),
@@ -41,7 +41,8 @@ function Index() {
   const data = Route.useLoaderData();
   const { layout } = useLoaderData({ from: "__root__" });
   const wa = (layout.settings.contact_whatsapp as string) ?? "6281234567890";
-  const brands = [...data.sellers.map((s) => s.name), "Kopi Senja", "Tokoku.id", "Batik Nusa", "Rumah Kreatif", "UMKM Maju", "Laris Store"];
+  const c = homepageContent(layout.settings[HOMEPAGE_KEY]);
+  const brands = c.clients;
 
   return (
     <>
@@ -53,54 +54,47 @@ function Index() {
         <div className="relative mx-auto grid max-w-7xl items-center gap-10 px-4 py-16 md:py-24 lg:grid-cols-2">
           <div>
             <span className="inline-flex items-center gap-2 rounded-full border border-navy-foreground/20 bg-navy-foreground/5 px-3 py-1 text-xs font-semibold">
-              <Zap className="h-3.5 w-3.5 text-primary" /> Marketplace jasa digital #1 untuk UMKM
+              <Zap className="h-3.5 w-3.5 text-primary" /> {c.eyebrow}
             </span>
-            <h1 className="mt-5 text-4xl font-extrabold leading-[1.1] tracking-tight md:text-6xl">
-              Semua jasa digital bisnis Anda, <span className="text-primary">di satu tempat.</span>
+            <h1 className="mt-5 text-4xl font-extrabold leading-[1.1] break-words md:text-6xl">
+              {c.title} <span className="text-primary">{c.title_accent}</span>
             </h1>
             <p className="mt-5 max-w-xl text-lg text-navy-foreground/75">
-              Website, desain, iklan, SEO, aplikasi, hingga video — dikerjakan brand terkurasi dengan harga transparan dan invoice resmi.
+              {c.description}
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Button asChild size="lg" className="h-12 rounded-xl px-6 text-base font-bold shadow-cta">
-                <a href={waLink(wa, "Halo Dimaloka, saya ingin konsultasi.")} target="_blank" rel="noreferrer"><MessageCircle /> Konsultasi Disini</a>
+                <a href={waLink(wa, c.wa_message)} target="_blank" rel="noreferrer"><MessageCircle /> {c.primary_button}</a>
               </Button>
               <Button asChild size="lg" variant="outline" className="h-12 rounded-xl border-navy-foreground/30 bg-transparent px-6 text-base font-bold text-navy-foreground hover:bg-navy-foreground/10 hover:text-navy-foreground">
-                <a href="#layanan">Lihat Layanan <ArrowRight /></a>
+                <a href="#layanan">{c.secondary_button} <ArrowRight /></a>
               </Button>
             </div>
             <div className="mt-8 flex flex-wrap gap-5 text-sm text-navy-foreground/75">
-              <span className="flex items-center gap-2"><ShieldCheck className="h-4 w-4 text-primary" /> Brand terverifikasi</span>
-              <span className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4 text-primary" /> Invoice resmi</span>
-              <span className="flex items-center gap-2"><Star className="h-4 w-4 text-primary" /> Rating 4.9/5</span>
+              {c.highlights.map((label, i) => { const Icon = [ShieldCheck, CheckCircle2, Star][i % 3]; return <span key={i} className="flex items-center gap-2"><Icon className="h-4 w-4 shrink-0 text-primary" />{label}</span>; })}
             </div>
           </div>
           <div className="relative">
-            <img src={hero} alt="Ilustrasi layanan digital Dimaloka" width={1024} height={1024} className="hero-float mx-auto w-full max-w-lg drop-shadow-2xl" />
+            <img src={c.hero_image} alt={c.hero_alt} width={1024} height={1024} className="hero-float mx-auto h-auto w-full max-w-lg object-contain drop-shadow-2xl" />
           </div>
         </div>
       </section>
 
-      {/* SOCIAL PROOF */}
-      <section className="border-b bg-background py-8">
-        <p className="text-center text-sm font-semibold text-muted-foreground">
-          Dipercaya <span className="font-extrabold text-navy">500+ Brand</span> di seluruh Indonesia
-        </p>
-        <div className="relative mt-5 overflow-hidden [mask-image:linear-gradient(90deg,transparent,black_10%,black_90%,transparent)]">
-          <div className="flex w-max animate-marquee gap-12">
-            {[...brands, ...brands].map((b, i) => (
-              <span key={i} className="whitespace-nowrap text-xl font-extrabold text-navy/30">{b}</span>
-            ))}
+      {c.visible.clients && brands.length > 0 && <section className="border-b bg-background py-8">
+        <p className="px-4 text-center text-sm font-semibold text-muted-foreground">{c.clients_title}</p>
+        <div className="relative mt-5 overflow-hidden">
+          <div className="flex w-max animate-marquee items-center gap-12">
+            {[...brands, ...brands].map((brand, i) => <div key={i} aria-hidden={i >= brands.length || undefined} className="flex h-16 w-40 shrink-0 items-center justify-center px-3">{brand.image ? <img src={brand.image} alt={i >= brands.length ? "" : brand.name} className="max-h-12 max-w-full object-contain" loading="lazy" /> : <span className="text-center text-lg font-bold text-navy/50">{brand.name}</span>}</div>)}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* CATEGORIES */}
-      <section id="layanan" className="mx-auto max-w-7xl px-4 py-16">
+      {c.visible.services && <section id="layanan" className="mx-auto max-w-7xl px-4 py-16">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-bold uppercase tracking-wider text-primary-strong">Layanan</p>
-            <h2 className="mt-1 text-3xl font-extrabold text-navy md:text-4xl">Temukan jasa yang Anda butuhkan</h2>
+            <p className="text-sm font-bold uppercase tracking-wider text-primary-strong">{c.services_eyebrow}</p>
+            <h2 className="mt-1 text-3xl font-extrabold text-navy md:text-4xl">{c.services_title}</h2>
           </div>
         </div>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -118,42 +112,42 @@ function Index() {
             </Link>
           ))}
         </div>
-      </section>
+      </section>}
 
       {/* PRODUCTS */}
-      <section className="bg-muted/60 py-16">
+      {c.visible.products && <section className="bg-muted/60 py-16">
         <div className="mx-auto max-w-7xl px-4">
-          <p className="text-sm font-bold uppercase tracking-wider text-primary-strong">Layanan Populer</p>
-          <h2 className="mt-1 text-3xl font-extrabold text-navy md:text-4xl">Paling banyak dipesan minggu ini</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-primary-strong">{c.products_eyebrow}</p>
+          <h2 className="mt-1 text-3xl font-extrabold text-navy md:text-4xl">{c.products_title}</h2>
           <div className="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {data.products.map((p: any) => <ProductCard key={p.id} p={p} />)}
           </div>
         </div>
-      </section>
+      </section>}
 
       {/* STEPS */}
-      <section className="mx-auto max-w-7xl px-4 py-16">
+      {c.visible.steps && <section className="mx-auto max-w-7xl px-4 py-16">
         <div className="text-center">
-          <p className="text-sm font-bold uppercase tracking-wider text-primary-strong">Cara Order</p>
-          <h2 className="mt-1 text-3xl font-extrabold text-navy md:text-4xl">Cara order dalam 4 langkah</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-primary-strong">{c.steps_eyebrow}</p>
+          <h2 className="mt-1 text-3xl font-extrabold text-navy md:text-4xl">{c.steps_title}</h2>
         </div>
         <div className="mt-10 grid gap-5 md:grid-cols-4">
-          {steps.map((s, i) => (
-            <div key={s.t} className="relative rounded-2xl border bg-card p-6 shadow-card">
+          {c.steps.map((s, i) => { const Icon = steps[i].icon; return (
+            <div key={i} className="relative rounded-2xl border bg-card p-6 shadow-card">
               <span className="absolute right-5 top-4 text-5xl font-extrabold text-navy/5">0{i + 1}</span>
-              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-cta"><s.icon className="h-6 w-6" /></div>
-              <h3 className="mt-4 font-bold text-navy">{s.t}</h3>
-              <p className="mt-1 text-sm text-muted-foreground">{s.d}</p>
+              <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-cta"><Icon className="h-6 w-6" /></div>
+              <h3 className="mt-4 font-bold text-navy">{s.title}</h3>
+              <p className="mt-1 text-sm text-muted-foreground">{s.text}</p>
             </div>
-          ))}
+          ); })}
         </div>
-      </section>
+      </section>}
 
       {/* TESTIMONIALS */}
-      <section className="bg-gradient-navy py-16 text-navy-foreground">
+      {c.visible.testimonials && <section className="bg-gradient-navy py-16 text-navy-foreground">
         <div className="mx-auto max-w-7xl px-4">
-          <p className="text-sm font-bold uppercase tracking-wider text-primary">Testimoni</p>
-          <h2 className="mt-1 text-3xl font-extrabold md:text-4xl">Apa kata mereka</h2>
+          <p className="text-sm font-bold uppercase tracking-wider text-primary">{c.testimonials_eyebrow}</p>
+          <h2 className="mt-1 text-3xl font-extrabold md:text-4xl">{c.testimonials_title}</h2>
           <Carousel opts={{ align: "start", loop: true }} className="mt-8">
             <CarouselContent>
               {data.testimonials.map((t) => (
@@ -181,14 +175,14 @@ function Index() {
             <CarouselNext className="-right-3 hidden text-navy md:flex" />
           </Carousel>
         </div>
-      </section>
+      </section>}
 
       {/* BLOG */}
-      {data.articles.length > 0 && (
+      {c.visible.blog && data.articles.length > 0 && (
         <section className="mx-auto max-w-7xl px-4 py-16">
-          <div className="flex items-end justify-between">
-            <h2 className="text-3xl font-extrabold text-navy">Artikel terbaru</h2>
-            <Link to="/blog" className="text-sm font-bold text-primary-strong hover:underline">Lihat semua →</Link>
+          <div className="flex flex-wrap items-end justify-between gap-4">
+            <h2 className="text-3xl font-extrabold text-navy">{c.blog_title}</h2>
+            <Link to="/blog" className="text-sm font-bold text-primary-strong hover:underline">{c.blog_button} →</Link>
           </div>
           <div className="mt-8 grid gap-5 md:grid-cols-3">
             {data.articles.map((a) => (
@@ -204,7 +198,7 @@ function Index() {
         </section>
       )}
 
-      <WaCta phone={wa} />
+      {c.visible.cta && <WaCta phone={wa} title={c.cta_title} text={c.cta_text} button={c.cta_button} message={c.cta_message} />}
     </>
   );
 }
