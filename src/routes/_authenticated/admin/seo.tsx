@@ -12,6 +12,7 @@ import { Field, PageHeader, TagInput } from "@/components/admin/fields";
 import { useSettings } from "@/components/admin/useSettings";
 import { descOk, scoreArticle, titleOk } from "@/lib/seo";
 import { pageMeta } from "@/lib/site";
+import { AiSeoAssistant } from "@/components/admin/AiSeoAssistant";
 
 export const Route = createFileRoute("/_authenticated/admin/seo")({ head: () => ({ meta: [...pageMeta({ title: "Optimasi SEO | Dimaloka", description: "Kelola SEO layanan, artikel, dan produk Dimaloka." }), { name: "robots", content: "noindex" }] }), component: Page });
 
@@ -52,6 +53,7 @@ function Page() {
   return (
     <div className="max-w-6xl space-y-6">
       <PageHeader title="Optimasi SEO" desc="Pengaturan SEO global, sitemap, robots.txt, dan status SEO semua konten." />
+      <AiSeoAssistant />
       <section className="space-y-4 rounded-2xl border bg-card p-6 shadow-card">
         <div className="flex items-center justify-between"><h2 className="font-extrabold text-navy">SEO Global</h2><Button onClick={() => save(Object.fromEntries(KEYS.map((k) => [k, v[k] ?? ""])))}>Simpan</Button></div>
         <Field label="Site title" hint={`${(v.global_seo_title ?? "").length}/60`}><Input value={v.global_seo_title ?? ""} onChange={(e) => setV({ ...v, global_seo_title: e.target.value })} /></Field>
