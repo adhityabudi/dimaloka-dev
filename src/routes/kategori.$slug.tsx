@@ -18,7 +18,7 @@ export const Route = createFileRoute("/kategori/$slug")({
     return { ...d, landing, portfolio: params.slug === "website" ? await getPortfolio() : landing?.portfolio ?? null };
   },
   head: ({ loaderData, matches }) => {
-    if (!loaderData) return { meta: [{ title: "Kategori tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
+    if (!loaderData) return { meta: [{ title: "Layanan tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
     const c = loaderData.category;
     const origin = (matches[0]?.loaderData as any)?.origin ?? "";
     const url = `${origin}/kategori/${c.slug}`;
@@ -69,7 +69,7 @@ function CategoryPage() {
         </div>
         <h2 className="mt-12 text-2xl font-extrabold text-navy">Layanan {c.name} ({products.length})</h2>
         {products.length === 0 ? (
-          <p className="mt-6 rounded-2xl border border-dashed p-10 text-center text-muted-foreground">Belum ada layanan di kategori ini.</p>
+          <p className="mt-6 rounded-2xl border border-dashed p-10 text-center text-muted-foreground">Belum ada layanan di sini.</p>
         ) : (
           <div className="mt-6 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
             {products.map((p: any) => <ProductCard key={p.id} p={p} />)}

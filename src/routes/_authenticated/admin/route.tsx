@@ -15,7 +15,7 @@ export const Route = createFileRoute("/_authenticated/admin")({
 
 const nav = [
   { to: "/admin", label: "Dashboard", icon: BarChart3, exact: true },
-  { to: "/admin/kategori", label: "Kategori", icon: FolderTree },
+  { to: "/admin/layanan", label: "Layanan", icon: FolderTree },
   { to: "/admin/produk", label: "Produk", icon: Package },
   { to: "/admin/seller", label: "Brand / Seller", icon: Store },
   { to: "/admin/order", label: "Order", icon: ShoppingBag },
@@ -23,7 +23,7 @@ const nav = [
   { to: "/admin/testimoni", label: "Testimoni", icon: MessageSquareQuote },
   { to: "/admin/artikel", label: "Artikel", icon: FileText },
   { to: "/admin/portfolio", label: "Portfolio", icon: Images },
-  { to: "/admin/layanan", label: "Halaman Layanan", icon: LayoutTemplate },
+  { to: "/admin/halaman-layanan", label: "Halaman Layanan", icon: LayoutTemplate },
   { to: "/admin/seo", label: "Optimasi SEO", icon: Search },
   { to: "/admin/setting", label: "Setting", icon: Settings },
 ] as const;

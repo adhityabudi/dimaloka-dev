@@ -41,7 +41,7 @@ function Dashboard() {
   });
   const stats = [
     { label: "Total Produk", v: data?.products ?? 0, icon: Package },
-    { label: "Total Kategori", v: data?.categories ?? 0, icon: FolderTree },
+    { label: "Total Layanan", v: data?.categories ?? 0, icon: FolderTree },
     { label: "Total Order", v: data?.orders.length ?? 0, icon: ShoppingBag },
     { label: "Pendapatan", v: rupiah(revenue), icon: Wallet },
     { label: "Buyer Baru (30 hari)", v: data?.buyers ?? 0, icon: Users },

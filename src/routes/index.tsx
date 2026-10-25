@@ -31,7 +31,7 @@ export const Route = createFileRoute("/")({
 });
 
 const steps = [
-  { icon: LayoutGrid, t: "Pilih Kategori", d: "Jelajahi kategori jasa sesuai kebutuhan bisnis Anda." },
+  { icon: LayoutGrid, t: "Pilih Layanan", d: "Jelajahi layanan sesuai kebutuhan bisnis Anda." },
   { icon: Eye, t: "Lihat Detail", d: "Bandingkan paket, fitur, dan harga setiap layanan." },
   { icon: MessageCircle, t: "Kontak Seller", d: "Diskusikan kebutuhan langsung via chat WhatsApp." },
   { icon: CreditCard, t: "Bayar & Akses", d: "Terima invoice resmi, bayar, dan proyek dimulai." },
@@ -99,7 +99,7 @@ function Index() {
       <section id="layanan" className="mx-auto max-w-7xl px-4 py-16">
         <div className="mb-8 flex items-end justify-between gap-4">
           <div>
-            <p className="text-sm font-bold uppercase tracking-wider text-primary-strong">Kategori</p>
+            <p className="text-sm font-bold uppercase tracking-wider text-primary-strong">Layanan</p>
             <h2 className="mt-1 text-3xl font-extrabold text-navy md:text-4xl">Temukan jasa yang Anda butuhkan</h2>
           </div>
         </div>

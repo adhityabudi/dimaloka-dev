@@ -33,11 +33,11 @@ function Page() {
       <div className="mb-4 flex flex-wrap gap-2">
         <Input placeholder="Cari produk…" value={q} onChange={(e) => setQ(e.target.value)} className="max-w-xs bg-card" />
         <Select value={status} onValueChange={setStatus}><SelectTrigger className="w-40 bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">Semua status</SelectItem><SelectItem value="published">Published</SelectItem><SelectItem value="draft">Draft</SelectItem></SelectContent></Select>
-        <Select value={cat} onValueChange={setCat}><SelectTrigger className="w-48 bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">Semua kategori</SelectItem>{cats.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent></Select>
+        <Select value={cat} onValueChange={setCat}><SelectTrigger className="w-48 bg-card"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="all">Semua layanan</SelectItem>{cats.map((c) => <SelectItem key={c.id} value={c.id}>{c.name}</SelectItem>)}</SelectContent></Select>
       </div>
       <div className="rounded-2xl border bg-card shadow-card">
         <Table>
-          <TableHeader><TableRow><TableHead>Produk</TableHead><TableHead>Kategori</TableHead><TableHead>Brand</TableHead><TableHead>Harga</TableHead><TableHead>Status</TableHead><TableHead /></TableRow></TableHeader>
+          <TableHeader><TableRow><TableHead>Produk</TableHead><TableHead>Layanan</TableHead><TableHead>Brand</TableHead><TableHead>Harga</TableHead><TableHead>Status</TableHead><TableHead /></TableRow></TableHeader>
           <TableBody>
             {rows.map((p: any) => (
               <TableRow key={p.id}>

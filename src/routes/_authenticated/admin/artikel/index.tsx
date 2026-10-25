@@ -24,7 +24,7 @@ function Page() {
       <PageHeader title="Artikel Blog" action={<Button asChild><Link to="/admin/artikel/new"><Plus /> Tulis Artikel</Link></Button>} />
       <div className="rounded-2xl border bg-card shadow-card">
         <Table>
-          <TableHeader><TableRow><TableHead>Artikel</TableHead><TableHead>Kategori</TableHead><TableHead>Status</TableHead><TableHead>Publish</TableHead><TableHead>SEO</TableHead><TableHead /></TableRow></TableHeader>
+          <TableHeader><TableRow><TableHead>Artikel</TableHead><TableHead>Layanan</TableHead><TableHead>Status</TableHead><TableHead>Publish</TableHead><TableHead>SEO</TableHead><TableHead /></TableRow></TableHeader>
           <TableBody>
             {data.map((a: any) => (
               <TableRow key={a.id}>
