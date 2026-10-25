@@ -20,3 +20,9 @@
 - [x] Build Desain Grafis, Digital Marketing, SEO, Aplikasi Mobile, Video & Animasi pages in the Website style.
 - [x] Turn Portfolio into a master page of service cards linking to per-service portfolios.
 - [x] Admin editing for service pages, master page, and each service portfolio.
+
+# Navigation and mobile
+- [ ] Add Home and service search to desktop and mobile navigation.
+- [ ] Use canonical /layanan URLs and preserve old links with redirects.
+- [ ] Float all opening images and respect reduced-motion settings.
+- [ ] Verify navigation, search, redirects, and mobile layouts.
