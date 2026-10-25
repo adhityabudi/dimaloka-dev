@@ -31,24 +31,15 @@ export const saveAiSeoConfig = createServerFn({ method: "POST" }).middleware([re
 });
 
 export const generateAiSeo = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((data: unknown) => aiSeoInputSchema.parse(data)).handler(async ({ context, data }) => {
-  const { assertSeoAdmin, readSeoStream } = await import("./ai-seo.server");
+  const { assertSeoAdmin } = await import("./ai-seo.server");
   await assertSeoAdmin(context.supabase, context.userId);
-  const key = process.env["DOLLARDESA_API_KEY"];
-  if (!key) throw new Error("Kunci API DollarDesa belum diatur");
-  const { data: row, error } = await context.supabase.from("site_settings").select("value").eq("key", "ai_seo_settings").maybeSingle();
-  if (error) throw new Error("Pengaturan AI tidak dapat dimuat");
-  const parsed = aiSeoSettingsSchema.safeParse(row?.value);
-  const settings = parsed.success ? parsed.data : { enabled: true, model: "deepseek-v4.1-flash" };
+  const { loadAiSettings, loadPrompt, callGateway } = await import("./aio.server");
+  const settings = await loadAiSettings(context.supabase);
   if (!settings.enabled) throw new Error("AI SEO dinonaktifkan oleh admin");
-  const response = await fetch(`${AI_SEO_BASE}/chat/completions`, {
-    method: "POST", headers: { Authorization: `Bearer ${key}`, "Content-Type": "application/json" },
-    body: JSON.stringify({ model: settings.model, stream: true, messages: [{ role: "system", content: AI_SEO_PROMPT }, { role: "user", content: JSON.stringify(data) }] }),
-  });
-  if (!response.ok) {
-    const messages: Record<number, string> = { 401: "Kunci API DollarDesa tidak valid; perbarui kunci melalui pengaturan rahasia proyek.", 402: "Saldo DollarDesa tidak mencukupi; periksa langganan Anda.", 403: "Akses DollarDesa ditolak; periksa izin akun Anda.", 404: "Model atau layanan DollarDesa tidak tersedia.", 429: "Batas permintaan DollarDesa tercapai; coba lagi nanti." };
-    throw new Error(messages[response.status] ?? `DollarDesa gagal memproses permintaan (${response.status}).`);
-  }
-  const text = await readSeoStream(response);
+  // Skill = the article_seo prompt from the Prompt Library; the output contract stays the editor's format.
+  const skill = await loadPrompt(context.supabase, "article_seo");
+  const system = `${skill.system_prompt}\n\n---\nUNTUK PERMINTAAN INI, gunakan seluruh keahlian SEO dan copywriting SEO di atas, tetapi ABAIKAN format output di atas dan ikuti aturan berikut:\n${AI_SEO_PROMPT}`;
+  const text = await callGateway({ model: skill.model || settings.model, system, user: JSON.stringify(data), temperature: skill.temperature, max_tokens: Math.max(settings.max_tokens, 4096) });
   try { return { result: parseAiSeoResult(text), model: settings.model }; }
   catch { throw new Error("Format rekomendasi AI tidak sesuai batas SEO. Tidak ada konten yang diubah."); }
 });
