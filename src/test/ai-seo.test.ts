@@ -16,8 +16,10 @@ describe("AI SEO recommendations", () => {
   });
   it("makes opted-in service content available without replacing legacy editorial copy", () => {
     expect(serviceRevision("Layanan website")).toBeUndefined();
-    expect(serviceRevision(seoApplication(draft, "category", false).description)).toBeUndefined();
-    expect(serviceRevision(seoApplication(draft, "category", true).description)).toBe("<h2>Layanan website</h2><p>Konten revisi</p>");
+    const metadata = seoApplication(draft, "category", false);
+    const revision = seoApplication(draft, "category", true);
+    expect(serviceRevision("description" in metadata ? metadata.description : undefined)).toBeUndefined();
+    expect(serviceRevision("description" in revision ? revision.description : undefined)).toBe("<h2>Layanan website</h2><p>Konten revisi</p>");
   });
   const recommendation = { titles: ["Jasa Website Bisnis | Dimaloka"], descriptions: ["a".repeat(150)], improvements: [{ priority: "tinggi", issue: "Subjudul kurang", suggestion: "Tambahkan subjudul sesuai layanan." }], revised_content: "Konten revisi sesuai fakta awal." };
   it("parses gateway JSON into title, description and content improvements", () => {
