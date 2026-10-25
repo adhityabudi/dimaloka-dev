@@ -36,3 +36,8 @@
 - [x] Generate page-specific structured data from current public/admin content.
 - [x] Align metadata, canonical URLs, crawler access, and private-page indexing.
 - [x] Test schema accuracy and verify admin changes in rendered public structured data.
+
+# AI SEO assistant
+- [x] Configure secure DollarDesa access and admin-only model settings.
+- [x] Add content/keyword inputs and reviewable SEO recommendations.
+- [x] Verify permissions, recommendation parsing, and the admin generation flow.
