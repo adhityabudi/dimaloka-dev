@@ -13,8 +13,12 @@ export type PortfolioPage = {
   section_title: string; section_description: string; section_button: string;
   cta_title: string; cta_description: string; cta_button: string;
   categories: string[]; projects: PortfolioProject[];
+  card_title: string; card_description: string; card_image: string;
 };
 export const defaultPortfolio: PortfolioPage = {
+  card_title: "Pembuatan Website",
+  card_description: "Company profile, toko online, dan website travel yang tertata dan mudah dihubungi.",
+  card_image: aruna,
   eyebrow: "Dimaloka · Portfolio Website",
   title: "Portfolio",
   description: "Jelajahi inspirasi desain website company profile, toko online, dan bisnis travel. Temukan tampilan yang sesuai dengan karakter dan kebutuhan bisnis Anda.",
@@ -35,13 +39,13 @@ export const defaultPortfolio: PortfolioPage = {
     { id: "nusa", title: "Nusa Journeys", category: "Travel", description: "Konsep website travel dengan pilihan destinasi, informasi perjalanan, dan akses konsultasi yang mudah ditemukan.", image: nusa, image_alt: "Desain website travel Nusa Journeys dengan destinasi wisata dan tampilan ponsel", gallery: [], url: "", is_demo: true, published: true, featured: true },
   ],
 };
-export function portfolioPage(value: unknown): PortfolioPage {
-  if (!value || typeof value !== "object" || Array.isArray(value)) return defaultPortfolio;
+export function normalizePortfolio(defaults: PortfolioPage, value: unknown): PortfolioPage {
+  if (!value || typeof value !== "object" || Array.isArray(value)) return defaults;
   const input = value as Record<string, unknown>;
-  const result = { ...defaultPortfolio };
-  for (const key of Object.keys(defaultPortfolio) as (keyof PortfolioPage)[]) {
+  const result = { ...defaults };
+  for (const key of Object.keys(defaults) as (keyof PortfolioPage)[]) {
     if (key === "projects" || key === "categories" || key === "keywords") continue;
-    if (typeof input[key] === "string") result[key] = input[key];
+    if (typeof input[key] === "string") (result as Record<string, unknown>)[key] = input[key];
   }
   for (const key of ["categories", "keywords"] as const) {
     if (Array.isArray(input[key])) result[key] = input[key].filter((item): item is string => typeof item === "string");
@@ -50,8 +54,10 @@ export function portfolioPage(value: unknown): PortfolioPage {
     result.projects = input.projects.filter((item): item is PortfolioProject => !!item && typeof item === "object" && typeof item.id === "string" && typeof item.title === "string" && typeof item.category === "string")
       .map(p => ({ ...p, gallery: Array.isArray(p.gallery) ? p.gallery.filter(image => typeof image === "string") : [] }));
   }
+  if (!result.card_image) result.card_image = result.projects.find(p => p.published && p.image)?.image ?? "";
   return result;
 }
+export function portfolioPage(value: unknown): PortfolioPage { return normalizePortfolio(defaultPortfolio, value); }
 export function filterPortfolio(projects: PortfolioProject[], category: string, search: string) {
   const query = search.trim().toLocaleLowerCase("id");
   return projects.filter(p => p.published && (category === "Semua" || p.category === category) && `${p.title} ${p.category} ${p.description}`.toLocaleLowerCase("id").includes(query));
