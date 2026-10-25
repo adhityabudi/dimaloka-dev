@@ -14,6 +14,36 @@ export type Database = {
   }
   public: {
     Tables: {
+      ai_prompts: {
+        Row: {
+          feature: string
+          id: string
+          model: string | null
+          name: string
+          system_prompt: string
+          temperature: number
+          updated_at: string
+        }
+        Insert: {
+          feature: string
+          id?: string
+          model?: string | null
+          name: string
+          system_prompt: string
+          temperature?: number
+          updated_at?: string
+        }
+        Update: {
+          feature?: string
+          id?: string
+          model?: string | null
+          name?: string
+          system_prompt?: string
+          temperature?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
       articles: {
         Row: {
           author: string | null

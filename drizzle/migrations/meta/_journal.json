@@ -36,6 +36,13 @@
       "when": 1792893488672,
       "tag": "0004_checkout_orders",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1792900488403,
+      "tag": "0005_ai_prompts",
+      "breakpoints": true
     }
   ]
 }
