@@ -16,10 +16,10 @@ export const Route = createFileRoute("/portfolio/")({
 });
 
 function PortfolioMaster() {
-  const { master, services } = Route.useLoaderData();
+  const { master, services, activeSlugs } = Route.useLoaderData();
   const { layout } = useLoaderData({ from: "__root__" });
   const m = masterPage(master);
-  const cards = SERVICE_SLUGS.map(slug => ({ slug, p: servicePortfolio(slug, services[slug]) }));
+  const cards = SERVICE_SLUGS.filter(slug => activeSlugs.includes(slug)).map(slug => ({ slug, p: servicePortfolio(slug, services[slug]) }));
   return <>
     <section className="bg-navy text-navy-foreground"><div className="mx-auto max-w-4xl px-6 py-14 text-center sm:py-16"><p className="text-xs font-semibold uppercase text-primary">{m.eyebrow}</p><h1 className="mt-5 text-4xl font-bold sm:text-5xl">{m.title}</h1><p className="mx-auto mt-5 max-w-2xl text-sm leading-7 text-navy-foreground/75">{m.description}</p></div></section>
     <section className="bg-muted py-12 sm:py-16"><div className="mx-auto max-w-7xl px-6 sm:px-10">

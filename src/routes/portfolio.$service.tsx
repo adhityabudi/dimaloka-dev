@@ -14,7 +14,9 @@ import { PortfolioCard } from "@/components/site/PortfolioCard";
 export const Route = createFileRoute("/portfolio/$service")({
   loader: async ({ params }) => {
     if (!isServiceSlug(params.service)) throw notFound();
-    return { slug: params.service, value: await getServicePortfolio({ data: { slug: params.service } }) };
+    const result = await getServicePortfolio({ data: { slug: params.service } });
+    if (!result.available) throw notFound();
+    return { slug: params.service, value: result.value };
   },
   head: ({ loaderData, matches }) => {
     if (!loaderData) return { meta: [...pageMeta({ title: "Halaman tidak tersedia | Dimaloka", description: "Halaman yang Anda cari tidak tersedia." }), { name: "robots", content: "noindex" }] };

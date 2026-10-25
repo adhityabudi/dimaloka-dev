@@ -150,6 +150,7 @@ export async function handleAnnisa(request: Request) {
         .from("products")
         .select("title,slug,price,packages,short_description,categories(name)")
         .eq("status", "published")
+        .eq("is_active", true)
         .order("title")
         .limit(100),
       sb.from("categories").select("name,slug").eq("is_active", true).order("sort_order"),

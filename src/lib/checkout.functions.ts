@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
+import { catalogVisible } from "@/lib/catalog-visibility";
 import { checkoutQuote } from "@/lib/checkout";
 
 type Input = { slug: string; packageName: string | null; stage: "full" | "dp"; buyer_name: string; buyer_wa: string; brief: string };
@@ -16,8 +17,9 @@ export const createCheckout = createServerFn({ method: "POST" })
   })
   .handler(async ({ data, context }) => {
     const { userId, supabase } = context;
-    const { data: product } = await supabase.from("products").select("id,title,price,packages,seller_id,status").eq("slug", data.slug).eq("status", "published").maybeSingle();
-    if (!product) throw new Error("Layanan tidak tersedia");
+    const { data: product } = await supabase.from("products").select("id,title,price,packages,seller_id,status,is_active,category_id").eq("slug", data.slug).eq("status", "published").maybeSingle();
+    const { data: services } = await supabase.from("categories").select("id").eq("is_active", true);
+    if (!product || !catalogVisible(product, new Set((services ?? []).map(s => s.id)))) throw new Error("Layanan tidak tersedia");
     const q = checkoutQuote(product, data.packageName, data.stage);
     const { data: prof } = await supabase.from("profiles").select("email").eq("id", userId).maybeSingle();
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
