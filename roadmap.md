@@ -12,7 +12,7 @@
 - [x] Verify the revised page, all sections, and service links.
 
 # Portfolio
-- [ ] Add a reference-inspired Portfolio page and navigation before Blog.
-- [ ] Add a Website portfolio section and proportional dummy project images.
-- [ ] Enable admin editing for page copy, SEO, images, and portfolio projects.
-- [ ] Verify admin edits read back on public pages and test filtering.
+- [x] Add a reference-inspired Portfolio page and navigation before Blog.
+- [x] Add a Website portfolio section and proportional dummy project images.
+- [x] Enable admin editing for page copy, SEO, images, and portfolio projects.
+- [x] Verify admin edits read back on public pages and test filtering.
