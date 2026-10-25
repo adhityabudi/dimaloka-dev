@@ -10,6 +10,7 @@ import { Field, ImageInput, ListInput, PageHeader, TagInput, uploadMedia } from 
 import { useSettings } from "@/components/admin/useSettings";
 import { LANDING_SLUGS, SERVICE_NAMES, serviceContent, serviceKey, type ServiceContent } from "@/lib/services";
 import { pageMeta } from "@/lib/site";
+import { HomepageEditor } from "@/components/admin/HomepageEditor";
 
 export const Route = createFileRoute("/_authenticated/admin/halaman-layanan")({
   head: () => ({ meta: [...pageMeta({ title: "Kelola Halaman Layanan | Dimaloka", description: "Ubah teks dan gambar halaman Desain Grafis, Digital Marketing, SEO, Aplikasi Mobile, serta Video & Animasi." }), { name: "robots", content: "noindex" }] }),
@@ -28,10 +29,10 @@ async function persist(url: string) {
 }
 
 function AdminServices() {
-  const [slug, setSlug] = useState<Slug>(LANDING_SLUGS[0]);
+  const [slug, setSlug] = useState<Slug | "homepage">("homepage");
   return <div className="max-w-5xl">
-    <div className="mb-6 flex flex-wrap gap-2">{LANDING_SLUGS.map(s => <Button key={s} size="sm" variant={slug === s ? "default" : "outline"} aria-pressed={slug === s} onClick={() => setSlug(s)}>{SERVICE_NAMES[s]}</Button>)}</div>
-    <Editor key={slug} slug={slug} />
+    <div className="mb-6 flex flex-wrap gap-2"><Button size="sm" variant={slug === "homepage" ? "default" : "outline"} aria-pressed={slug === "homepage"} onClick={() => setSlug("homepage")}>Homepage</Button>{LANDING_SLUGS.map(s => <Button key={s} size="sm" variant={slug === s ? "default" : "outline"} aria-pressed={slug === s} onClick={() => setSlug(s)}>{SERVICE_NAMES[s]}</Button>)}</div>
+    {slug === "homepage" ? <HomepageEditor /> : <Editor key={slug} slug={slug} />}
   </div>;
 }
 
