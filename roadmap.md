@@ -33,6 +33,6 @@
 - [x] Verify saving and reading back copy/images/logos in admin and on mobile.
 
 # Automatic SEO schema
-- [ ] Generate page-specific structured data from current public/admin content.
-- [ ] Align metadata, canonical URLs, crawler access, and private-page indexing.
-- [ ] Test schema accuracy and verify admin changes in rendered public structured data.
+- [x] Generate page-specific structured data from current public/admin content.
+- [x] Align metadata, canonical URLs, crawler access, and private-page indexing.
+- [x] Test schema accuracy and verify admin changes in rendered public structured data.
