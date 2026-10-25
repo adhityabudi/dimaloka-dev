@@ -387,6 +387,7 @@ export type Database = {
           features: Json
           gallery: Json
           id: string
+          is_active: boolean
           is_featured: boolean
           keywords: string[]
           packages: Json
@@ -412,6 +413,7 @@ export type Database = {
           features?: Json
           gallery?: Json
           id?: string
+          is_active?: boolean
           is_featured?: boolean
           keywords?: string[]
           packages?: Json
@@ -437,6 +439,7 @@ export type Database = {
           features?: Json
           gallery?: Json
           id?: string
+          is_active?: boolean
           is_featured?: boolean
           keywords?: string[]
           packages?: Json

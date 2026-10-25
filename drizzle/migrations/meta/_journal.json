@@ -64,6 +64,13 @@
       "when": 1792910935166,
       "tag": "0008_annisa_daily_question_quota",
       "breakpoints": true
+    },
+    {
+      "idx": 9,
+      "version": "7",
+      "when": 1792935825113,
+      "tag": "0009_product_activation",
+      "breakpoints": true
     }
   ]
 }
