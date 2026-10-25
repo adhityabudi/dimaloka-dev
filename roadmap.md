@@ -5,5 +5,5 @@
 - [x] Test calculations and verify admin-to-public flows.
 
 # Website presentation
-- [ ] Redesign the Website category with a distinctive editorial composition.
-- [ ] Verify layout, images, and service links on desktop and mobile.
+- [x] Redesign the Website category with a distinctive editorial composition.
+- [x] Verify layout, images, and service links on desktop and mobile.
