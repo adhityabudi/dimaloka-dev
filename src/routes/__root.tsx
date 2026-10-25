@@ -43,11 +43,12 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
   useEffect(() => {
     // A dropped connection (e.g. server restarting) is transient: retry once quietly.
-    if (/failed to fetch|network/i.test(error.message) && !sessionStorage.getItem("net-retry")) {
+    const message = error && typeof error === "object" && "message" in error ? String(error.message) : String(error);
+    if (/failed to fetch|network/i.test(message) && !sessionStorage.getItem("net-retry")) {
       sessionStorage.setItem("net-retry", "1");
       // A fresh document also clears failed query and route-loader caches.
-      const t = setTimeout(() => window.location.reload(), 1500);
-      return () => clearTimeout(t);
+      setTimeout(() => window.location.reload(), 1500);
+      return;
     }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error, reset, router]);
