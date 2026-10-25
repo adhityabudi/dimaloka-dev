@@ -13,7 +13,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 
 export const Route = createFileRoute("/_authenticated/checkout/$slug")({
-  validateSearch: (s: Record<string, unknown>) => ({ paket: typeof s.paket === "string" ? s.paket : undefined }),
+  validateSearch: (s: Record<string, unknown>): { paket?: string } => ({ paket: typeof s.paket === "string" ? s.paket : undefined }),
   loader: async ({ params }) => {
     const d = await getProduct({ data: { slug: params.slug } });
     if (!d) throw notFound();

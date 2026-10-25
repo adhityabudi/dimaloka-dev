@@ -12,7 +12,7 @@ import { paymentKind } from "@/lib/invoice-payments";
 import { rupiah, tanggal, waLink } from "@/lib/format";
 
 export const Route = createFileRoute("/_authenticated/pesanan/$id")({
-  validateSearch: (s: Record<string, unknown>) => ({ baru: s.baru ? 1 : undefined }),
+  validateSearch: (s: Record<string, unknown>): { baru?: number } => ({ baru: s.baru ? 1 : undefined }),
   head: () => ({ meta: [{ title: "Detail Pesanan | Dimaloka" }, { name: "robots", content: "noindex" }] }),
   component: OrderPage,
 });
