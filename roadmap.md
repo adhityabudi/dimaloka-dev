@@ -26,3 +26,8 @@
 - [x] Use canonical /layanan URLs and preserve old links with redirects.
 - [x] Float all opening images and respect reduced-motion settings.
 - [x] Verify navigation, search, redirects, and mobile layouts.
+
+# Homepage editor
+- [ ] Add structured Homepage copy, image, client-logo, and section settings.
+- [ ] Add Homepage editor to Halaman Layanan and connect saved content to the public page.
+- [ ] Verify saving and reading back copy/images/logos in admin and on mobile.
