@@ -2,6 +2,8 @@ import { z } from "zod";
 
 export const AIO_FEATURES = ["article_generate", "article_seo", "website_content", "product_seo"] as const;
 export type AioFeature = (typeof AIO_FEATURES)[number];
+export const AIO_PROMPT_FEATURES = [...AIO_FEATURES, "assistant_chat"] as const;
+export type AioPromptFeature = (typeof AIO_PROMPT_FEATURES)[number];
 export const AIO_FEATURE_LABELS: Record<AioFeature, string> = {
   article_generate: "Generate Artikel Blog",
   article_seo: "Optimasi SEO Artikel",
@@ -19,7 +21,7 @@ export const aioRequestSchema = z.object({
   model: modelId.optional(),
 });
 export const aioPromptSchema = z.object({
-  feature: z.enum(AIO_FEATURES),
+  feature: z.enum(AIO_PROMPT_FEATURES),
   system_prompt: z.string().trim().min(20).max(20000),
   temperature: z.number().min(0).max(2),
   model: modelId.nullable(),

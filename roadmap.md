@@ -71,3 +71,8 @@
 - [x] Add admin report with real published-content inventory and honest unavailable Google metrics.
 - [x] Verify admin access, search, and report export.
 - [ ] Activate live index/click/traffic/bounce reports — waiting for Google connections declined by the user.
+
+# Annisa AI
+- [ ] Add public single-session chat, navigation, safe Markdown, quick questions, reset and Stop.
+- [ ] Add editable assistant prompt, public catalog grounding, durable request limits and safety blocks.
+- [ ] Test concrete limits and verify real chat, follow-up, reset, admin prompt editing and narrow public settings.
