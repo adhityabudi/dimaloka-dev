@@ -1,7 +1,7 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
-import { AIO_FEATURES, aioPromptSchema, aioRequestSchema, aioUserMessage, parseAioOutput } from "./aio";
+import { AIO_PROMPT_FEATURES, aioPromptSchema, aioRequestSchema, aioUserMessage, parseAioOutput } from "./aio";
 import { groundArticleLinks, validateArticleLinks } from "./aio-article";
 
 async function admin(context: { supabase: any; userId: string }) {
@@ -48,24 +48,29 @@ export const listAioPrompts = createServerFn({ method: "POST" }).middleware([req
   const { AIO_DEFAULT_PROMPTS } = await import("./aio-prompts.server");
   const { data, error } = await context.supabase.from("ai_prompts").select("feature,name,system_prompt,temperature,model,updated_at");
   if (error) throw new Error("Prompt library tidak dapat dimuat");
-  return AIO_FEATURES.map((f) => {
+  const { ANNISA_DEFAULT_PROMPT } = await import("./annisa-prompt.server");
+  const defaults = { ...AIO_DEFAULT_PROMPTS, assistant_chat: ANNISA_DEFAULT_PROMPT };
+  return AIO_PROMPT_FEATURES.map((f) => {
     const row = data?.find((r) => r.feature === f);
-    return { feature: f, name: row?.name ?? AIO_DEFAULT_PROMPTS[f].name, system_prompt: row?.system_prompt ?? AIO_DEFAULT_PROMPTS[f].system_prompt, temperature: row ? Number(row.temperature) : 0.7, model: row?.model ?? null, updated_at: row?.updated_at ?? null, is_default: !row || row.system_prompt === AIO_DEFAULT_PROMPTS[f].system_prompt };
+    return { feature: f, name: row?.name ?? defaults[f].name, system_prompt: row?.system_prompt ?? defaults[f].system_prompt, temperature: row ? Number(row.temperature) : 0.7, model: row?.model ?? null, updated_at: row?.updated_at ?? null, is_default: !row || row.system_prompt === defaults[f].system_prompt };
   });
 });
 
 export const saveAioPrompt = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: unknown) => aioPromptSchema.parse(d)).handler(async ({ context, data }) => {
   await admin(context);
   const { AIO_DEFAULT_PROMPTS } = await import("./aio-prompts.server");
-  const { error } = await context.supabase.from("ai_prompts").upsert({ ...data, name: AIO_DEFAULT_PROMPTS[data.feature].name, updated_at: new Date().toISOString() }, { onConflict: "feature" });
+  const { ANNISA_DEFAULT_PROMPT } = await import("./annisa-prompt.server");
+  const defaults = { ...AIO_DEFAULT_PROMPTS, assistant_chat: ANNISA_DEFAULT_PROMPT };
+  const { error } = await context.supabase.from("ai_prompts").upsert({ ...data, name: defaults[data.feature].name, updated_at: new Date().toISOString() }, { onConflict: "feature" });
   if (error) throw new Error("Prompt gagal disimpan");
   return { ok: true };
 });
 
-export const resetAioPrompt = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: unknown) => z.object({ feature: z.enum(AIO_FEATURES) }).parse(d)).handler(async ({ context, data }) => {
+export const resetAioPrompt = createServerFn({ method: "POST" }).middleware([requireSupabaseAuth]).inputValidator((d: unknown) => z.object({ feature: z.enum(AIO_PROMPT_FEATURES) }).parse(d)).handler(async ({ context, data }) => {
   await admin(context);
   const { AIO_DEFAULT_PROMPTS } = await import("./aio-prompts.server");
-  const d = AIO_DEFAULT_PROMPTS[data.feature];
+  const { ANNISA_DEFAULT_PROMPT } = await import("./annisa-prompt.server");
+  const d = { ...AIO_DEFAULT_PROMPTS, assistant_chat: ANNISA_DEFAULT_PROMPT }[data.feature];
   const { error } = await context.supabase.from("ai_prompts").upsert({ feature: data.feature, name: d.name, system_prompt: d.system_prompt, temperature: 0.7, model: null, updated_at: new Date().toISOString() }, { onConflict: "feature" });
   if (error) throw new Error("Prompt gagal direset");
   return { ok: true };
