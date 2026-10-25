@@ -10,7 +10,7 @@ export const AIO_FEATURE_LABELS: Record<AioFeature, string> = {
 };
 export const AIO_MODELS = ["deepseek-v4-pro", "claude-opus-5-5", "gpt-6-astra", "glm-5.3"] as const;
 export const AIO_DEFAULT_MODEL = "deepseek-v4-pro";
-export const AIO_DEFAULT_MAX_TOKENS = 2048;
+export const AIO_DEFAULT_MAX_TOKENS = 8192;
 
 const modelId = z.string().trim().min(1).max(120).refine((m) => !m.includes("/"), "Gunakan ID model tanpa prefix vendor");
 export const aioRequestSchema = z.object({

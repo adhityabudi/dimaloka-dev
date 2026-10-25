@@ -19,6 +19,7 @@ export async function readSeoStream(response: Response): Promise<string> {
     const item = JSON.parse(raw);
     if (item.error) throw new Error("DollarDesa menghentikan rekomendasi; periksa akun dan model Anda.");
     for (const choice of item.choices ?? []) {
+      if (choice.finish_reason === "length") throw new Error("Jawaban AI terpotong karena batas max tokens; naikkan Max tokens di AI Settings.");
       if (choice.delta?.refusal || choice.finish_reason === "content_filter") throw new Error("DollarDesa menolak permintaan ini.");
       if (typeof choice.delta?.content === "string") text += choice.delta.content;
       if (text.length > 50000) throw new Error("Jawaban AI terlalu panjang");
