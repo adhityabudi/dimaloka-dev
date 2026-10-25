@@ -16,3 +16,7 @@
 - [x] Add a Website portfolio section and proportional dummy project images.
 - [x] Enable admin editing for page copy, SEO, images, and portfolio projects.
 - [x] Verify admin edits read back on public pages and test filtering.
+# Service pages & Master Portfolio
+- [x] Build Desain Grafis, Digital Marketing, SEO, Aplikasi Mobile, Video & Animasi pages in the Website style.
+- [x] Turn Portfolio into a master page of service cards linking to per-service portfolios.
+- [x] Admin editing for service pages, master page, and each service portfolio.
