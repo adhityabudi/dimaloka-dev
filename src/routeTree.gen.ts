@@ -31,6 +31,7 @@ import { Route as StoreSlugRouteImport } from './routes/store.$slug'
 import { Route as AuthenticatedAdminIndexRouteImport } from './routes/_authenticated/admin/index'
 import { Route as AuthenticatedAdminAioRouteImport } from './routes/_authenticated/admin/aio'
 import { Route as AuthenticatedAdminHalamanLayananRouteImport } from './routes/_authenticated/admin/halaman-layanan'
+import { Route as AuthenticatedAdminLaporanSeoRouteImport } from './routes/_authenticated/admin/laporan-seo'
 import { Route as AuthenticatedAdminLayananRouteImport } from './routes/_authenticated/admin/layanan'
 import { Route as AuthenticatedAdminOrderRouteImport } from './routes/_authenticated/admin/order'
 import { Route as AuthenticatedAdminPortfolioRouteImport } from './routes/_authenticated/admin/portfolio'
@@ -163,6 +164,12 @@ const AuthenticatedAdminHalamanLayananRoute =
   AuthenticatedAdminHalamanLayananRouteImport.update({
     id: '/halaman-layanan',
     path: '/halaman-layanan',
+    getParentRoute: () => AuthenticatedAdminRouteRoute,
+  } as any)
+const AuthenticatedAdminLaporanSeoRoute =
+  AuthenticatedAdminLaporanSeoRouteImport.update({
+    id: '/laporan-seo',
+    path: '/laporan-seo',
     getParentRoute: () => AuthenticatedAdminRouteRoute,
   } as any)
 const AuthenticatedAdminLayananRoute =
@@ -321,6 +328,7 @@ export interface FileRoutesByFullPath {
   '/portfolio/': typeof PortfolioIndexRoute
   '/admin/aio': typeof AuthenticatedAdminAioRouteWithChildren
   '/admin/halaman-layanan': typeof AuthenticatedAdminHalamanLayananRoute
+  '/admin/laporan-seo': typeof AuthenticatedAdminLaporanSeoRoute
   '/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -364,6 +372,7 @@ export interface FileRoutesByTo {
   '/layanan': typeof LayananIndexRoute
   '/portfolio': typeof PortfolioIndexRoute
   '/admin/halaman-layanan': typeof AuthenticatedAdminHalamanLayananRoute
+  '/admin/laporan-seo': typeof AuthenticatedAdminLaporanSeoRoute
   '/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/admin/order': typeof AuthenticatedAdminOrderRoute
   '/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -412,6 +421,7 @@ export interface FileRoutesById {
   '/portfolio/': typeof PortfolioIndexRoute
   '/_authenticated/admin/aio': typeof AuthenticatedAdminAioRouteWithChildren
   '/_authenticated/admin/halaman-layanan': typeof AuthenticatedAdminHalamanLayananRoute
+  '/_authenticated/admin/laporan-seo': typeof AuthenticatedAdminLaporanSeoRoute
   '/_authenticated/admin/layanan': typeof AuthenticatedAdminLayananRoute
   '/_authenticated/admin/order': typeof AuthenticatedAdminOrderRoute
   '/_authenticated/admin/portfolio': typeof AuthenticatedAdminPortfolioRoute
@@ -460,6 +470,7 @@ export interface FileRouteTypes {
     | '/portfolio/'
     | '/admin/aio'
     | '/admin/halaman-layanan'
+    | '/admin/laporan-seo'
     | '/admin/layanan'
     | '/admin/order'
     | '/admin/portfolio'
@@ -503,6 +514,7 @@ export interface FileRouteTypes {
     | '/layanan'
     | '/portfolio'
     | '/admin/halaman-layanan'
+    | '/admin/laporan-seo'
     | '/admin/layanan'
     | '/admin/order'
     | '/admin/portfolio'
@@ -550,6 +562,7 @@ export interface FileRouteTypes {
     | '/portfolio/'
     | '/_authenticated/admin/aio'
     | '/_authenticated/admin/halaman-layanan'
+    | '/_authenticated/admin/laporan-seo'
     | '/_authenticated/admin/layanan'
     | '/_authenticated/admin/order'
     | '/_authenticated/admin/portfolio'
@@ -751,6 +764,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedAdminHalamanLayananRouteImport
       parentRoute: typeof AuthenticatedAdminRouteRoute
     }
+    '/_authenticated/admin/laporan-seo': {
+      id: '/_authenticated/admin/laporan-seo'
+      path: '/laporan-seo'
+      fullPath: '/admin/laporan-seo'
+      preLoaderRoute: typeof AuthenticatedAdminLaporanSeoRouteImport
+      parentRoute: typeof AuthenticatedAdminRouteRoute
+    }
     '/_authenticated/admin/layanan': {
       id: '/_authenticated/admin/layanan'
       path: '/layanan'
@@ -935,6 +955,7 @@ const AuthenticatedAdminAioRouteWithChildren =
 interface AuthenticatedAdminRouteRouteChildren {
   AuthenticatedAdminAioRoute: typeof AuthenticatedAdminAioRouteWithChildren
   AuthenticatedAdminHalamanLayananRoute: typeof AuthenticatedAdminHalamanLayananRoute
+  AuthenticatedAdminLaporanSeoRoute: typeof AuthenticatedAdminLaporanSeoRoute
   AuthenticatedAdminLayananRoute: typeof AuthenticatedAdminLayananRoute
   AuthenticatedAdminOrderRoute: typeof AuthenticatedAdminOrderRoute
   AuthenticatedAdminPortfolioRoute: typeof AuthenticatedAdminPortfolioRoute
@@ -960,6 +981,7 @@ const AuthenticatedAdminRouteRouteChildren: AuthenticatedAdminRouteRouteChildren
     AuthenticatedAdminAioRoute: AuthenticatedAdminAioRouteWithChildren,
     AuthenticatedAdminHalamanLayananRoute:
       AuthenticatedAdminHalamanLayananRoute,
+    AuthenticatedAdminLaporanSeoRoute: AuthenticatedAdminLaporanSeoRoute,
     AuthenticatedAdminLayananRoute: AuthenticatedAdminLayananRoute,
     AuthenticatedAdminOrderRoute: AuthenticatedAdminOrderRoute,
     AuthenticatedAdminPortfolioRoute: AuthenticatedAdminPortfolioRoute,
