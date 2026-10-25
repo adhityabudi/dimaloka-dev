@@ -24,7 +24,7 @@ export function ServiceLandingPage({ slug, name, content: c, portfolio, products
             <div className="mt-7 flex flex-wrap items-center gap-3"><Button asChild className="h-12 rounded-md px-5 font-semibold"><a href={contact} target="_blank" rel="noreferrer">Konsultasi {name} <ArrowUpRight className="size-4" /></a></Button><Button asChild variant="link" className="h-12 text-navy-foreground"><a href="#layanan">Lihat layanan <ArrowDown className="size-4" /></a></Button></div>
             {c.tags.length > 0 && <div className="mt-7 flex flex-wrap gap-x-5 gap-y-3 text-xs text-navy-foreground/70">{c.tags.map(t => <span key={t} className="flex items-center gap-2"><Sparkles className="size-4 text-primary" />{t}</span>)}</div>}
           </div>
-          {c.hero_image && <div className="mx-auto w-full max-w-[480px] overflow-hidden rounded-xl border border-navy-foreground/10 shadow-card"><img src={c.hero_image} alt={c.hero_alt} width={1024} height={1024} fetchPriority="high" className="aspect-square h-auto w-full object-cover" /></div>}
+          {c.hero_image && <div className="hero-float mx-auto w-full max-w-[480px] overflow-hidden rounded-lg border border-navy-foreground/10 shadow-card"><img src={c.hero_image} alt={c.hero_alt} width={1024} height={1024} fetchPriority="high" className="h-auto w-full object-contain" /></div>}
         </div>
       </div>
     </section>

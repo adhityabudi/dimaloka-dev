@@ -14,8 +14,9 @@ import { Field, PageHeader, SeoFields } from "@/components/admin/fields";
 import { CategoryIcon } from "@/components/site/CategoryIcon";
 import { slugify } from "@/lib/format";
 import { canPublish } from "@/lib/seo";
+import { pageMeta } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/admin/layanan")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/layanan")({ head: () => ({ meta: [...pageMeta({ title: "Kelola Layanan | Dimaloka", description: "Kelola daftar layanan digital dan SEO Dimaloka." }), { name: "robots", content: "noindex" }] }), component: Page });
 
 const empty = { name: "", slug: "", icon: "Sparkles", description: "", is_active: true, seo_title: "", seo_description: "", keywords: [] as string[], sort_order: 0 };
 
@@ -87,7 +88,7 @@ function Page() {
               <Field label="Ikon" hint="Nama ikon lucide (mis. Globe, Palette) atau emoji"><Input value={edit.icon ?? ""} onChange={(e) => set({ icon: e.target.value })} /></Field>
               <Field label="Deskripsi"><Textarea value={edit.description ?? ""} onChange={(e) => set({ description: e.target.value })} /></Field>
               <label className="flex items-center gap-2 text-sm font-semibold"><Switch checked={edit.is_active} onCheckedChange={(v) => set({ is_active: v })} /> Aktif (tampil publik)</label>
-              <SeoFields v={edit} set={set} slugPath={`/kategori/${edit.slug}`} />
+              <SeoFields v={edit} set={set} slugPath={`/layanan/${edit.slug}`} />
               <Button onClick={save} className="w-full">Simpan</Button>
             </div>
           )}

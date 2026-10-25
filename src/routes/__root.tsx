@@ -43,10 +43,12 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
   useEffect(() => {
     // A dropped connection (e.g. server restarting) is transient: retry once quietly.
-    if (error instanceof TypeError && /failed to fetch|network/i.test(error.message) && !sessionStorage.getItem("net-retry")) {
+    const message = error && typeof error === "object" && "message" in error ? String(error.message) : String(error);
+    if (/failed to fetch|network/i.test(message) && !sessionStorage.getItem("net-retry")) {
       sessionStorage.setItem("net-retry", "1");
-      const t = setTimeout(() => { reset(); void router.invalidate().finally(() => sessionStorage.removeItem("net-retry")); }, 1500);
-      return () => clearTimeout(t);
+      // A fresh document also clears failed query and route-loader caches.
+      setTimeout(() => window.location.reload(), 1500);
+      return;
     }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
   }, [error, reset, router]);
@@ -59,8 +61,10 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
         <div className="mt-6 flex flex-wrap justify-center gap-2">
           <button
             onClick={() => {
-              router.invalidate();
-              reset();
+              void router.invalidate().then(() => {
+                sessionStorage.removeItem("net-retry");
+                reset();
+              });
             }}
             className="inline-flex items-center justify-center rounded-md bg-primary px-4 py-2 text-sm font-medium text-primary-foreground"
           >
@@ -137,6 +141,7 @@ function RootComponent() {
   const bare = pathname.startsWith("/admin") || pathname.startsWith("/invoice/");
 
   useEffect(() => {
+    sessionStorage.removeItem("net-retry");
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();

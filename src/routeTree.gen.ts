@@ -22,6 +22,8 @@ import { Route as BlogIndexRouteImport } from './routes/blog.index'
 import { Route as BlogSlugRouteImport } from './routes/blog.$slug'
 import { Route as InvoiceTokenRouteImport } from './routes/invoice.$token'
 import { Route as KategoriSlugRouteImport } from './routes/kategori.$slug'
+import { Route as LayananIndexRouteImport } from './routes/layanan.index'
+import { Route as LayananSlugRouteImport } from './routes/layanan.$slug'
 import { Route as PSlugRouteImport } from './routes/p.$slug'
 import { Route as PortfolioIndexRouteImport } from './routes/portfolio.index'
 import { Route as PortfolioServiceRouteImport } from './routes/portfolio.$service'
@@ -107,6 +109,16 @@ const InvoiceTokenRoute = InvoiceTokenRouteImport.update({
 const KategoriSlugRoute = KategoriSlugRouteImport.update({
   id: '/kategori/$slug',
   path: '/kategori/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayananIndexRoute = LayananIndexRouteImport.update({
+  id: '/layanan/',
+  path: '/layanan/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LayananSlugRoute = LayananSlugRouteImport.update({
+  id: '/layanan/$slug',
+  path: '/layanan/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
 const PSlugRoute = PSlugRouteImport.update({
@@ -247,10 +259,12 @@ export interface FileRoutesByFullPath {
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
+  '/layanan/$slug': typeof LayananSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/layanan/': typeof LayananIndexRoute
   '/portfolio/': typeof PortfolioIndexRoute
   '/admin/halaman-layanan': typeof AuthenticatedAdminHalamanLayananRoute
   '/admin/layanan': typeof AuthenticatedAdminLayananRoute
@@ -281,10 +295,12 @@ export interface FileRoutesByTo {
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
+  '/layanan/$slug': typeof LayananSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog': typeof BlogIndexRoute
+  '/layanan': typeof LayananIndexRoute
   '/portfolio': typeof PortfolioIndexRoute
   '/admin/halaman-layanan': typeof AuthenticatedAdminHalamanLayananRoute
   '/admin/layanan': typeof AuthenticatedAdminLayananRoute
@@ -319,10 +335,12 @@ export interface FileRoutesById {
   '/blog/$slug': typeof BlogSlugRoute
   '/invoice/$token': typeof InvoiceTokenRoute
   '/kategori/$slug': typeof KategoriSlugRoute
+  '/layanan/$slug': typeof LayananSlugRoute
   '/p/$slug': typeof PSlugRoute
   '/portfolio/$service': typeof PortfolioServiceRoute
   '/store/$slug': typeof StoreSlugRoute
   '/blog/': typeof BlogIndexRoute
+  '/layanan/': typeof LayananIndexRoute
   '/portfolio/': typeof PortfolioIndexRoute
   '/_authenticated/admin/halaman-layanan': typeof AuthenticatedAdminHalamanLayananRoute
   '/_authenticated/admin/layanan': typeof AuthenticatedAdminLayananRoute
@@ -357,10 +375,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/invoice/$token'
     | '/kategori/$slug'
+    | '/layanan/$slug'
     | '/p/$slug'
     | '/portfolio/$service'
     | '/store/$slug'
     | '/blog/'
+    | '/layanan/'
     | '/portfolio/'
     | '/admin/halaman-layanan'
     | '/admin/layanan'
@@ -391,10 +411,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/invoice/$token'
     | '/kategori/$slug'
+    | '/layanan/$slug'
     | '/p/$slug'
     | '/portfolio/$service'
     | '/store/$slug'
     | '/blog'
+    | '/layanan'
     | '/portfolio'
     | '/admin/halaman-layanan'
     | '/admin/layanan'
@@ -428,10 +450,12 @@ export interface FileRouteTypes {
     | '/blog/$slug'
     | '/invoice/$token'
     | '/kategori/$slug'
+    | '/layanan/$slug'
     | '/p/$slug'
     | '/portfolio/$service'
     | '/store/$slug'
     | '/blog/'
+    | '/layanan/'
     | '/portfolio/'
     | '/_authenticated/admin/halaman-layanan'
     | '/_authenticated/admin/layanan'
@@ -464,9 +488,11 @@ export interface RootRouteChildren {
   BlogSlugRoute: typeof BlogSlugRoute
   InvoiceTokenRoute: typeof InvoiceTokenRoute
   KategoriSlugRoute: typeof KategoriSlugRoute
+  LayananSlugRoute: typeof LayananSlugRoute
   PSlugRoute: typeof PSlugRoute
   StoreSlugRoute: typeof StoreSlugRoute
   BlogIndexRoute: typeof BlogIndexRoute
+  LayananIndexRoute: typeof LayananIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -560,6 +586,20 @@ declare module '@tanstack/react-router' {
       path: '/kategori/$slug'
       fullPath: '/kategori/$slug'
       preLoaderRoute: typeof KategoriSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/layanan/': {
+      id: '/layanan/'
+      path: '/layanan'
+      fullPath: '/layanan/'
+      preLoaderRoute: typeof LayananIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/layanan/$slug': {
+      id: '/layanan/$slug'
+      path: '/layanan/$slug'
+      fullPath: '/layanan/$slug'
+      preLoaderRoute: typeof LayananSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/p/$slug': {
@@ -806,9 +846,11 @@ const rootRouteChildren: RootRouteChildren = {
   BlogSlugRoute: BlogSlugRoute,
   InvoiceTokenRoute: InvoiceTokenRoute,
   KategoriSlugRoute: KategoriSlugRoute,
+  LayananSlugRoute: LayananSlugRoute,
   PSlugRoute: PSlugRoute,
   StoreSlugRoute: StoreSlugRoute,
   BlogIndexRoute: BlogIndexRoute,
+  LayananIndexRoute: LayananIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

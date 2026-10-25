@@ -156,7 +156,7 @@ export function RichEditor({ value, onChange }: { value: string; onChange: (html
         <B label="Bullet" on={() => editor.chain().focus().toggleBulletList().run()} active={editor.isActive("bulletList")}><List className="h-4 w-4" /></B>
         <B label="Numbered" on={() => editor.chain().focus().toggleOrderedList().run()} active={editor.isActive("orderedList")}><ListOrdered className="h-4 w-4" /></B>
         <B label="Quote" on={() => editor.chain().focus().toggleBlockquote().run()} active={editor.isActive("blockquote")}><Quote className="h-4 w-4" /></B>
-        <B label="Link" on={() => { const url = prompt("URL link (mis. /kategori/website)"); if (url) editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run(); }} active={editor.isActive("link")}><Link2 className="h-4 w-4" /></B>
+        <B label="Link" on={() => { const url = prompt("URL link (mis. /layanan/website)"); if (url) editor.chain().focus().extendMarkRange("link").setLink({ href: url }).run(); }} active={editor.isActive("link")}><Link2 className="h-4 w-4" /></B>
       </div>
       <EditorContent editor={editor} />
     </div>

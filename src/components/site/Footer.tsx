@@ -25,7 +25,7 @@ export function Footer() {
           <h3 className="mb-4 font-bold">Layanan</h3>
           <ul className="space-y-2 text-sm text-navy-foreground/70">
             {layout.categories.slice(0, 6).map((c) => (
-              <li key={c.id}><Link to="/kategori/$slug" params={{ slug: c.slug }} className="hover:text-primary">{c.name}</Link></li>
+              <li key={c.id}><Link to="/layanan/$slug" params={{ slug: c.slug }} className="hover:text-primary">{c.name}</Link></li>
             ))}
           </ul>
         </div>

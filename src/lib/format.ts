@@ -15,7 +15,7 @@ export function slugify(s: string) {
 
 export function tanggal(d: string | Date | null | undefined) {
   if (!d) return "-";
-  return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric" }).format(new Date(d));
+  return new Intl.DateTimeFormat("id-ID", { day: "numeric", month: "long", year: "numeric", timeZone: "Asia/Jakarta" }).format(new Date(d));
 }
 
 export function waLink(phone: string | null | undefined, text: string) {

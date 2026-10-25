@@ -11,8 +11,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@
 import { Field, PageHeader, TagInput } from "@/components/admin/fields";
 import { useSettings } from "@/components/admin/useSettings";
 import { descOk, scoreArticle, titleOk } from "@/lib/seo";
+import { pageMeta } from "@/lib/site";
 
-export const Route = createFileRoute("/_authenticated/admin/seo")({ component: Page });
+export const Route = createFileRoute("/_authenticated/admin/seo")({ head: () => ({ meta: [...pageMeta({ title: "Optimasi SEO | Dimaloka", description: "Kelola SEO layanan, artikel, dan produk Dimaloka." }), { name: "robots", content: "noindex" }] }), component: Page });
 
 const KEYS = ["global_seo_title", "global_seo_description", "global_keywords", "canonical_domain", "google_analytics_id", "search_console_meta", "robots_txt"];
 
@@ -41,7 +42,7 @@ function Page() {
       };
       return [
         ...(p.data ?? []).map((x) => ({ type: "Produk", id: x.id, title: x.title, url: `/p/${x.slug}`, edit: "produk", ...base(x) })),
-        ...(c.data ?? []).map((x) => ({ type: "Layanan", id: x.id, title: x.name, url: `/kategori/${x.slug}`, edit: "layanan", ...base(x) })),
+        ...(c.data ?? []).map((x) => ({ type: "Layanan", id: x.id, title: x.name, url: `/layanan/${x.slug}`, edit: "layanan", ...base(x) })),
         ...(a.data ?? []).map((x) => ({ type: "Artikel", id: x.id, title: x.title, url: `/blog/${x.slug}`, edit: "artikel", ...base(x), score: scoreArticle(x as any).score })),
       ];
     },

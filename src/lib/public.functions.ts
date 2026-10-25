@@ -25,6 +25,12 @@ async function settings(sb: ReturnType<typeof pub>): Promise<Settings> {
 
 const productCard = "id,slug,title,short_description,cover_image,price,is_featured,tags,sellers(name,slug),categories(name,slug)";
 
+export const getServiceDirectory = createServerFn({ method: "GET" }).handler(async () => {
+  const { data, error } = await pub().from("products").select(productCard).eq("status", "published").order("title");
+  if (error) throw new Error("Layanan belum dapat dimuat. Silakan coba kembali.");
+  return data ?? [];
+});
+
 export const getLayoutData = createServerFn({ method: "GET" }).handler(async () => {
   const sb = pub();
   const [s, cats] = await Promise.all([

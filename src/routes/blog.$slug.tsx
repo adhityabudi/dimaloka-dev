@@ -51,7 +51,7 @@ function ArticlePage() {
         <Link to="/" className="hover:text-primary-strong">Beranda</Link><ChevronRight className="h-4 w-4" />
         <Link to="/blog" className="hover:text-primary-strong">Blog</Link>
       </nav>
-      {cat && <Link to="/kategori/$slug" params={{ slug: cat.slug }} className="mt-6 inline-block text-sm font-bold text-sky">{cat.name}</Link>}
+      {cat && <Link to="/layanan/$slug" params={{ slug: cat.slug }} className="mt-6 inline-block text-sm font-bold text-sky">{cat.name}</Link>}
       <h1 className="mt-2 text-3xl font-extrabold leading-tight text-navy md:text-5xl">{a.title}</h1>
       <p className="mt-4 text-sm text-muted-foreground">Oleh <span className="font-semibold text-navy">{a.author ?? "Tim Dimaloka"}</span> · {tanggal(a.published_at)}</p>
       {a.cover_image && <img src={a.cover_image} alt={a.title} className="mt-8 aspect-[16/9] w-full rounded-2xl object-cover" />}

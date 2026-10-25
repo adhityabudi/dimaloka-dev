@@ -62,7 +62,7 @@ function ProductPage() {
     <div className="mx-auto max-w-7xl px-4 py-8">
       <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-1 text-sm text-muted-foreground">
         <Link to="/" className="hover:text-primary-strong">Beranda</Link><ChevronRight className="h-4 w-4" />
-        {cat && <><Link to="/kategori/$slug" params={{ slug: cat.slug }} className="hover:text-primary-strong">{cat.name}</Link><ChevronRight className="h-4 w-4" /></>}
+        {cat && <><Link to="/layanan/$slug" params={{ slug: cat.slug }} className="hover:text-primary-strong">{cat.name}</Link><ChevronRight className="h-4 w-4" /></>}
         <span className="text-navy">{p.title}</span>
       </nav>
 

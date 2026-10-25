@@ -1,7 +1,8 @@
 import { Link, useLoaderData, useNavigate } from "@tanstack/react-router";
-import { ChevronDown, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
+import { ChevronDown, Home, LayoutDashboard, LogOut, Menu, User, X } from "lucide-react";
 import { useState } from "react";
 import { Logo } from "./Logo";
+import { ServiceSearch } from "./ServiceSearch";
 import { CategoryIcon } from "./CategoryIcon";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
@@ -22,9 +23,10 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-40 border-b bg-background/90 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center gap-6 px-4">
+      <div className="mx-auto flex h-16 max-w-7xl items-center gap-3 px-4 xl:gap-6">
         <Logo className="h-7" />
         <nav className="hidden items-center gap-1 text-sm font-semibold text-navy lg:flex">
+          <Button asChild variant="ghost" className="text-navy"><Link to="/" activeOptions={{ exact: true }} activeProps={{ className: "text-primary-strong" }}><Home className="size-4" />Home</Link></Button>
           <DropdownMenu>
             <DropdownMenuTrigger className="flex items-center gap-1 rounded-lg px-3 py-2 hover:bg-muted">
               Layanan <ChevronDown className="h-4 w-4" />
@@ -32,7 +34,7 @@ export function Navbar() {
             <DropdownMenuContent className="w-64">
               {cats.map((c) => (
                 <DropdownMenuItem key={c.id} asChild>
-                  <Link to="/kategori/$slug" params={{ slug: c.slug }} className="flex items-center gap-2">
+                  <Link to="/layanan/$slug" params={{ slug: c.slug }} className="flex items-center gap-2">
                     <CategoryIcon icon={c.icon} className="h-4 w-4 text-primary" /> {c.name}
                   </Link>
                 </DropdownMenuItem>
@@ -42,7 +44,8 @@ export function Navbar() {
           <Link to="/portfolio" className="rounded-lg px-3 py-2 hover:bg-muted" activeProps={{ className: "text-primary-strong" }}>Portfolio</Link>
           <Link to="/blog" className="rounded-lg px-3 py-2 hover:bg-muted" activeProps={{ className: "text-primary-strong" }}>Blog</Link>
         </nav>
-        <div className="ml-auto hidden items-center gap-2 lg:flex">
+        <div className="ml-auto hidden w-48 min-w-0 xl:w-64 lg:block"><ServiceSearch /></div>
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
           {user ? (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -63,17 +66,19 @@ export function Navbar() {
             </>
           )}
         </div>
-        <button className="ml-auto rounded-lg p-2 lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu">
+        <Button variant="ghost" size="icon" className="ml-auto lg:hidden" onClick={() => setOpen(!open)} aria-label="Menu" aria-expanded={open} aria-controls="mobile-navigation">
           {open ? <X /> : <Menu />}
-        </button>
+        </Button>
       </div>
       {open && (
-        <div className="border-t bg-background px-4 py-4 lg:hidden">
+        <div id="mobile-navigation" className="max-h-[calc(100dvh-4rem)] overflow-y-auto border-t bg-background px-4 py-4 lg:hidden">
+          <Button asChild variant="ghost" className="mb-3 px-0 text-navy"><Link to="/" onClick={() => setOpen(false)}><Home className="size-4" />Home</Link></Button>
+          <div className="mb-5"><ServiceSearch onSearch={() => setOpen(false)} /></div>
           <p className="mb-2 text-xs font-bold uppercase text-muted-foreground">Layanan</p>
           <div className="grid grid-cols-2 gap-2">
             {cats.map((c) => (
-              <Link key={c.id} to="/kategori/$slug" params={{ slug: c.slug }} onClick={() => setOpen(false)} className="flex items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm font-medium">
-                <CategoryIcon icon={c.icon} className="h-4 w-4 text-primary" /> {c.name}
+              <Link key={c.id} to="/layanan/$slug" params={{ slug: c.slug }} onClick={() => setOpen(false)} className="flex min-w-0 items-center gap-2 rounded-lg bg-muted px-3 py-2 text-sm font-medium">
+                <CategoryIcon icon={c.icon} className="h-4 w-4 shrink-0 text-primary" /> <span className="min-w-0 break-words">{c.name}</span>
               </Link>
             ))}
           </div>

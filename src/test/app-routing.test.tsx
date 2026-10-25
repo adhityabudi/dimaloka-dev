@@ -14,4 +14,12 @@ describe("App routing", () => {
 
     expect(matches.at(-1)?.routeId).not.toBe(rootRouteId);
   });
+  it("matches the canonical service page", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    expect(router.matchRoutes("/layanan/website").at(-1)?.routeId).toBe("/layanan/$slug");
+  });
+  it("retains the legacy service route for redirects", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    expect(router.matchRoutes("/kategori/website").at(-1)?.routeId).toBe("/kategori/$slug");
+  });
 });

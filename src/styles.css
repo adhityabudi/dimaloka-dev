@@ -64,6 +64,16 @@
   to { transform: translateX(-50%); }
 }
 
+@keyframes hero-float {
+  0%, 100% { transform: translate3d(0, 0, 0) rotate(-0.4deg); }
+  50% { transform: translate3d(0, -10px, 0) rotate(0.4deg); }
+}
+.hero-float { animation: hero-float 7s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-float, .animate-marquee { animation: none; }
+  html { scroll-behavior: auto; }
+}
+
 :root {
   --radius: 0.875rem;
   --background: oklch(1 0 0);
