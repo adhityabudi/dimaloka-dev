@@ -10,3 +10,9 @@
 - [x] Review the full reference and rebuild the service-page sections with original concrete copy.
 - [x] Replace the stretched opening visual with proportional new website mockups.
 - [x] Verify the revised page, all sections, and service links.
+
+# Portfolio
+- [ ] Add a reference-inspired Portfolio page and navigation before Blog.
+- [ ] Add a Website portfolio section and proportional dummy project images.
+- [ ] Enable admin editing for page copy, SEO, images, and portfolio projects.
+- [ ] Verify admin edits read back on public pages and test filtering.
