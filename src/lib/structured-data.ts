@@ -4,6 +4,7 @@ import { homepageContent, HOMEPAGE_KEY } from "./homepage";
 import { LANDING_SLUGS, SERVICE_SLUGS, serviceContent, servicePortfolio, masterPage } from "./services";
 import websiteHero from "@/assets/website-profile-mockups.png";
 import siteLogo from "@/assets/dimaloka-logo.png.asset.json";
+import { serviceRevision } from "./ai-seo-application";
 
 type Entity = Record<string, unknown>;
 type Kind = "home" | "directory" | "service" | "product" | "blog" | "article" | "store" | "portfolio" | "servicePortfolio";
@@ -75,7 +76,7 @@ export function publicPageHead(kind: Kind, data: any, root: RootData = {}) {
     title = c.seo_title || `${c.name} | Dimaloka`; description = c.seo_description || landing?.description || c.description || "";
     keywords = keywordList(c.keywords); image = landing?.hero_image || (c.slug === "website" ? websiteHero : undefined);
     pageType = "CollectionPage"; items = cards(data.products);
-    entity = { "@type": "Service", name, description: landing?.description || c.description || description, serviceType: c.name, provider: { "@id": orgId }, offers: (data.products ?? []).flatMap((p: any) => serviceOffers(p, origin)) };
+    entity = { "@type": "Service", name, description: serviceRevision(c.description) ? stripHtml(c.description) : landing?.description || c.description || description, serviceType: c.name, provider: { "@id": orgId }, offers: (data.products ?? []).flatMap((p: any) => serviceOffers(p, origin)) };
   } else if (kind === "product") {
     const p = data.product;
     path = `/p/${p.slug}`; name = p.title; title = p.seo_title || p.title; description = p.seo_description || p.short_description || stripHtml(p.description || "");

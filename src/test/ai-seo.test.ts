@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { aiSeoInputSchema, parseAiSeoResult } from "../lib/ai-seo";
 import { assertSeoAdmin, readSeoStream } from "../lib/ai-seo.server";
-import { seoApplication, contentToHtml } from "../lib/ai-seo-application";
+import { seoApplication, contentToHtml, serviceRevision } from "../lib/ai-seo-application";
 
 describe("AI SEO recommendations", () => {
   const draft = { seo_title: "Jasa Website Dimaloka", seo_description: "a".repeat(150), content: "## Layanan website\n\nKonten revisi" };
@@ -13,6 +13,13 @@ describe("AI SEO recommendations", () => {
   });
   it("escapes untrusted generated HTML instead of executing it", () => {
     expect(contentToHtml('<script>alert(1)</script>')).toBe('<p>&lt;script&gt;alert(1)&lt;/script&gt;</p>');
+  });
+  it("makes opted-in service content available without replacing legacy editorial copy", () => {
+    expect(serviceRevision("Layanan website")).toBeUndefined();
+    const metadata = seoApplication(draft, "category", false);
+    const revision = seoApplication(draft, "category", true);
+    expect(serviceRevision("description" in metadata ? metadata.description : undefined)).toBeUndefined();
+    expect(serviceRevision("description" in revision ? revision.description : undefined)).toBe("<h2>Layanan website</h2><p>Konten revisi</p>");
   });
   const recommendation = { titles: ["Jasa Website Bisnis | Dimaloka"], descriptions: ["a".repeat(150)], improvements: [{ priority: "tinggi", issue: "Subjudul kurang", suggestion: "Tambahkan subjudul sesuai layanan." }], revised_content: "Konten revisi sesuai fakta awal." };
   it("parses gateway JSON into title, description and content improvements", () => {

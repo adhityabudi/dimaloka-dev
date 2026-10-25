@@ -6,6 +6,12 @@ import { xmlEscape } from "@/lib/sitemap-utils";
 const root = { origin: "https://example.com", layout: { settings: {} } };
 const graph = (head: ReturnType<typeof publicPageHead>) => JSON.parse(head.scripts[0].children)["@graph"] as Record<string, any>[];
 describe("automatic public structured data", () => {
+  it("reads applied service SEO and revised public content instead of the old landing intro", () => {
+    const head = publicPageHead("service", { category: { slug: "seo", name: "SEO", seo_title: "SEO diperbarui", seo_description: "Deskripsi SEO tersimpan", description: "<h2>Audit SEO</h2><p>Konten revisi tersimpan.</p>" }, landing: { content: { description: "Deskripsi lama" } }, products: [] }, root);
+    expect(head.meta).toContainEqual({ title: "SEO diperbarui" });
+    expect(graph(head).find(e => e["@type"] === "Service")?.description).toContain("Konten revisi tersimpan.");
+    expect(graph(head).find(e => e["@type"] === "Service")?.description).not.toContain("Deskripsi lama");
+  });
   it("updates service image, keyword and content from current admin values", () => {
     const data = { category: { slug: "seo", name: "SEO", keywords: ["audit SEO"], seo_title: "Audit SEO", seo_description: "Audit teknis", description: "Layanan audit" }, landing: { content: { title: "Audit Website", description: "Periksa website bisnis", hero_image: "https://example.com/new.jpg" } }, products: [] };
     const first = graph(publicPageHead("service", data, root));
