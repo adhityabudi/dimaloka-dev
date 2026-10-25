@@ -1,3 +1,4 @@
+import { publicPageHead } from "@/lib/structured-data";
 import { createFileRoute, Link, notFound, useLoaderData } from "@tanstack/react-router";
 import { BadgeCheck, ChevronRight, Clock, ShieldCheck, Wallet } from "lucide-react";
 import { getCategory, getPortfolio, getServiceContent } from "@/lib/public.functions";
@@ -5,7 +6,7 @@ import { portfolioPage } from "@/lib/portfolio";
 import { ProductCard } from "@/components/site/ProductCard";
 import { WaCta } from "@/components/site/WaCta";
 import { CategoryIcon } from "@/components/site/CategoryIcon";
-import { jsonLd, pageMeta } from "@/lib/site";
+import { pageMeta } from "@/lib/site";
 import { WebsiteServicePage } from "@/components/site/WebsiteServicePage";
 import { ServiceLandingPage } from "@/components/site/ServiceLandingPage";
 import { LANDING_SLUGS, serviceContent, servicePortfolio } from "@/lib/services";
@@ -18,15 +19,8 @@ export const Route = createFileRoute("/layanan/$slug")({
     return { ...d, landing, portfolio: params.slug === "website" ? await getPortfolio() : landing?.portfolio ?? null };
   },
   head: ({ loaderData, matches }) => {
-    if (!loaderData) return { meta: [{ title: "Layanan tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
-    const c = loaderData.category;
-    const origin = (matches[0]?.loaderData as any)?.origin ?? "";
-    const url = `${origin}/layanan/${c.slug}`;
-    return {
-      meta: [...pageMeta({ title: c.seo_title || `${c.name} | Dimaloka`, description: c.seo_description || c.description || "" }), { name: "keywords", content: c.keywords.join(", ") }],
-      links: origin ? [{ rel: "canonical", href: url }] : [],
-      scripts: [jsonLd({ "@context": "https://schema.org", "@type": "CollectionPage", name: c.name, description: c.seo_description, url })],
-    };
+    if (!loaderData) return { meta: [...pageMeta({ title: "Halaman tidak tersedia | Dimaloka", description: "Halaman yang Anda cari tidak tersedia." }), { name: "robots", content: "noindex" }] };
+    return publicPageHead("service", loaderData, matches[0]?.loaderData as any);
   },
   component: CategoryPage,
 });

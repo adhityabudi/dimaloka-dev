@@ -1,9 +1,10 @@
+import { publicPageHead } from "@/lib/structured-data";
 import { createFileRoute, notFound } from "@tanstack/react-router";
 import { MessageCircle } from "lucide-react";
 import { getStore } from "@/lib/public.functions";
 import { ProductCard } from "@/components/site/ProductCard";
 import { Button } from "@/components/ui/button";
-import { jsonLd, pageMeta } from "@/lib/site";
+import { pageMeta } from "@/lib/site";
 import { waLink } from "@/lib/format";
 
 export const Route = createFileRoute("/store/$slug")({
@@ -13,15 +14,8 @@ export const Route = createFileRoute("/store/$slug")({
     return d;
   },
   head: ({ loaderData, matches }) => {
-    if (!loaderData) return { meta: [{ title: "Toko tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
-    const s = loaderData.seller;
-    const origin = (matches[0]?.loaderData as any)?.origin ?? "";
-    const desc = `${s.description ?? ""} Lihat semua layanan ${s.name} dan order mudah via WhatsApp di Dimaloka.`.trim();
-    return {
-      meta: pageMeta({ title: `${s.name} — Toko Jasa di Dimaloka`, description: desc }),
-      links: origin ? [{ rel: "canonical", href: `${origin}/store/${s.slug}` }] : [],
-      scripts: [jsonLd({ "@context": "https://schema.org", "@type": "Organization", name: s.name, description: s.description, logo: s.logo_url, url: `${origin}/store/${s.slug}` })],
-    };
+    if (!loaderData) return { meta: [...pageMeta({ title: "Halaman tidak tersedia | Dimaloka", description: "Halaman yang Anda cari tidak tersedia." }), { name: "robots", content: "noindex" }] };
+    return publicPageHead("store", loaderData, matches[0]?.loaderData as any);
   },
   component: StorePage,
 });

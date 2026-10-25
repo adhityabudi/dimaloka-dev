@@ -1,7 +1,8 @@
+import { publicPageHead } from "@/lib/structured-data";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { ChevronRight } from "lucide-react";
 import { getArticle } from "@/lib/public.functions";
-import { jsonLd, pageMeta } from "@/lib/site";
+import { pageMeta } from "@/lib/site";
 import { tanggal } from "@/lib/format";
 
 export const Route = createFileRoute("/blog/$slug")({
@@ -11,33 +12,8 @@ export const Route = createFileRoute("/blog/$slug")({
     return d;
   },
   head: ({ loaderData, matches }) => {
-    if (!loaderData) return { meta: [{ title: "Artikel tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
-    const a = loaderData.article;
-    const origin = (matches[0]?.loaderData as any)?.origin ?? "";
-    const url = `${origin}/blog/${a.slug}`;
-    const image = a.og_image || a.cover_image;
-    return {
-      meta: [
-        ...pageMeta({ title: a.seo_title || a.title, description: a.seo_description || a.excerpt || "", image, type: "article" }),
-        { name: "keywords", content: [a.focus_keyword, ...a.keywords].filter(Boolean).join(", ") },
-        { property: "article:published_time", content: a.published_at ?? "" },
-      ],
-      links: origin ? [{ rel: "canonical", href: url }] : [],
-      scripts: [
-        jsonLd({
-          "@context": "https://schema.org",
-          "@type": "Article",
-          headline: a.title,
-          description: a.seo_description,
-          image: image ? [image] : undefined,
-          author: { "@type": "Person", name: a.author ?? "Dimaloka" },
-          publisher: { "@type": "Organization", name: "Dimaloka" },
-          datePublished: a.published_at,
-          dateModified: a.updated_at,
-          mainEntityOfPage: url,
-        }),
-      ],
-    };
+    if (!loaderData) return { meta: [...pageMeta({ title: "Halaman tidak tersedia | Dimaloka", description: "Halaman yang Anda cari tidak tersedia." }), { name: "robots", content: "noindex" }] };
+    return publicPageHead("article", loaderData, matches[0]?.loaderData as any);
   },
   component: ArticlePage,
 });

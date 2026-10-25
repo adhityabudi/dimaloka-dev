@@ -1,3 +1,4 @@
+import { publicPageHead } from "@/lib/structured-data";
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { Check, ChevronRight, MessageCircle, ShoppingCart, Star, Store } from "lucide-react";
 import { useAuth } from "@/hooks/use-auth";
@@ -5,7 +6,7 @@ import { useState } from "react";
 import { getProduct } from "@/lib/public.functions";
 import { Button } from "@/components/ui/button";
 import { ProductCard } from "@/components/site/ProductCard";
-import { jsonLd, pageMeta } from "@/lib/site";
+import { pageMeta } from "@/lib/site";
 import { rupiah, waLink } from "@/lib/format";
 
 export const Route = createFileRoute("/p/$slug")({
@@ -15,34 +16,8 @@ export const Route = createFileRoute("/p/$slug")({
     return d;
   },
   head: ({ loaderData, matches }) => {
-    if (!loaderData) return { meta: [{ title: "Layanan tidak tersedia | Dimaloka" }, { name: "robots", content: "noindex" }] };
-    const p = loaderData.product;
-    const origin = (matches[0]?.loaderData as any)?.origin ?? "";
-    const url = `${origin}/p/${p.slug}`;
-    const packages = (p.packages as any[]) ?? [];
-    return {
-      meta: [...pageMeta({ title: p.seo_title || p.title, description: p.seo_description || p.short_description || "", image: p.cover_image, type: "product" }), { name: "keywords", content: p.keywords.join(", ") }],
-      links: origin ? [{ rel: "canonical", href: url }] : [],
-      scripts: [
-        jsonLd({
-          "@context": "https://schema.org",
-          "@type": "Product",
-          name: p.title,
-          description: p.short_description,
-          image: p.cover_image ? [p.cover_image] : undefined,
-          brand: { "@type": "Brand", name: (p.sellers as any)?.name },
-          offers: {
-            "@type": "AggregateOffer",
-            priceCurrency: "IDR",
-            lowPrice: p.price,
-            highPrice: Math.max(Number(p.price), ...packages.map((x) => Number(x.price) || 0)),
-            offerCount: packages.length || 1,
-            url,
-          },
-          aggregateRating: { "@type": "AggregateRating", ratingValue: "4.9", reviewCount: "120" },
-        }),
-      ],
-    };
+    if (!loaderData) return { meta: [...pageMeta({ title: "Halaman tidak tersedia | Dimaloka", description: "Halaman yang Anda cari tidak tersedia." }), { name: "robots", content: "noindex" }] };
+    return publicPageHead("product", loaderData, matches[0]?.loaderData as any);
   },
   component: ProductPage,
 });

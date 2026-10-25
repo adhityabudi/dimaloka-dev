@@ -1,17 +1,16 @@
+import { publicPageHead } from "@/lib/structured-data";
 import { createFileRoute, Link, useLoaderData } from "@tanstack/react-router";
 import { ArrowUpRight } from "lucide-react";
 import { getPortfolioOverview } from "@/lib/public.functions";
 import { masterPage, SERVICE_SLUGS, servicePortfolio } from "@/lib/services";
-import { pageMeta, jsonLd } from "@/lib/site";
+import { pageMeta } from "@/lib/site";
 import { waLink } from "@/lib/format";
 import { Button } from "@/components/ui/button";
 
 export const Route = createFileRoute("/portfolio/")({
   loader: () => getPortfolioOverview(),
   head: ({ loaderData, matches }) => {
-    const m = masterPage(loaderData?.master);
-    const origin = (matches[0]?.loaderData as { origin?: string })?.origin;
-    return { meta: [...pageMeta({ title: m.seo_title, description: m.seo_description }), { name: "keywords", content: m.keywords.join(", ") }], links: origin ? [{ rel: "canonical", href: `${origin}/portfolio` }] : [], scripts: [jsonLd({ "@context": "https://schema.org", "@type": "CollectionPage", name: m.seo_title, description: m.seo_description })] };
+    return publicPageHead("portfolio", loaderData, matches[0]?.loaderData as any);
   },
   component: PortfolioMaster,
 });
