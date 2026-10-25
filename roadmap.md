@@ -3,3 +3,7 @@
 - [x] Add admin payment choices, DP confirmation, and settlement creation.
 - [x] Match full/DP/settlement tables and payment statuses to the references.
 - [x] Test calculations and verify admin-to-public flows.
+
+# Website presentation
+- [ ] Redesign the Website category with a distinctive editorial composition.
+- [ ] Verify layout, images, and service links on desktop and mobile.
