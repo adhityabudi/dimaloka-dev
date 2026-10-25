@@ -43,15 +43,10 @@ function ErrorComponent({ error, reset }: ErrorComponentProps) {
   const router = useRouter();
   useEffect(() => {
     // A dropped connection (e.g. server restarting) is transient: retry once quietly.
-    if (error instanceof TypeError && /failed to fetch|network/i.test(error.message) && !sessionStorage.getItem("net-retry")) {
+    if (/failed to fetch|network/i.test(error.message) && !sessionStorage.getItem("net-retry")) {
       sessionStorage.setItem("net-retry", "1");
-      const t = setTimeout(() => {
-        // Clearing the boundary before reloading leaves errored loader matches cached.
-        void router.invalidate().then(() => {
-          sessionStorage.removeItem("net-retry");
-          reset();
-        });
-      }, 1500);
+      // A fresh document also clears failed query and route-loader caches.
+      const t = setTimeout(() => window.location.reload(), 1500);
       return () => clearTimeout(t);
     }
     reportLovableError(error, { boundary: "tanstack_root_error_component" });
@@ -145,6 +140,7 @@ function RootComponent() {
   const bare = pathname.startsWith("/admin") || pathname.startsWith("/invoice/");
 
   useEffect(() => {
+    sessionStorage.removeItem("net-retry");
     const { data } = supabase.auth.onAuthStateChange((event) => {
       if (event !== "SIGNED_IN" && event !== "SIGNED_OUT" && event !== "USER_UPDATED") return;
       router.invalidate();
