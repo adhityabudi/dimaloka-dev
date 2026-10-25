@@ -8,7 +8,11 @@ export function useSettings() {
   const router = useRouter();
   const q = useQuery({
     queryKey: ["adm-settings"],
-    queryFn: async () => Object.fromEntries(((await supabase.from("site_settings").select("key,value")).data ?? []).map((r) => [r.key, r.value])) as Record<string, any>,
+    queryFn: async () => {
+      const { data, error } = await supabase.from("site_settings").select("key,value");
+      if (error) throw error;
+      return Object.fromEntries((data ?? []).map((r) => [r.key, r.value])) as Record<string, any>;
+    },
   });
   const save = async (values: Record<string, any>) => {
     const rows = Object.entries(values).map(([key, value]) => ({ key, value, updated_at: new Date().toISOString() }));

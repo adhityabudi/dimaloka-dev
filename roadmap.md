@@ -43,3 +43,8 @@
 - [x] Verify permissions, recommendation parsing, and the admin generation flow.
 - [x] Add content selection, opportunity discovery, editable recommendations, and explicit SEO application.
 - [x] Add keyword-driven AI recommendations to article creation/editing and verify the saved result.
+
+# Admin page recovery
+- [x] Prevent saving settings before loading finishes and expose fetch failures.
+- [x] Refresh article data after saving and show article loading/failure states.
+- [x] Verify admin navigation, article edits, and settings persistence.

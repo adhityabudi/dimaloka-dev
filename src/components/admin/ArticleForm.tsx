@@ -1,5 +1,5 @@
 import { useNavigate } from "@tanstack/react-router";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, XCircle } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -16,6 +16,7 @@ import { ArticleAiSeo } from "./ArticleAiSeo";
 
 export function ArticleForm({ initial }: { initial?: any }) {
   const navigate = useNavigate();
+  const qc = useQueryClient();
   const [v, setV] = useState<any>(initial ?? { title: "", slug: "", excerpt: "", content: "", cover_image: "", og_image: "", author: "Tim Dimaloka", status: "draft", seo_title: "", seo_description: "", focus_keyword: "", keywords: [], category_id: null, published_at: null });
   const set = (patch: any) => setV((x: any) => ({ ...x, ...patch }));
   const { data: cats = [] } = useQuery({ queryKey: ["adm-cat-opts"], queryFn: async () => (await supabase.from("categories").select("id,name").order("sort_order")).data ?? [] });
@@ -32,6 +33,8 @@ export function ArticleForm({ initial }: { initial?: any }) {
     if (row.published_at === "") row.published_at = null;
     const res = id ? await supabase.from("articles").update(row).eq("id", id) : await supabase.from("articles").insert(row);
     if (res.error) return toast.error(res.error.message.includes("duplicate") ? "Slug sudah dipakai" : res.error.message);
+    await qc.invalidateQueries({ queryKey: ["adm-articles"] });
+    if (id) await qc.invalidateQueries({ queryKey: ["adm-article", id] });
     toast.success("Artikel disimpan");
     navigate({ to: "/admin/artikel" });
   };

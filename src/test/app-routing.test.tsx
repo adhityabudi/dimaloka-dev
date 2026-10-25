@@ -22,4 +22,14 @@ describe("App routing", () => {
     const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
     expect(router.matchRoutes("/kategori/website").at(-1)?.routeId).toBe("/kategori/$slug");
   });
+  it("matches the admin article list, creation and edit pages", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    expect(router.matchRoutes("/admin/artikel").at(-1)?.routeId).toBe("/_authenticated/admin/artikel/");
+    expect(router.matchRoutes("/admin/artikel/new").at(-1)?.routeId).toBe("/_authenticated/admin/artikel/new");
+    expect(router.matchRoutes("/admin/artikel/example/edit").at(-1)?.routeId).toBe("/_authenticated/admin/artikel/$id/edit");
+  });
+  it("matches the platform settings page", () => {
+    const router = createRouter({ routeTree, context: { queryClient: new QueryClient() } });
+    expect(router.matchRoutes("/admin/setting").at(-1)?.routeId).toBe("/_authenticated/admin/setting");
+  });
 });
