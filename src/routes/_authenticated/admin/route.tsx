@@ -26,6 +26,7 @@ const nav = [
   { to: "/admin/portfolio", label: "Portfolio", icon: Images },
   { to: "/admin/halaman-layanan", label: "Halaman Layanan", icon: LayoutTemplate },
   { to: "/admin/seo", label: "Optimasi SEO", icon: Search },
+  { to: "/admin/laporan-seo", label: "Laporan SEO", icon: BarChart3 },
   { to: "/admin/setting", label: "Setting", icon: Settings },
 ] as const;
 

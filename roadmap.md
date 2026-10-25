@@ -65,7 +65,9 @@
 - [x] Allow article/image/link edits before posting and verify the public result.
 
 # SEO subscriptions
-- [ ] Confirm and enable an eligible automatic payment provider.
-- [ ] Add subscription packages and recurring checkout.
-- [ ] Connect subscription management and recurring invoices to admin/member views.
-- [ ] Verify recurring payment events and invoice synchronization.
+- Paused at the user's request; do not resume without a new request.
+
+# SEO reports
+- [x] Add admin report with real published-content inventory and honest unavailable Google metrics.
+- [x] Verify admin access, search, and report export.
+- [ ] Activate live index/click/traffic/bounce reports — waiting for Google connections declined by the user.
